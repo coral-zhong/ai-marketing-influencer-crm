@@ -1,0 +1,320 @@
+{
+  "name": "AI Marketing Influencer CRM",
+  "version": "0.2.0",
+  "description": "Full Feishu Base template schema for the AI Marketing Influencer CRM product install.",
+  "tables": [
+    {
+      "name": "Campaigns",
+      "primaryField": "Campaign Name",
+      "fields": [
+        { "name": "Campaign Name", "type": "text", "required": true },
+        { "name": "Brand", "type": "text", "required": true },
+        { "name": "Product Name", "type": "text", "required": true },
+        { "name": "Campaign Goal", "type": "long_text", "required": true },
+        { "name": "Target Market", "type": "text", "required": false },
+        { "name": "Creator Criteria", "type": "long_text", "required": false },
+        { "name": "Claims Allowed", "type": "long_text", "required": false },
+        { "name": "Claims To Avoid", "type": "long_text", "required": false },
+        { "name": "Budget", "type": "number", "required": false },
+        { "name": "Launch Date", "type": "datetime", "required": false },
+        { "name": "Content Deadline", "type": "datetime", "required": false },
+        {
+          "name": "Status",
+          "type": "select",
+          "required": true,
+          "options": ["Draft", "Active", "Paused", "Completed"]
+        }
+      ],
+      "views": [
+        { "name": "Active Campaigns", "type": "grid" },
+        { "name": "Completed Campaigns", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Creators",
+      "primaryField": "Creator Name",
+      "fields": [
+        { "name": "Creator Name", "type": "text", "required": true },
+        {
+          "name": "Platform",
+          "type": "select",
+          "required": true,
+          "options": ["TikTok", "Instagram", "YouTube", "Xiaohongshu", "Other"]
+        },
+        { "name": "Profile URL", "type": "url", "required": true },
+        { "name": "Example Video URL", "type": "url", "required": false },
+        { "name": "Category", "type": "text", "required": false },
+        { "name": "Email", "type": "text", "required": false },
+        { "name": "Country", "type": "text", "required": false },
+        { "name": "Followers", "type": "number", "required": false },
+        { "name": "Notes", "type": "long_text", "required": false },
+        {
+          "name": "Creator Status",
+          "type": "select",
+          "required": true,
+          "options": ["Captured", "To Screen", "Needs Review", "To Outreach", "Contacted", "Negotiating", "Confirmed", "Rejected"]
+        },
+        { "name": "Fit Score", "type": "number", "required": false },
+        {
+          "name": "Tier",
+          "type": "select",
+          "required": false,
+          "options": ["A", "B", "C", "Reject"]
+        },
+        {
+          "name": "Score Confidence",
+          "type": "select",
+          "required": false,
+          "options": ["High", "Medium", "Low"]
+        },
+        { "name": "Strengths", "type": "long_text", "required": false },
+        { "name": "Risks", "type": "long_text", "required": false },
+        {
+          "name": "Recommended Collaboration",
+          "type": "select",
+          "required": false,
+          "options": ["Seed", "Paid", "Affiliate", "Re-hire", "Reject", "Needs Review"]
+        },
+        { "name": "Screening Summary", "type": "long_text", "required": false },
+        { "name": "Last Agent Run At", "type": "datetime", "required": false },
+        { "name": "Agent Error", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "To Screen", "type": "grid" },
+        { "name": "Needs Review", "type": "grid" },
+        { "name": "To Outreach", "type": "grid" },
+        { "name": "Confirmed Creators", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Creator Search",
+      "primaryField": "Search Name",
+      "fields": [
+        { "name": "Search Name", "type": "text", "required": true },
+        { "name": "Campaign Name", "type": "text", "required": false },
+        { "name": "Source Website", "type": "url", "required": false },
+        { "name": "Search Query", "type": "long_text", "required": false },
+        { "name": "Candidate Count", "type": "number", "required": false },
+        {
+          "name": "Status",
+          "type": "select",
+          "required": true,
+          "options": ["Draft", "Searching", "Needs Review", "Imported", "Archived"]
+        },
+        { "name": "Agent Summary", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Active Searches", "type": "grid" },
+        { "name": "Needs Review", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Outreach",
+      "primaryField": "Outreach Name",
+      "fields": [
+        { "name": "Outreach Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Campaign Name", "type": "text", "required": false },
+        { "name": "Channel", "type": "select", "required": false, "options": ["Email", "Instagram DM", "TikTok DM", "Xiaohongshu", "Other"] },
+        { "name": "Subject", "type": "text", "required": false },
+        { "name": "Draft Message", "type": "long_text", "required": false },
+        { "name": "Approved Message", "type": "long_text", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Draft", "Needs Review", "Approved", "Sent", "Replied", "Closed"] },
+        { "name": "Sent At", "type": "datetime", "required": false },
+        { "name": "Agent Notes", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Needs Review", "type": "grid" },
+        { "name": "Ready To Send", "type": "grid" },
+        { "name": "Sent Outreach", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Negotiations",
+      "primaryField": "Negotiation Name",
+      "fields": [
+        { "name": "Negotiation Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Campaign Name", "type": "text", "required": false },
+        { "name": "Inbound Message", "type": "long_text", "required": false },
+        { "name": "Suggested Reply", "type": "long_text", "required": false },
+        { "name": "Offer", "type": "text", "required": false },
+        { "name": "Risk Notes", "type": "long_text", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Needs Review", "Waiting Creator", "Waiting Brand", "Agreement Ready", "Closed"] }
+      ],
+      "views": [
+        { "name": "Needs Review", "type": "grid" },
+        { "name": "Active Negotiations", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Collaborations",
+      "primaryField": "Collaboration Name",
+      "fields": [
+        { "name": "Collaboration Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Campaign Name", "type": "text", "required": false },
+        { "name": "Terms Summary", "type": "long_text", "required": false },
+        { "name": "Deliverables", "type": "long_text", "required": false },
+        { "name": "Fee", "type": "number", "required": false },
+        { "name": "Usage Rights", "type": "long_text", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Draft", "Needs Approval", "Confirmed", "In Fulfillment", "Completed", "Canceled"] }
+      ],
+      "views": [
+        { "name": "Needs Approval", "type": "grid" },
+        { "name": "Confirmed", "type": "grid" },
+        { "name": "In Fulfillment", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Samples",
+      "primaryField": "Sample Name",
+      "fields": [
+        { "name": "Sample Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Product Name", "type": "text", "required": false },
+        { "name": "Tracking Number", "type": "text", "required": false },
+        { "name": "Carrier", "type": "text", "required": false },
+        { "name": "Ship Date", "type": "datetime", "required": false },
+        { "name": "Received Date", "type": "datetime", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Not Shipped", "In Transit", "Received", "Issue", "No Sample Needed"] },
+        { "name": "Agent Notes", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Needs Shipping", "type": "grid" },
+        { "name": "In Transit", "type": "grid" },
+        { "name": "Received", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Content Deliverables",
+      "primaryField": "Deliverable Name",
+      "fields": [
+        { "name": "Deliverable Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Campaign Name", "type": "text", "required": false },
+        { "name": "Content Type", "type": "select", "required": false, "options": ["Video", "Photo", "Story", "Livestream", "Other"] },
+        { "name": "Due Date", "type": "datetime", "required": false },
+        { "name": "Submitted URL", "type": "url", "required": false },
+        { "name": "Revision Notes", "type": "long_text", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Not Started", "In Progress", "Submitted", "Needs Revision", "Approved", "Overdue"] },
+        { "name": "Agent Notes", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Due Soon", "type": "grid" },
+        { "name": "Needs Review", "type": "grid" },
+        { "name": "Overdue", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Published Content",
+      "primaryField": "Published Content Name",
+      "fields": [
+        { "name": "Published Content Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Campaign Name", "type": "text", "required": false },
+        { "name": "Published URL", "type": "url", "required": true },
+        { "name": "Published At", "type": "datetime", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Live", "Missing Metrics", "Ready For Review", "Archived"] },
+        { "name": "Agent Notes", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Live Content", "type": "grid" },
+        { "name": "Needs Metrics", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Performance",
+      "primaryField": "Performance Review Name",
+      "fields": [
+        { "name": "Performance Review Name", "type": "text", "required": true },
+        { "name": "Published URL", "type": "url", "required": false },
+        { "name": "Views", "type": "number", "required": false },
+        { "name": "Likes", "type": "number", "required": false },
+        { "name": "Comments", "type": "number", "required": false },
+        { "name": "Shares", "type": "number", "required": false },
+        { "name": "Engagement Rate", "type": "number", "required": false },
+        { "name": "Performance Tier", "type": "select", "required": false, "options": ["Strong", "Average", "Weak", "Needs Data"] },
+        { "name": "Status", "type": "select", "required": true, "options": ["Needs Data", "Ready For Review", "Reviewed", "Archived"] },
+        { "name": "Agent Summary", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Ready For Review", "type": "grid" },
+        { "name": "Strong Performers", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Recommendations",
+      "primaryField": "Recommendation Name",
+      "fields": [
+        { "name": "Recommendation Name", "type": "text", "required": true },
+        { "name": "Creator Name", "type": "text", "required": false },
+        { "name": "Published URL", "type": "url", "required": false },
+        { "name": "Recommendation Type", "type": "select", "required": true, "options": ["Second Collaboration", "Content Repurpose", "Wait", "Reject"] },
+        { "name": "Reason", "type": "long_text", "required": false },
+        { "name": "Suggested Next Step", "type": "long_text", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Needs Review", "Approved", "Rejected", "Done"] }
+      ],
+      "views": [
+        { "name": "Needs Review", "type": "grid" },
+        { "name": "Approved Recommendations", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Agent Tasks",
+      "primaryField": "Task Name",
+      "fields": [
+        { "name": "Task Name", "type": "text", "required": true },
+        {
+          "name": "Task Type",
+          "type": "select",
+          "required": true,
+          "options": ["creator_search", "screen_creator", "campaign_plan", "draft_outreach", "send_package", "negotiation_assist", "confirm_collaboration", "track_sample", "track_content", "track_performance", "recommend_second_collaboration", "recommend_repurpose"]
+        },
+        {
+          "name": "Input Record Type",
+          "type": "select",
+          "required": true,
+          "options": ["Campaign", "Creator", "Outreach", "Negotiation", "Collaboration", "Sample", "Deliverable", "Published Content", "Performance"]
+        },
+        { "name": "Input Record ID", "type": "text", "required": true },
+        {
+          "name": "Status",
+          "type": "select",
+          "required": true,
+          "options": ["pending", "processing", "needs_review", "done", "failed"]
+        },
+        {
+          "name": "Permission Level",
+          "type": "select",
+          "required": true,
+          "options": ["auto", "review", "manual"]
+        },
+        { "name": "Output Summary", "type": "long_text", "required": false },
+        { "name": "Output JSON", "type": "long_text", "required": false },
+        { "name": "Error Message", "type": "long_text", "required": false },
+        { "name": "Started At", "type": "datetime", "required": false },
+        { "name": "Finished At", "type": "datetime", "required": false }
+      ],
+      "views": [
+        { "name": "Pending Tasks", "type": "grid" },
+        { "name": "Needs Review", "type": "grid" },
+        { "name": "Failed Tasks", "type": "grid" }
+      ]
+    },
+    {
+      "name": "Operation Guide",
+      "primaryField": "Step",
+      "fields": [
+        { "name": "Step", "type": "text", "required": true },
+        { "name": "When To Use", "type": "long_text", "required": false },
+        { "name": "User Action", "type": "long_text", "required": false },
+        { "name": "Agent Output", "type": "long_text", "required": false },
+        { "name": "Human Approval Required", "type": "select", "required": true, "options": ["Yes", "No"] }
+      ],
+      "views": [
+        { "name": "Workflow Steps", "type": "grid" }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,10 @@ For local trial mode, no Feishu credentials are needed. For real writeback, the 
 
 ## What The User Provides
 
+The recommended public path is template-first: the user copies the complete Feishu Base template, then connects the copied Base to the agent.
+
+Use this API setup path when the user wants a developer install, an internal test, or an automatic Base creation flow.
+
 The user should only need to provide:
 
 ```bash
@@ -15,8 +19,8 @@ FEISHU_APP_SECRET=
 
 Then choose one path:
 
-- Existing Base: paste a Feishu Base URL.
-- New Base: ask the agent to create a new CRM Base.
+- Copied template or existing Base: paste a Feishu Base URL.
+- New Base: ask the agent to create a new CRM Base from the full template schema.
 
 `AGENT_API_SECRET` is not from Feishu. It is a private shared secret for the local agent endpoint. The AI agent can generate any long random value, for example:
 
@@ -101,12 +105,12 @@ The agent will:
 
 1. get `tenant_access_token` using `FEISHU_APP_ID` and `FEISHU_APP_SECRET`
 2. create a new Feishu Base
-3. create the default CRM tables from `schema/minimal-crm.schema.json`
+3. create the default CRM tables from `schema/full-template.schema.json`
 4. create fields and select options
 5. create schema views
 6. return the created `baseToken`, `creatorsTableId`, `tables`, and `views`
 
-The default install creates three tables: `Campaigns`, `Creators`, and `Agent Tasks`. They are the starting CRM model: campaign brief, creator pipeline, and agent review log. See [Operation Guide](operation-guide.md) for the full workflow explanation.
+The default API-created Base uses the same full template structure described in [Operation Guide](operation-guide.md). Public installs should still prefer copying the Feishu template first, because users can inspect the full CRM before connecting the agent.
 
 The command updates `.env` and prints a safe summary:
 

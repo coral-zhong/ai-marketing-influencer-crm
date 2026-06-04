@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 
 const FEISHU_OPENAPI_BASE_URL = "https://open.feishu.cn/open-apis";
-const DEFAULT_SCHEMA_URL = new URL("../schema/minimal-crm.schema.json", import.meta.url);
+const DEFAULT_SCHEMA_URL = new URL("../schema/full-template.schema.json", import.meta.url);
 
 const FIELD_TYPES = {
   text: { type: 1, ui_type: "Text" },

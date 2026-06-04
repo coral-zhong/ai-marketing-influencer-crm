@@ -42,7 +42,7 @@ Goal: make creator capture + screening usable enough for a real operator test.
 
 | Initiative | User Value | Output | Status |
 |---|---|---|---|
-| Minimal Feishu schema | User has the required Base fields | `schema/minimal-crm.schema.json` | Done |
+| Full Feishu template schema | User has the complete CRM template fields | `schema/full-template.schema.json` | Done |
 | Local install verification | Another AI agent can clone and verify the repo | `npm run verify:local` | Done |
 | Feishu Creator writeback | Agent can update a real Creator row | `src/feishuClient.js` | Done |
 | Feishu credential setup guide | User can configure real writeback manually | `docs/feishu-api-credentials-setup.md` | Done |

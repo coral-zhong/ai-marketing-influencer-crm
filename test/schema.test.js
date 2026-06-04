@@ -2,12 +2,26 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-test("minimal CRM schema contains the product tables and required fields", async () => {
-  const schema = JSON.parse(await readFile(new URL("../schema/minimal-crm.schema.json", import.meta.url), "utf8"));
+test("full CRM template schema contains the product tables and required fields", async () => {
+  const schema = JSON.parse(await readFile(new URL("../schema/full-template.schema.json", import.meta.url), "utf8"));
 
   assert.deepEqual(
     schema.tables.map((table) => table.name),
-    ["Campaigns", "Creators", "Agent Tasks"]
+    [
+      "Campaigns",
+      "Creators",
+      "Creator Search",
+      "Outreach",
+      "Negotiations",
+      "Collaborations",
+      "Samples",
+      "Content Deliverables",
+      "Published Content",
+      "Performance",
+      "Recommendations",
+      "Agent Tasks",
+      "Operation Guide"
+    ]
   );
 
   assertHasFields(schema, "Campaigns", [
@@ -40,10 +54,17 @@ test("minimal CRM schema contains the product tables and required fields", async
     "Output Summary",
     "Error Message"
   ]);
+  assertHasFields(schema, "Operation Guide", [
+    "Step",
+    "When To Use",
+    "User Action",
+    "Agent Output",
+    "Human Approval Required"
+  ]);
 });
 
 test("select fields define non-empty options", async () => {
-  const schema = JSON.parse(await readFile(new URL("../schema/minimal-crm.schema.json", import.meta.url), "utf8"));
+  const schema = JSON.parse(await readFile(new URL("../schema/full-template.schema.json", import.meta.url), "utf8"));
 
   for (const table of schema.tables) {
     for (const field of table.fields) {

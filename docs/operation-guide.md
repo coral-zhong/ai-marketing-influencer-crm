@@ -4,15 +4,27 @@ This guide explains how to use the AI Marketing Influencer CRM after it is insta
 
 It is written for founders, marketers, and operators. You do not need to understand the codebase to use the workflow.
 
-## Why The Install Creates Three Tables
+## Why The First Template Includes Many Tables
 
-The default Feishu Base creates three tables:
+The recommended install starts from a complete Feishu Base template.
+
+The template includes the main workflow tables:
 
 - `Campaigns`
 - `Creators`
+- `Creator Search`
+- `Outreach`
+- `Negotiations`
+- `Collaborations`
+- `Samples`
+- `Content Deliverables`
+- `Published Content`
+- `Performance`
+- `Recommendations`
 - `Agent Tasks`
+- `Operation Guide`
 
-This is intentional. The install uses a compact CRM model so a new user can start quickly without managing ten separate tables on day one.
+This is intentional. A first-time user should be able to copy the template and immediately see the whole influencer marketing workflow.
 
 `Campaigns` is the campaign brief. It stores the brand, product, goal, target market, creator criteria, allowed claims, and claims to avoid. The agent uses this table to understand what kind of creators and content fit the campaign.
 
@@ -20,24 +32,9 @@ This is intentional. The install uses a compact CRM model so a new user can star
 
 `Agent Tasks` is the review queue and activity log. It records what the agent was asked to do, which record it worked on, whether the task is pending, done, failed, or needs review, and what output it produced.
 
-The product still supports the full influencer marketing workflow:
+`Creator Search`, `Outreach`, `Negotiations`, `Collaborations`, `Samples`, `Content Deliverables`, `Published Content`, `Performance`, and `Recommendations` hold the later workflow stages so users do not need to design the CRM structure themselves.
 
-- creator search
-- creator screening
-- campaign task breakdown
-- outreach drafting
-- outreach send package
-- negotiation support
-- collaboration confirmation
-- sample tracking
-- content delivery tracking
-- published content performance tracking
-- second collaboration recommendation
-- content repurpose recommendation
-
-These workflow outputs are currently written back as CRM fields, summaries, and reviewable agent task outputs instead of being split into many tables. This keeps the first install easier to understand.
-
-As a team grows, the same workflow can be expanded into additional tables such as `Outreach`, `Collaborations`, `Samples`, `Content Deliverables`, and `Performance`. The three-table setup is the starting product shape, not the limit of the product.
+`Operation Guide` explains how to move through the workflow inside the Base.
 
 ## Daily Workflow
 
@@ -73,7 +70,13 @@ After setup, open the Feishu Base and confirm:
 
 - `Campaigns` exists
 - `Creators` exists
+- `Outreach` exists
+- `Samples` exists
+- `Content Deliverables` exists
+- `Performance` exists
+- `Recommendations` exists
 - `Agent Tasks` exists
+- `Operation Guide` exists
 - `Creators` has views such as `To Screen` and `Needs Review`
 - `.env` has `FEISHU_BASE_TOKEN` and `FEISHU_CREATORS_TABLE_ID` if real Feishu writeback is enabled
 
@@ -99,15 +102,27 @@ The first test is successful when the CRM helps you make a better next-step deci
 
 它是写给创始人、市场团队和运营同学看的。你不需要懂代码，也可以理解这套工作流。
 
-## 为什么安装后是三张表？
+## 为什么第一次安装就是完整模板？
 
-默认安装会创建三张表：
+推荐安装方式是先复制一个完整的飞书 Base 模板。
+
+模板里包含主要工作流表：
 
 - `Campaigns`
 - `Creators`
+- `Creator Search`
+- `Outreach`
+- `Negotiations`
+- `Collaborations`
+- `Samples`
+- `Content Deliverables`
+- `Published Content`
+- `Performance`
+- `Recommendations`
 - `Agent Tasks`
+- `Operation Guide`
 
-这是有意设计的。第一版安装使用的是一个更轻的 CRM 数据结构，让新用户可以马上开始用，而不是一上来管理十几张表。
+这是有意设计的。第一次安装时，用户应该复制模板后就能马上看到完整红人营销工作流。
 
 `Campaigns` 是活动 brief。它记录品牌、产品、活动目标、目标市场、达人标准、允许使用的卖点，以及需要避免的表达。Agent 会用这张表理解这次 Campaign 需要什么样的达人和内容。
 
@@ -115,24 +130,9 @@ The first test is successful when the CRM helps you make a better next-step deci
 
 `Agent Tasks` 是 Agent 的任务队列和执行记录。它记录 Agent 被要求做什么、处理哪条记录、任务是待处理/已完成/失败/需要人工审核，以及 Agent 产出的结果。
 
-产品仍然覆盖完整的红人营销流程：
+`Creator Search`、`Outreach`、`Negotiations`、`Collaborations`、`Samples`、`Content Deliverables`、`Published Content`、`Performance` 和 `Recommendations` 承接后面的流程阶段，用户不需要自己设计 CRM 结构。
 
-- 达人搜索
-- 达人筛选
-- Campaign 任务拆解
-- Outreach 起草
-- Outreach 发送包
-- 谈判辅助
-- 合作确认
-- 寄样跟踪
-- 内容交付跟踪
-- 已发布内容表现跟踪
-- 二次合作推荐
-- 内容复用推荐
-
-这些流程结果目前会以 CRM 字段、摘要和 Agent 任务输出的形式写回，而不是一开始就拆成很多张表。这样第一次安装更容易理解，也更适合真实用户上手。
-
-等团队使用量变大后，可以继续扩展成更多表，比如 `Outreach`、`Collaborations`、`Samples`、`Content Deliverables`、`Performance`。三张表是当前产品的起点，不是产品能力的上限。
+`Operation Guide` 用来在 Base 里解释每一步怎么走。
 
 ## 日常怎么用
 
@@ -168,7 +168,13 @@ Agent 不应该自动替你：
 
 - 有 `Campaigns`
 - 有 `Creators`
+- 有 `Outreach`
+- 有 `Samples`
+- 有 `Content Deliverables`
+- 有 `Performance`
+- 有 `Recommendations`
 - 有 `Agent Tasks`
+- 有 `Operation Guide`
 - `Creators` 里有 `To Screen` 和 `Needs Review` 等视图
 - 如果开启真实飞书写回，`.env` 里已经有 `FEISHU_BASE_TOKEN` 和 `FEISHU_CREATORS_TABLE_ID`
 
@@ -184,4 +190,4 @@ Agent 不应该自动替你：
 4. 检查是否写回了匹配分数、等级、优势、风险和合作建议。
 5. 人工 review 这个结果。
 
-第一次测试成功的标准不是“表格很多”，而是这套 CRM 能不能帮你更快判断这个达人下一步该怎么处理。
+第一次测试成功的标准是：这套 CRM 能不能帮你更快判断这个达人下一步该怎么处理。

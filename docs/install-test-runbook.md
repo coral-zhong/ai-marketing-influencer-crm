@@ -16,7 +16,7 @@ clean Feishu CRM
 ## Prerequisites
 
 - A clean Feishu Base named `AI Influencer CRM - Cloud Agent Install Test`
-- The fields from [`schema/minimal-crm.schema.json`](../schema/minimal-crm.schema.json)
+- The fields from [`schema/full-template.schema.json`](../schema/full-template.schema.json)
 - A running Cloud Agent endpoint
 
 For local smoke testing:
@@ -43,7 +43,17 @@ Create these Feishu Base tables:
 
 - `Campaigns`
 - `Creators`
+- `Creator Search`
+- `Outreach`
+- `Negotiations`
+- `Collaborations`
+- `Samples`
+- `Content Deliverables`
+- `Published Content`
+- `Performance`
+- `Recommendations`
 - `Agent Tasks`
+- `Operation Guide`
 
 Use the schema file as the source of truth for fields, select options, and core views.
 

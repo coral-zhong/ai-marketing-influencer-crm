@@ -10,6 +10,15 @@ https://github.com/coral-zhong/ai-marketing-influencer-crm
 
 ## Success Criteria
 
+For a non-technical user, prefer the template-first path:
+
+1. Ask the user to copy the complete Feishu Base template into their own workspace.
+2. Ask for the copied Base URL.
+3. Install and verify this GitHub repo.
+4. Connect the agent to the copied Base with `npm run setup:feishu`.
+
+See [Template-First Install](template-first-install.md).
+
 The local install is successful when this command exits with code `0`:
 
 ```bash
