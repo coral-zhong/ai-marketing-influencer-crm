@@ -9,7 +9,7 @@ Working rule:
 ## Checklist
 
 - [x] Creator search from websites
-- [ ] Outreach send workflow
+- [x] Outreach send workflow
 - [ ] Negotiation assistant
 - [ ] Collaboration confirmation
 - [ ] Sample tracking
@@ -31,3 +31,4 @@ Working rule:
 ## Completion Log
 
 - 2026-06-04: Completed `Creator search from websites` with `POST /api/creators/search`, local tests, smoke coverage, and website-source candidate extraction.
+- 2026-06-04: Completed `Outreach send workflow` with `POST /api/outreach/send-package`, approval gate, send-ready package output, local tests, and smoke coverage.

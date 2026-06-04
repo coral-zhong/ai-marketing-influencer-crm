@@ -6,6 +6,7 @@ import { importCreatorsFromCsv } from "./importCreators.js";
 import { planCampaignTasks } from "./campaignPlanner.js";
 import { draftOutreach } from "./outreachDraft.js";
 import { searchCreatorsFromWebsiteSources } from "./creatorSearch.js";
+import { prepareOutreachSendPackage } from "./outreachSendWorkflow.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -107,6 +108,21 @@ export function createApp(config = loadConfig()) {
           duplicates: result.duplicates,
           errors: result.errors,
           summary: result.summary
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/outreach/send-package") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (Object.keys(body).length === 0) {
+          return sendJson(response, 400, { ok: false, error: "outreach send package input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          package: prepareOutreachSendPackage(body)
         });
       }
 

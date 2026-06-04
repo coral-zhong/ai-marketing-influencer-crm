@@ -231,6 +231,45 @@ test("POST /api/creators/search validates source body", async () => {
   });
 });
 
+test("POST /api/outreach/send-package creates an approved send package", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/outreach/send-package`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        approvalStatus: "Approved",
+        channel: "email",
+        recipient: "maya@example.com",
+        subject: "Demo Brand x Maya Tech Finds",
+        message: "Hi Maya,\nWould you be open to reviewing a brief?",
+        creator: { name: "Maya Tech Finds" },
+        campaign: { brand: "Demo Brand" }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.package.status, "Ready To Send");
+    assert.equal(body.package.permissionLevel, "manual");
+  });
+});
+
+test("POST /api/outreach/send-package validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/outreach/send-package`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "outreach send package input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

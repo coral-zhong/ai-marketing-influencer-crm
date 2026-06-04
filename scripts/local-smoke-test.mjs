@@ -115,9 +115,26 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(creatorSearch.ok === true, "creator search should return ok=true");
   assert(creatorSearch.summary.candidates === 1, "creator search should find one candidate");
 
+  const sendPackage = await requestJson(`${baseUrl}/api/outreach/send-package`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      approvalStatus: "Approved",
+      channel: "email",
+      recipient: "maya@example.com",
+      subject: "Demo Brand x Maya Tech Finds",
+      message: "Hi Maya,\nWould you be open to reviewing a brief?",
+      creator: { name: "Maya Tech Finds" },
+      campaign: { brand: "Demo Brand", productName: "Magnetic power bank" }
+    })
+  });
+
+  assert(sendPackage.ok === true, "send package should return ok=true");
+  assert(sendPackage.package.status === "Ready To Send", "send package should be ready after approval");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -125,7 +142,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     duplicateCreators: importResult.summary.duplicates,
     campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType),
     outreachStatus: outreachDraft.draft.status,
-    creatorSearchCandidates: creatorSearch.summary.candidates
+    creatorSearchCandidates: creatorSearch.summary.candidates,
+    sendPackageStatus: sendPackage.package.status
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

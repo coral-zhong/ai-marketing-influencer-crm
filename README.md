@@ -157,6 +157,22 @@ curl -s http://localhost:3215/api/creators/search \
   }'
 ```
 
+Prepare an approved outreach send package:
+
+```bash
+curl -s http://localhost:3215/api/outreach/send-package \
+  -H "content-type: application/json" \
+  -d '{
+    "approvalStatus": "Approved",
+    "channel": "email",
+    "recipient": "maya@example.com",
+    "subject": "Demo Brand x Maya Tech Finds",
+    "message": "Hi Maya,\nWould you be open to reviewing a brief?",
+    "creator": { "name": "Maya Tech Finds" },
+    "campaign": { "brand": "Demo Brand", "productName": "Magnetic power bank" }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:
