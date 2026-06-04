@@ -84,6 +84,8 @@ This writes the default workflow steps into the copied or created `Operation Gui
 
 If the AI agent cannot access `open.feishu.cn`, this is usually an agent sandbox network limitation. Run the command on the user's own computer.
 
+If `npm run seed:guide` or real writeback returns `Forbidden`, the copied Base exists but the Feishu app does not have edit access to that copied document. Open the copied Base in Feishu, share it with the integration app as a document collaborator, and give it edit or manage permission. Feishu documents describe this as adding the app to the document collaborators / document app permissions.
+
 ---
 
 # 模板优先安装
@@ -171,3 +173,5 @@ npm run seed:guide
 这会把默认 workflow 步骤写入复制或创建出来的 `Operation Guide` 表。
 
 如果 AI agent 访问不了 `open.feishu.cn`，通常是 agent 沙箱网络限制。让用户在自己的电脑上运行这条命令即可。
+
+如果 `npm run seed:guide` 或真实写回返回 `Forbidden`，说明复制后的 Base 存在，但飞书应用还没有这份复制文档的编辑权限。打开复制后的 Base，在分享/协作者里把对应集成应用加入为文档协作者，并授予可编辑或可管理权限。飞书文档里通常称为给应用开通云文档权限，或把应用添加为文档协作应用。

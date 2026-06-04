@@ -217,6 +217,45 @@ test("createFeishuCrmBase returns parsed setup from an existing Base URL", async
   });
 });
 
+test("createFeishuCrmBase lists table ids for an existing Base URL when credentials are available", async () => {
+  const fakeFetch = async (url) => {
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+    if (url.endsWith("/bitable/v1/apps/bascnExisting/tables")) {
+      return jsonResponse({
+        code: 0,
+        data: {
+          items: [
+            { name: "Campaigns", table_id: "tblCampaigns" },
+            { name: "Creators", table_id: "tblExistingCreators" },
+            { name: "Outreach", table_id: "tblOutreach" }
+          ]
+        }
+      });
+    }
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  const setup = await createFeishuCrmBase(
+    {
+      feishuAppId: "app-id",
+      feishuAppSecret: "app-secret"
+    },
+    {
+      baseUrl: "https://example.feishu.cn/base/bascnExisting?table=tblExistingCreators"
+    },
+    fakeFetch
+  );
+
+  assert.deepEqual(setup.tables, {
+    Campaigns: "tblCampaigns",
+    Creators: "tblExistingCreators",
+    Outreach: "tblOutreach"
+  });
+  assert.equal(setup.creatorsTableId, "tblExistingCreators");
+});
+
 test("seedFeishuTableRecords adds records to an existing table", async () => {
   const calls = [];
   const fakeFetch = async (url, options) => {

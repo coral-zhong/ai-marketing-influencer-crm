@@ -48,13 +48,12 @@ export function buildFeishuFieldDefinition(field) {
 export async function createFeishuCrmBase(config, input = {}, fetchImpl = fetch) {
   if (input.baseUrl) {
     const parsed = parseFeishuBaseUrl(input.baseUrl);
+    const tables = await maybeListExistingTables(config, parsed.baseToken, fetchImpl);
     return {
       mode: "existing_base_url",
       baseToken: parsed.baseToken,
-      creatorsTableId: parsed.tableId,
-      tables: {
-        Creators: parsed.tableId
-      },
+      creatorsTableId: tables.Creators || parsed.tableId,
+      tables: Object.keys(tables).length ? tables : { Creators: parsed.tableId },
       views: {},
       seededRecords: {}
     };
@@ -138,6 +137,24 @@ async function getTenantAccessToken(config, fetchImpl) {
   });
   const body = await parseFeishuResponse(response);
   return body.tenant_access_token;
+}
+
+async function maybeListExistingTables(config, baseToken, fetchImpl) {
+  if (!config.feishuAppId || !config.feishuAppSecret) return {};
+
+  try {
+    const tenantAccessToken = await getTenantAccessToken(config, fetchImpl);
+    const response = await fetchImpl(`${FEISHU_OPENAPI_BASE_URL}/bitable/v1/apps/${encodeURIComponent(baseToken)}/tables`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${tenantAccessToken}`
+      }
+    });
+    const body = await parseFeishuResponse(response);
+    return Object.fromEntries((body.data?.items || []).map((table) => [table.name, table.table_id]));
+  } catch {
+    return {};
+  }
 }
 
 async function createBase(input, fetchImpl) {
