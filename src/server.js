@@ -9,6 +9,7 @@ import { searchCreatorsFromWebsiteSources } from "./creatorSearch.js";
 import { prepareOutreachSendPackage } from "./outreachSendWorkflow.js";
 import { assistNegotiation } from "./negotiationAssistant.js";
 import { confirmCollaboration } from "./collaborationConfirmation.js";
+import { trackSample } from "./sampleTracking.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -155,6 +156,24 @@ export function createApp(config = loadConfig()) {
         return sendJson(response, 200, {
           ok: true,
           confirmation: confirmCollaboration(body)
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/samples/track") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.collaboration || !body.sample) {
+          return sendJson(response, 400, { ok: false, error: "sample tracking input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          tracking: trackSample({
+            collaboration: body.collaboration,
+            sample: body.sample
+          })
         });
       }
 

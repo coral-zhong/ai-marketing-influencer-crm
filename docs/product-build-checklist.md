@@ -12,7 +12,7 @@ Working rule:
 - [x] Outreach send workflow
 - [x] Negotiation assistant
 - [x] Collaboration confirmation
-- [ ] Sample tracking
+- [x] Sample tracking
 - [ ] Content delivery tracking
 - [ ] Published content / performance tracking
 - [ ] Second collaboration recommendation
@@ -34,3 +34,4 @@ Working rule:
 - 2026-06-04: Completed `Outreach send workflow` with `POST /api/outreach/send-package`, approval gate, send-ready package output, local tests, and smoke coverage.
 - 2026-06-04: Completed `Negotiation assistant` with `POST /api/negotiation/assist`, review-only reply suggestions, risk detection, guardrails, local tests, and smoke coverage.
 - 2026-06-04: Completed `Collaboration confirmation` with `POST /api/collaborations/confirm`, approval gate, collaboration draft output, fulfillment-start defaults, local tests, and smoke coverage.
+- 2026-06-04: Completed `Sample tracking` with `POST /api/samples/track`, tracking status classification, missing-info blockers, content kickoff reminder draft, local tests, and smoke coverage.

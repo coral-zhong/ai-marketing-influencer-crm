@@ -350,6 +350,47 @@ test("POST /api/collaborations/confirm validates request body", async () => {
   });
 });
 
+test("POST /api/samples/track returns sample tracking status", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/samples/track`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        collaboration: {
+          collaborationName: "Maya Tech Finds x Spring TikTok UGC Test",
+          creatorName: "Maya Tech Finds"
+        },
+        sample: {
+          trackingNumber: "1Z999",
+          carrier: "UPS",
+          deliveredAt: "2026-06-08",
+          latestEvent: "Delivered"
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.tracking.sampleStatus, "Received");
+  });
+});
+
+test("POST /api/samples/track validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/samples/track`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "sample tracking input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

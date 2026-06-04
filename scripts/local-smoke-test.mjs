@@ -167,9 +167,29 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(collaboration.ok === true, "collaboration confirmation should return ok=true");
   assert(collaboration.confirmation.status === "Ready For Fulfillment", "collaboration should be ready for fulfillment after approval");
 
+  const sampleTracking = await requestJson(`${baseUrl}/api/samples/track`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      collaboration: {
+        collaborationName: "Maya Tech Finds x Spring TikTok UGC Test",
+        creatorName: "Maya Tech Finds"
+      },
+      sample: {
+        trackingNumber: "1Z999",
+        carrier: "UPS",
+        deliveredAt: "2026-06-08",
+        latestEvent: "Delivered"
+      }
+    })
+  });
+
+  assert(sampleTracking.ok === true, "sample tracking should return ok=true");
+  assert(sampleTracking.tracking.sampleStatus === "Received", "sample tracking should detect delivered sample");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -180,7 +200,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     creatorSearchCandidates: creatorSearch.summary.candidates,
     sendPackageStatus: sendPackage.package.status,
     negotiationStatus: negotiation.guidance.status,
-    collaborationStatus: collaboration.confirmation.status
+    collaborationStatus: collaboration.confirmation.status,
+    sampleStatus: sampleTracking.tracking.sampleStatus
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

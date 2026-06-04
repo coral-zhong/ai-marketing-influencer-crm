@@ -21,7 +21,7 @@ Expected output includes:
 ```json
 {
   "ok": true,
-  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation"],
+  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking"],
   "fitScore": 100,
   "tier": "A",
   "writebackMode": "demo",
@@ -32,7 +32,8 @@ Expected output includes:
   "creatorSearchCandidates": 1,
   "sendPackageStatus": "Ready To Send",
   "negotiationStatus": "Needs Review",
-  "collaborationStatus": "Ready For Fulfillment"
+  "collaborationStatus": "Ready For Fulfillment",
+  "sampleStatus": "Received"
 }
 ```
 
