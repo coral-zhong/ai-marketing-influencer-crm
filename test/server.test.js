@@ -147,6 +147,71 @@ test("POST /api/campaigns/plan validates campaign body", async () => {
   });
 });
 
+test("POST /api/agent-tasks/run executes and writes back a hosted campaign task", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblAgentTasks/records/recTask")) {
+      return jsonResponse({ code: 0, data: { record: { record_id: "recTask" } } });
+    }
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  await withServer({
+    agentApiSecret: "secret",
+    feishuAppId: "app-id",
+    feishuAppSecret: "app-secret",
+    feishuBaseToken: "base-token",
+    feishuTables: {
+      "Agent Tasks": "tblAgentTasks"
+    },
+    fetchImpl: fakeFetch
+  }, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/agent-tasks/run`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-agent-secret": "secret" },
+      body: JSON.stringify({
+        taskRecordId: "recTask",
+        taskType: "campaign_plan",
+        input: {
+          campaign: {
+            campaignName: "Spring TikTok UGC Test",
+            brand: "Demo Brand",
+            productName: "Magnetic power bank",
+            campaignGoal: "Find creators for short tutorial demos",
+            creatorCriteria: "TikTok UGC review creators"
+          }
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.task.status, "needs_review");
+    assert.equal(body.writeback.written, true);
+    assert.match(JSON.parse(calls[1].options.body).fields["Output JSON"], /creator_search_planner/);
+  });
+});
+
+test("POST /api/agent-tasks/run validates task type", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/agent-tasks/run`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "taskType is required");
+  });
+});
+
 test("POST /api/outreach/draft returns a review-only outreach draft", async () => {
   await withServer({}, async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/outreach/draft`, {

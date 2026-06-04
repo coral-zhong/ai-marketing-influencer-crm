@@ -1,7 +1,8 @@
 import http from "node:http";
 import { loadConfig } from "./config.js";
 import { screenCreator } from "./screenCreator.js";
-import { writeCreatorScreeningResult } from "./feishuClient.js";
+import { writeAgentTaskResult, writeCreatorScreeningResult } from "./feishuClient.js";
+import { runAgentTask } from "./agentTaskRunner.js";
 import { importCreatorsFromCsv } from "./importCreators.js";
 import { planCampaignTasks } from "./campaignPlanner.js";
 import { draftOutreach } from "./outreachDraft.js";
@@ -119,6 +120,27 @@ export function createApp(config = loadConfig()) {
           ok: true,
           plan: planCampaignTasks(body.campaign)
         });
+      }
+
+      if (request.method === "POST" && request.url === "/api/agent-tasks/run") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.taskType) {
+          return sendJson(response, 400, { ok: false, error: "taskType is required" });
+        }
+
+        const task = runAgentTask({
+          taskType: body.taskType,
+          input: body.input || {}
+        });
+        const writeback = await writeAgentTaskResult(config, {
+          taskRecordId: body.taskRecordId,
+          result: task
+        }, config.fetchImpl || fetch);
+
+        return sendJson(response, 200, { ok: true, task, writeback });
       }
 
       if (request.method === "POST" && request.url === "/api/outreach/draft") {

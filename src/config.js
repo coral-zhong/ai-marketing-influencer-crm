@@ -7,8 +7,17 @@ export function loadConfig(env = process.env) {
     feishuAppSecret: env.FEISHU_APP_SECRET || "",
     feishuBaseToken: env.FEISHU_BASE_TOKEN || "",
     feishuCreatorsTableId: env.FEISHU_CREATORS_TABLE_ID || "",
+    feishuTables: parseJson(env.FEISHU_TABLES_JSON || "{}"),
     feishuOAuthRedirectUri: env.FEISHU_OAUTH_REDIRECT_URI || "",
     feishuOAuthScopes: env.FEISHU_OAUTH_SCOPES || "",
     feishuOAuthExpectedState: env.FEISHU_OAUTH_EXPECTED_STATE || ""
   };
+}
+
+function parseJson(value) {
+  try {
+    return JSON.parse(value || "{}");
+  } catch {
+    return {};
+  }
 }

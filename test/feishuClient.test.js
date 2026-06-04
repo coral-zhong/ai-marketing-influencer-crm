@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildCreatorScreeningFields, writeCreatorScreeningResult } from "../src/feishuClient.js";
+import { buildAgentTaskResultFields, buildCreatorScreeningFields, writeAgentTaskResult, writeCreatorScreeningResult } from "../src/feishuClient.js";
 
 test("buildCreatorScreeningFields maps screening result to Feishu field names", () => {
   const fields = buildCreatorScreeningFields({
@@ -99,6 +99,62 @@ test("writeCreatorScreeningResult returns config_missing when table or record is
   assert.match(writeback.message, /FEISHU_CREATORS_TABLE_ID/);
 });
 
+test("buildAgentTaskResultFields maps hosted task result to Feishu fields", () => {
+  const fields = buildAgentTaskResultFields({
+    status: "needs_review",
+    permissionLevel: "review",
+    outputSummary: "Campaign plan created.",
+    output: {
+      tasks: [{ taskType: "creator_search_planner" }]
+    }
+  });
+
+  assert.equal(fields.Status, "needs_review");
+  assert.equal(fields["Permission Level"], "review");
+  assert.equal(fields["Output Summary"], "Campaign plan created.");
+  assert.match(fields["Output JSON"], /creator_search_planner/);
+  assert.equal(fields["Error Message"], "");
+});
+
+test("writeAgentTaskResult updates an Agent Tasks record through OpenAPI", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblAgentTasks/records/recTask")) {
+      return jsonResponse({ code: 0, data: { record: { record_id: "recTask" } } });
+    }
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  const writeback = await writeAgentTaskResult(
+    {
+      feishuAppId: "app-id",
+      feishuAppSecret: "app-secret",
+      feishuBaseToken: "base-token",
+      feishuTables: {
+        "Agent Tasks": "tblAgentTasks"
+      }
+    },
+    {
+      taskRecordId: "recTask",
+      result: {
+        status: "needs_review",
+        permissionLevel: "review",
+        outputSummary: "Campaign plan created.",
+        output: { tasks: [] }
+      }
+    },
+    fakeFetch
+  );
+
+  assert.equal(writeback.written, true);
+  assert.equal(calls[1].options.method, "PUT");
+  assert.equal(JSON.parse(calls[1].options.body).fields.Status, "needs_review");
+});
+
 function jsonResponse(body) {
   return {
     ok: true,
@@ -111,4 +167,3 @@ function jsonResponse(body) {
     }
   };
 }
-

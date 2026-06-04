@@ -66,6 +66,8 @@ They do not need to wait for a script to create tables before understanding the 
 
 The API-created Base path still exists for developer installs and internal tests, but template-first should be the default public install path.
 
+For automatic Feishu triggers, deploy the agent as a hosted service. See [Hosted Agent Install](hosted-agent-install.md).
+
 ## Connecting The Copied Base
 
 After the user copies the template, run:
@@ -157,6 +159,8 @@ repo 提供：
 他们不需要等脚本创建表格以后才理解产品，也不需要一开始就面对 API 创建流程。用户可以先查看完整工作流、视图和操作指南，再连接 agent。
 
 自动创建 Base 的路径仍然保留，适合开发者安装和内部测试；但公开对外时，默认应该走模板优先。
+
+如果需要飞书自动触发 agent，需要把 agent 部署成云端服务。见 [Hosted Agent Install](hosted-agent-install.md)。
 
 ## 连接复制后的 Base
 

@@ -79,6 +79,26 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(campaignPlan.ok === true, "campaign plan should return ok=true");
   assert(campaignPlan.plan.tasks.length === 3, "campaign plan should create three task previews");
 
+  const hostedTask = await requestJson(`${baseUrl}/api/agent-tasks/run`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      taskType: "campaign_plan",
+      input: {
+        campaign: {
+          campaignName: "Spring TikTok UGC Test",
+          brand: "Demo Brand",
+          productName: "Magnetic power bank",
+          campaignGoal: "Find creators who can make short tutorial demos.",
+          creatorCriteria: "TikTok UGC review creators with clear product demos."
+        }
+      }
+    })
+  });
+
+  assert(hostedTask.ok === true, "hosted agent task endpoint should return ok=true");
+  assert(hostedTask.task.status === "needs_review", "hosted agent task should return a review state");
+
   const outreachDraft = await requestJson(`${baseUrl}/api/outreach/draft`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -337,13 +357,14 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
 
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "viral_breakdown", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "hosted_agent_task", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "viral_breakdown", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
     importedCreators: importResult.summary.imported,
     duplicateCreators: importResult.summary.duplicates,
     campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType),
+    hostedTaskStatus: hostedTask.task.status,
     outreachStatus: outreachDraft.draft.status,
     creatorSearchCandidates: creatorSearch.summary.candidates,
     sendPackageStatus: sendPackage.package.status,

@@ -40,6 +40,47 @@ export async function writeCreatorScreeningResult(config, payload, fetchImpl = f
   };
 }
 
+export async function writeAgentTaskResult(config, payload, fetchImpl = fetch) {
+  const hasCredentials = Boolean(config.feishuAppId && config.feishuAppSecret && config.feishuBaseToken);
+
+  if (!hasCredentials || config.demoMode) {
+    return {
+      mode: "demo",
+      written: false,
+      message: "Feishu credentials are not configured; returning agent task result without writeback."
+    };
+  }
+
+  const agentTasksTableId = config.feishuTables?.["Agent Tasks"];
+  if (!agentTasksTableId || !payload.taskRecordId) {
+    return {
+      mode: "config_missing",
+      written: false,
+      message: "Agent Tasks table id and taskRecordId are required for hosted task writeback.",
+      taskRecordId: payload.taskRecordId || null
+    };
+  }
+
+  const tenantAccessToken = await getTenantAccessToken(config, fetchImpl);
+  await updateBitableRecord(
+    {
+      baseToken: config.feishuBaseToken,
+      tableId: agentTasksTableId,
+      recordId: payload.taskRecordId,
+      tenantAccessToken,
+      fields: buildAgentTaskResultFields(payload.result)
+    },
+    fetchImpl
+  );
+
+  return {
+    mode: "feishu_openapi",
+    written: true,
+    message: "Agent task result written to Feishu.",
+    taskRecordId: payload.taskRecordId
+  };
+}
+
 export function buildCreatorScreeningFields(result) {
   return {
     "Fit Score": result.fitScore,
@@ -51,6 +92,16 @@ export function buildCreatorScreeningFields(result) {
     "Screening Summary": result.screeningSummary,
     "Agent Error": "",
     "Creator Status": "Needs Review"
+  };
+}
+
+export function buildAgentTaskResultFields(result) {
+  return {
+    Status: result.status || "needs_review",
+    "Permission Level": result.permissionLevel || "review",
+    "Output Summary": result.outputSummary || "",
+    "Output JSON": JSON.stringify(result.output || {}, null, 2),
+    "Error Message": ""
   };
 }
 
@@ -70,7 +121,17 @@ async function getTenantAccessToken(config, fetchImpl) {
 }
 
 async function updateCreatorRecord(input, fetchImpl) {
-  const url = `${FEISHU_OPENAPI_BASE_URL}/bitable/v1/apps/${encodeURIComponent(input.baseToken)}/tables/${encodeURIComponent(input.creatorsTableId)}/records/${encodeURIComponent(input.creatorRecordId)}`;
+  return updateBitableRecord({
+    baseToken: input.baseToken,
+    tableId: input.creatorsTableId,
+    recordId: input.creatorRecordId,
+    tenantAccessToken: input.tenantAccessToken,
+    fields: input.fields
+  }, fetchImpl);
+}
+
+async function updateBitableRecord(input, fetchImpl) {
+  const url = `${FEISHU_OPENAPI_BASE_URL}/bitable/v1/apps/${encodeURIComponent(input.baseToken)}/tables/${encodeURIComponent(input.tableId)}/records/${encodeURIComponent(input.recordId)}`;
   await parseFeishuResponse(
     await fetchImpl(url, {
       method: "PUT",
