@@ -137,30 +137,21 @@ AGENT_PORT=3215
 AGENT_DEMO_MODE=false
 ```
 
+Some AI agent sandboxes cannot reach `open.feishu.cn`. If Feishu network access fails inside the agent environment, prepare the repo and ask the user to run the Feishu setup command on their own computer.
+
 If the user already has a Feishu Base, the agent can parse the Base token and Creators table ID from the Base URL:
 
 ```bash
-curl -s http://localhost:3215/api/setup/feishu-base \
-  -H "content-type: application/json" \
-  -H "x-agent-secret: $AGENT_API_SECRET" \
-  -d '{
-    "baseUrl": "https://your-domain.feishu.cn/base/BASE_TOKEN_HERE?table=TABLE_ID_HERE"
-  }'
+npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/BASE_TOKEN_HERE?table=TABLE_ID_HERE"
 ```
 
 If the user wants the agent to create the CRM Base, the Feishu app needs permission to create and manage Bitable resources. Then run:
 
 ```bash
-curl -s http://localhost:3215/api/setup/feishu-base \
-  -H "content-type: application/json" \
-  -H "x-agent-secret: $AGENT_API_SECRET" \
-  -d '{
-    "createNewBase": true,
-    "baseName": "AI Marketing Influencer CRM"
-  }'
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
 ```
 
-The response includes `baseToken`, `creatorsTableId`, and a `tables` map. Copy `baseToken` into `FEISHU_BASE_TOKEN` and `creatorsTableId` into `FEISHU_CREATORS_TABLE_ID`.
+The command updates `.env` with `FEISHU_BASE_TOKEN` and `FEISHU_CREATORS_TABLE_ID`.
 
 Then run:
 

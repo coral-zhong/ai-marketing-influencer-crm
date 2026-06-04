@@ -63,6 +63,18 @@ The Feishu setup has two paths:
 - Paste an existing Feishu Base link. The agent can read the Base token and Creators table ID from the URL.
 - Ask the agent to create a new CRM Base. It can create the Base, tables, fields, select options, and views through the Feishu API.
 
+If your AI agent runs inside a restricted sandbox and cannot reach `open.feishu.cn`, let it prepare the repo and then run the final Feishu setup command on your own computer:
+
+```bash
+npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
+```
+
+or:
+
+```bash
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
+```
+
 ## What It Can Do
 
 Once installed, the agent can help with:
@@ -180,6 +192,18 @@ AI agent 或技术助手会处理安装步骤，并告诉你什么时候可以�
 
 - 粘贴一个已有飞书多维表格链接。Agent 可以自动从 URL 里识别 Base token 和 Creators table ID。
 - 让 Agent 新建一个 CRM Base。它可以通过飞书 API 创建 Base、数据表、字段、选项字段和视图。
+
+如果你的 AI agent 运行在受限沙箱里，访问不了 `open.feishu.cn`，让它先准备好 repo，然后你在自己的电脑上运行最后一步：
+
+```bash
+npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
+```
+
+或者：
+
+```bash
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
+```
 
 ## 它能做什么
 

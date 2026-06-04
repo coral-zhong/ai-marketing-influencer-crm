@@ -47,6 +47,14 @@ Official Feishu references:
 - Create Bitable view: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create
 - Update Bitable record: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update
 
+## Important: Where The Feishu API Call Runs
+
+If the AI agent is running inside a restricted sandbox, it may not be able to access `open.feishu.cn` even when the Feishu credentials are correct.
+
+That is an environment limitation, not a credential problem.
+
+In that case, let the agent prepare the repo and `.env`, then run the final Feishu setup command on the user's own computer. The local command will call Feishu OpenAPI and write the returned Base values back into `.env`.
+
 ## Path A: Existing Feishu Base
 
 Ask the user for the browser URL of the `Creators` table.
@@ -62,30 +70,20 @@ The agent can parse:
 - `FEISHU_BASE_TOKEN=bascnxxxx`
 - `FEISHU_CREATORS_TABLE_ID=tblxxxx`
 
-Call:
+Run:
 
 ```bash
-curl -s http://localhost:3215/api/setup/feishu-base \
-  -H "content-type: application/json" \
-  -H "x-agent-secret: $AGENT_API_SECRET" \
-  -d '{
-    "baseUrl": "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
-  }'
+npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
 ```
 
-Response shape:
+The command updates `.env` and prints a safe summary:
 
 ```json
 {
-  "setup": {
-    "mode": "existing_base_url",
-    "baseToken": "bascnxxxx",
-    "creatorsTableId": "tblxxxx",
-    "tables": {
-      "Creators": "tblxxxx"
-    },
-    "views": {}
-  }
+  "ok": true,
+  "mode": "existing_base_url",
+  "baseToken": "bascnxxxx",
+  "creatorsTableId": "tblxxxx"
 }
 ```
 
@@ -93,16 +91,10 @@ Response shape:
 
 If the user does not have a Base, the agent can create one through Feishu OpenAPI.
 
-Call:
+Run:
 
 ```bash
-curl -s http://localhost:3215/api/setup/feishu-base \
-  -H "content-type: application/json" \
-  -H "x-agent-secret: $AGENT_API_SECRET" \
-  -d '{
-    "createNewBase": true,
-    "baseName": "AI Marketing Influencer CRM"
-  }'
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
 ```
 
 The agent will:
@@ -114,33 +106,20 @@ The agent will:
 5. create schema views
 6. return the created `baseToken`, `creatorsTableId`, `tables`, and `views`
 
-Response shape:
+The command updates `.env` and prints a safe summary:
 
 ```json
 {
-  "setup": {
-    "mode": "created",
-    "baseToken": "bascnxxxx",
-    "creatorsTableId": "tblCreators",
-    "tables": {
-      "Campaigns": "tblCampaigns",
-      "Creators": "tblCreators",
-      "Agent Tasks": "tblAgentTasks"
-    },
-    "views": {
-      "Creators": {
-        "Needs Review": "vewNeedsReview"
-      }
-    }
+  "ok": true,
+  "mode": "created",
+  "baseToken": "bascnxxxx",
+  "creatorsTableId": "tblCreators",
+  "tables": {
+    "Campaigns": "tblCampaigns",
+    "Creators": "tblCreators",
+    "Agent Tasks": "tblAgentTasks"
   }
 }
-```
-
-Copy:
-
-```bash
-FEISHU_BASE_TOKEN=<setup.baseToken>
-FEISHU_CREATORS_TABLE_ID=<setup.creatorsTableId>
 ```
 
 ## Local `.env`
