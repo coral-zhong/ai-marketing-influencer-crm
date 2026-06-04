@@ -125,6 +125,8 @@ Official references:
 - [Install Test Runbook](docs/install-test-runbook.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)
+- [Influencer Marketing Workflow Roadmap](docs/influencer-marketing-workflow-roadmap.md)
+- [Agent Capability Map](docs/agent-capability-map.md)
 - [Build-in-Public Positioning Post](docs/positioning-post.md)
 
 ## Schema
