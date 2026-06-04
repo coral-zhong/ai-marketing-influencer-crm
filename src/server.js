@@ -13,6 +13,7 @@ import { trackSample } from "./sampleTracking.js";
 import { trackContentDelivery } from "./contentDeliveryTracking.js";
 import { trackPublishedPerformance } from "./performanceTracking.js";
 import { recommendSecondCollaboration } from "./secondCollaborationRecommendation.js";
+import { recommendContentRepurpose } from "./contentRepurposeRecommendation.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -231,6 +232,24 @@ export function createApp(config = loadConfig()) {
           recommendation: recommendSecondCollaboration({
             creator: body.creator,
             campaign: body.campaign || {},
+            performance: body.performance
+          })
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/recommendations/content-repurpose") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.content || !body.performance) {
+          return sendJson(response, 400, { ok: false, error: "content repurpose recommendation input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          recommendation: recommendContentRepurpose({
+            content: body.content,
             performance: body.performance
           })
         });

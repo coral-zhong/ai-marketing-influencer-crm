@@ -252,9 +252,25 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(secondCollaboration.ok === true, "second collaboration recommendation should return ok=true");
   assert(secondCollaboration.recommendation.recommendationStatus === "Recommended", "strong performance should recommend second collaboration");
 
+  const contentRepurpose = await requestJson(`${baseUrl}/api/recommendations/content-repurpose`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      content: {
+        title: "TikTok demo video",
+        publishedUrl: "https://www.tiktok.com/@mayatechfinds/video/123",
+        rightsStatus: "Usage Rights Approved"
+      },
+      performance: performanceTracking.performance
+    })
+  });
+
+  assert(contentRepurpose.ok === true, "content repurpose recommendation should return ok=true");
+  assert(contentRepurpose.recommendation.repurposeStatus === "Recommended", "strong content with rights should be recommended for reuse");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -270,7 +286,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     contentDeliveryStatus: contentDelivery.delivery.deliveryStatus,
     performanceStatus: performanceTracking.performance.performanceStatus,
     engagementRate: performanceTracking.performance.metrics.engagementRate,
-    secondCollaborationStatus: secondCollaboration.recommendation.recommendationStatus
+    secondCollaborationStatus: secondCollaboration.recommendation.recommendationStatus,
+    contentRepurposeStatus: contentRepurpose.recommendation.repurposeStatus
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

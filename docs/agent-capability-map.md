@@ -25,7 +25,7 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Review | `summarize_performance` | performance metrics | performance tier + next action | No | Implemented MVP |
 | Review | `recommend_next_actions` | performance + creator history | second collaboration recommendation | Yes before rehire | Implemented MVP |
 | Reuse | `second_collaboration_agent` | performance record | second collaboration draft recommendation | Yes | Implemented MVP |
-| Reuse | `content_repurpose_agent` | content asset + performance | `Content Assets` | Yes before reuse | Planned |
+| Reuse | `content_repurpose_agent` | content asset + performance | content repurpose recommendations | Yes before reuse | Implemented MVP |
 
 ## Status Definitions
 
@@ -38,11 +38,11 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 Recommended next build:
 
 ```text
-content_repurpose_agent
+one_click_feishu_install_oauth
 ```
 
 Reason:
 
-- It uses the performance and collaboration outputs that now exist.
-- It turns strong content into reusable ad/email/social asset suggestions.
-- It keeps final reuse decisions behind human approval.
+- It is the remaining productization gap between a developer repo and a real user install.
+- It should define the hosted OAuth/install path before adding more workflow depth.
+- It keeps API credentials out of the public repo and away from non-technical setup.

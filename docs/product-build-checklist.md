@@ -16,7 +16,7 @@ Working rule:
 - [x] Content delivery tracking
 - [x] Published content / performance tracking
 - [x] Second collaboration recommendation
-- [ ] Content repurpose recommendation
+- [x] Content repurpose recommendation
 - [ ] One-click Feishu install / OAuth hosted app
 
 ## Done Before This Checklist
@@ -38,3 +38,4 @@ Working rule:
 - 2026-06-04: Completed `Content delivery tracking` with `POST /api/content/delivery-track`, submitted/overdue/revision-needed status classification, blockers, local tests, and smoke coverage.
 - 2026-06-04: Completed `Published content / performance tracking` with `POST /api/performance/track`, published URL and metric readiness checks, engagement-rate calculation, performance tiering, local tests, and smoke coverage.
 - 2026-06-04: Completed `Second collaboration recommendation` with `POST /api/recommendations/second-collaboration`, approval-gated re-engagement recommendations, wait-state blockers, local tests, and smoke coverage.
+- 2026-06-04: Completed `Content repurpose recommendation` with `POST /api/recommendations/content-repurpose`, usage-rights blockers, paid/social/email reuse ideas, local tests, and smoke coverage.

@@ -294,6 +294,27 @@ curl -s http://localhost:3215/api/recommendations/second-collaboration \
   }'
 ```
 
+Recommend content repurpose options:
+
+```bash
+curl -s http://localhost:3215/api/recommendations/content-repurpose \
+  -H "content-type: application/json" \
+  -d '{
+    "content": {
+      "title": "TikTok demo video",
+      "publishedUrl": "https://www.tiktok.com/@mayatechfinds/video/123",
+      "rightsStatus": "Usage Rights Approved"
+    },
+    "performance": {
+      "performanceStatus": "Ready For Review",
+      "performanceTier": "Strong",
+      "metrics": {
+        "engagementRate": 0.1
+      }
+    }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:

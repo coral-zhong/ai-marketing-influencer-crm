@@ -528,6 +528,50 @@ test("POST /api/recommendations/second-collaboration validates request body", as
   });
 });
 
+test("POST /api/recommendations/content-repurpose returns repurpose ideas", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/recommendations/content-repurpose`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        content: {
+          title: "TikTok demo video",
+          publishedUrl: "https://www.tiktok.com/@mayatechfinds/video/123",
+          rightsStatus: "Usage Rights Approved"
+        },
+        performance: {
+          performanceStatus: "Ready For Review",
+          performanceTier: "Strong",
+          metrics: {
+            engagementRate: 0.1
+          }
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.recommendation.repurposeStatus, "Recommended");
+    assert.equal(body.recommendation.repurposeIdeas.length, 3);
+  });
+});
+
+test("POST /api/recommendations/content-repurpose validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/recommendations/content-repurpose`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "content repurpose recommendation input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,
