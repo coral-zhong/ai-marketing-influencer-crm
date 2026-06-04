@@ -643,6 +643,16 @@ test("POST /api/setup/feishu-base creates a new CRM Base", async () => {
       return jsonResponse({ code: 0, data: { view: { view_id: `vew_${body.view_name.replaceAll(" ", "_")}` } } });
     }
 
+    if (url.match(/\/bitable\/v1\/apps\/base-token\/tables\/tbl_.+\/records\/batch_create$/)) {
+      const body = JSON.parse(options.body);
+      return jsonResponse({
+        code: 0,
+        data: {
+          records: body.records.map((_, index) => ({ record_id: `rec_${index}` }))
+        }
+      });
+    }
+
     throw new Error(`Unexpected URL: ${url}`);
   };
 
@@ -666,6 +676,7 @@ test("POST /api/setup/feishu-base creates a new CRM Base", async () => {
     assert.equal(body.setup.mode, "created");
     assert.equal(body.setup.baseToken, "base-token");
     assert.equal(body.setup.creatorsTableId, "tbl_Creators");
+    assert.equal(body.setup.seededRecords["Operation Guide"], 7);
     assert.ok(calls.length >= 4);
   });
 });

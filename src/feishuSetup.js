@@ -55,7 +55,8 @@ export async function createFeishuCrmBase(config, input = {}, fetchImpl = fetch)
       tables: {
         Creators: parsed.tableId
       },
-      views: {}
+      views: {},
+      seededRecords: {}
     };
   }
 
@@ -72,6 +73,7 @@ export async function createFeishuCrmBase(config, input = {}, fetchImpl = fetch)
 
   const tables = {};
   const views = {};
+  const seededRecords = {};
   for (const table of schema.tables || []) {
     tables[table.name] = await createTable({
       baseToken,
@@ -84,6 +86,12 @@ export async function createFeishuCrmBase(config, input = {}, fetchImpl = fetch)
       views: table.views || [],
       tenantAccessToken
     }, fetchImpl);
+    seededRecords[table.name] = await createRecords({
+      baseToken,
+      tableId: tables[table.name],
+      records: table.records || [],
+      tenantAccessToken
+    }, fetchImpl);
   }
 
   return {
@@ -91,8 +99,26 @@ export async function createFeishuCrmBase(config, input = {}, fetchImpl = fetch)
     baseToken,
     creatorsTableId: tables.Creators || "",
     tables,
-    views
+    views,
+    seededRecords
   };
+}
+
+export async function seedFeishuTableRecords(config, input = {}, fetchImpl = fetch) {
+  if (!config.feishuAppId || !config.feishuAppSecret) {
+    throw new Error("FEISHU_APP_ID and FEISHU_APP_SECRET are required to seed Feishu table records.");
+  }
+  if (!input.baseToken || !input.tableId) {
+    throw new Error("baseToken and tableId are required to seed Feishu table records.");
+  }
+
+  const tenantAccessToken = await getTenantAccessToken(config, fetchImpl);
+  return createRecords({
+    baseToken: input.baseToken,
+    tableId: input.tableId,
+    records: input.records || [],
+    tenantAccessToken
+  }, fetchImpl);
 }
 
 async function loadDefaultSchema() {
@@ -167,6 +193,23 @@ async function createViews(input, fetchImpl) {
     created[view.name] = body.data?.view?.view_id || body.data?.view_id || body.view_id || "";
   }
   return created;
+}
+
+async function createRecords(input, fetchImpl) {
+  if (!input.records.length) return 0;
+
+  const response = await fetchImpl(`${FEISHU_OPENAPI_BASE_URL}/bitable/v1/apps/${encodeURIComponent(input.baseToken)}/tables/${encodeURIComponent(input.tableId)}/records/batch_create`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${input.tenantAccessToken}`,
+      "content-type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({
+      records: input.records.map((record) => ({ fields: record.fields || {} }))
+    })
+  });
+  const body = await parseFeishuResponse(response);
+  return body.data?.records?.length || input.records.length;
 }
 
 async function parseFeishuResponse(response) {

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildFeishuFieldDefinition, createFeishuCrmBase, parseFeishuBaseUrl } from "../src/feishuSetup.js";
+import { buildFeishuFieldDefinition, createFeishuCrmBase, seedFeishuTableRecords, parseFeishuBaseUrl } from "../src/feishuSetup.js";
 
 test("parseFeishuBaseUrl extracts base token and table id from a Feishu Base link", () => {
   const result = parseFeishuBaseUrl("https://example.feishu.cn/base/bascnDemoToken?table=tblCreators&view=vew123");
@@ -128,6 +128,72 @@ test("createFeishuCrmBase creates a Base and schema tables through OpenAPI", asy
   assert.deepEqual(JSON.parse(calls[3].options.body), { view_name: "Needs Review", view_type: "grid" });
 });
 
+test("createFeishuCrmBase seeds table records from schema", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+
+    if (url.endsWith("/bitable/v1/apps")) {
+      return jsonResponse({ code: 0, data: { app: { app_token: "base-token" } } });
+    }
+
+    if (url.endsWith("/bitable/v1/apps/base-token/tables")) {
+      return jsonResponse({ code: 0, data: { table_id: "tbl_Guide" } });
+    }
+
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tbl_Guide/records/batch_create")) {
+      return jsonResponse({ code: 0, data: { records: [{ record_id: "rec_step_1" }] } });
+    }
+
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  const setup = await createFeishuCrmBase(
+    {
+      feishuAppId: "app-id",
+      feishuAppSecret: "app-secret"
+    },
+    {
+      schema: {
+        tables: [
+          {
+            name: "Operation Guide",
+            fields: [
+              { name: "Step", type: "text" },
+              { name: "Human Approval Required", type: "select", options: ["Yes", "No"] }
+            ],
+            records: [
+              {
+                fields: {
+                  Step: "Create a campaign",
+                  "Human Approval Required": "No"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    fakeFetch
+  );
+
+  assert.equal(setup.seededRecords["Operation Guide"], 1);
+  assert.deepEqual(JSON.parse(calls[3].options.body), {
+    records: [
+      {
+        fields: {
+          Step: "Create a campaign",
+          "Human Approval Required": "No"
+        }
+      }
+    ]
+  });
+});
+
 test("createFeishuCrmBase returns parsed setup from an existing Base URL", async () => {
   const setup = await createFeishuCrmBase(
     {},
@@ -146,8 +212,42 @@ test("createFeishuCrmBase returns parsed setup from an existing Base URL", async
     tables: {
       Creators: "tblExistingCreators"
     },
-    views: {}
+    views: {},
+    seededRecords: {}
   });
+});
+
+test("seedFeishuTableRecords adds records to an existing table", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tbl_Guide/records/batch_create")) {
+      return jsonResponse({ code: 0, data: { records: [{ record_id: "rec_1" }, { record_id: "rec_2" }] } });
+    }
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  const count = await seedFeishuTableRecords(
+    {
+      feishuAppId: "app-id",
+      feishuAppSecret: "app-secret"
+    },
+    {
+      baseToken: "base-token",
+      tableId: "tbl_Guide",
+      records: [
+        { fields: { Step: "1. Create a campaign" } },
+        { fields: { Step: "2. Screen creators" } }
+      ]
+    },
+    fakeFetch
+  );
+
+  assert.equal(count, 2);
+  assert.equal(calls[1].options.headers.Authorization, "Bearer tenant-token");
 });
 
 function jsonResponse(body) {

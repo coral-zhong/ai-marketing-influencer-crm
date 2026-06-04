@@ -74,6 +74,14 @@ npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx
 
 This writes the Base token and Creators table ID into `.env`.
 
+For full-template installs, the setup also stores the complete table map in `FEISHU_TABLES_JSON`. If the Operation Guide table was created before seed records were added to this repo, run:
+
+```bash
+npm run seed:guide
+```
+
+This writes the default workflow steps into the copied or created `Operation Guide` table.
+
 If the AI agent cannot access `open.feishu.cn`, this is usually an agent sandbox network limitation. Run the command on the user's own computer.
 
 ---
@@ -153,5 +161,13 @@ npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx
 ```
 
 这会把 Base token 和 Creators table ID 写入 `.env`。
+
+对于完整模板安装，setup 也会把完整表格映射写入 `FEISHU_TABLES_JSON`。如果 Operation Guide 表是在这个 repo 增加种子内容之前创建的，可以运行：
+
+```bash
+npm run seed:guide
+```
+
+这会把默认 workflow 步骤写入复制或创建出来的 `Operation Guide` 表。
 
 如果 AI agent 访问不了 `open.feishu.cn`，通常是 agent 沙箱网络限制。让用户在自己的电脑上运行这条命令即可。

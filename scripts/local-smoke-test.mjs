@@ -306,6 +306,7 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(feishuCreatedBaseSetup.ok === true, "Feishu created Base setup should return ok=true");
   assert(feishuCreatedBaseSetup.setup.baseToken === "base-local-smoke", "Feishu created Base setup should return base token");
   assert(feishuCreatedBaseSetup.setup.creatorsTableId === "tbl_Creators", "Feishu created Base setup should return Creators table id");
+  assert(feishuCreatedBaseSetup.setup.seededRecords["Operation Guide"] === 7, "Feishu created Base setup should seed Operation Guide records");
 
   console.log(JSON.stringify({
     ok: true,
@@ -332,7 +333,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     parsedBaseToken: feishuExistingBaseSetup.setup.baseToken,
     parsedCreatorsTableId: feishuExistingBaseSetup.setup.creatorsTableId,
     createdBaseToken: feishuCreatedBaseSetup.setup.baseToken,
-    createdCreatorsTableId: feishuCreatedBaseSetup.setup.creatorsTableId
+    createdCreatorsTableId: feishuCreatedBaseSetup.setup.creatorsTableId,
+    operationGuideSeededRecords: feishuCreatedBaseSetup.setup.seededRecords["Operation Guide"]
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));
@@ -366,6 +368,16 @@ async function fakeFeishuFetch(url, options) {
   if (url.match(/\/bitable\/v1\/apps\/base-local-smoke\/tables\/tbl_.+\/views$/)) {
     const body = JSON.parse(options.body);
     return jsonResponse({ code: 0, data: { view: { view_id: `vew_${body.view_name.replaceAll(" ", "_")}` } } });
+  }
+
+  if (url.match(/\/bitable\/v1\/apps\/base-local-smoke\/tables\/tbl_.+\/records\/batch_create$/)) {
+    const body = JSON.parse(options.body);
+    return jsonResponse({
+      code: 0,
+      data: {
+        records: body.records.map((_, index) => ({ record_id: `rec_${index}` }))
+      }
+    });
   }
 
   throw new Error(`Unexpected fake Feishu URL: ${url}`);

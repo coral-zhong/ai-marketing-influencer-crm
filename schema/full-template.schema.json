@@ -314,6 +314,71 @@
       ],
       "views": [
         { "name": "Workflow Steps", "type": "grid" }
+      ],
+      "records": [
+        {
+          "fields": {
+            "Step": "1. Create a campaign",
+            "When To Use": "Start here when planning a new influencer marketing campaign.",
+            "User Action": "Fill campaign goal, product, creator criteria, allowed claims, and claims to avoid.",
+            "Agent Output": "Campaign task breakdown and creator search plan.",
+            "Human Approval Required": "No"
+          }
+        },
+        {
+          "fields": {
+            "Step": "2. Add or search creators",
+            "When To Use": "Use this when importing existing creators or asking the agent to search websites.",
+            "User Action": "Add creators to Creators or create a Creator Search task.",
+            "Agent Output": "Creator candidates, duplicate checks, and searchable creator records.",
+            "Human Approval Required": "No"
+          }
+        },
+        {
+          "fields": {
+            "Step": "3. Screen creators",
+            "When To Use": "Use this before outreach.",
+            "User Action": "Mark creators as To Screen and ask the agent to evaluate fit.",
+            "Agent Output": "Fit score, tier, strengths, risks, confidence, and collaboration recommendation.",
+            "Human Approval Required": "Yes"
+          }
+        },
+        {
+          "fields": {
+            "Step": "4. Draft outreach",
+            "When To Use": "Use this after a creator passes screening.",
+            "User Action": "Ask the agent to draft outreach for a selected creator and campaign.",
+            "Agent Output": "Review-only outreach draft and send-ready package.",
+            "Human Approval Required": "Yes"
+          }
+        },
+        {
+          "fields": {
+            "Step": "5. Negotiate and confirm collaboration",
+            "When To Use": "Use this when a creator replies or terms need review.",
+            "User Action": "Paste inbound messages, offer range, and constraints.",
+            "Agent Output": "Suggested reply, risk notes, and collaboration confirmation draft.",
+            "Human Approval Required": "Yes"
+          }
+        },
+        {
+          "fields": {
+            "Step": "6. Track sample and content delivery",
+            "When To Use": "Use this after collaboration terms are confirmed.",
+            "User Action": "Record sample tracking, due dates, submitted URLs, and revision notes.",
+            "Agent Output": "Sample status, overdue flags, and content review status.",
+            "Human Approval Required": "Yes"
+          }
+        },
+        {
+          "fields": {
+            "Step": "7. Review performance and reuse",
+            "When To Use": "Use this after content is published and metrics are available.",
+            "User Action": "Add published URL and performance metrics.",
+            "Agent Output": "Performance tier, second collaboration recommendation, and content repurpose ideas.",
+            "Human Approval Required": "Yes"
+          }
+        }
       ]
     }
   ]

@@ -23,10 +23,13 @@ AGENT_DEMO_MODE=true
 `, {
     FEISHU_BASE_TOKEN: "bascnCreated",
     FEISHU_CREATORS_TABLE_ID: "tblCreators",
+    FEISHU_TABLES_JSON: JSON.stringify({ Creators: "tblCreators", Outreach: "tblOutreach" }),
     AGENT_DEMO_MODE: "false"
   });
 
   assert.match(updated, /^FEISHU_BASE_TOKEN=bascnCreated$/m);
   assert.match(updated, /^FEISHU_CREATORS_TABLE_ID=tblCreators$/m);
+  assert.match(updated, /^FEISHU_TABLES_JSON=/m);
+  assert.match(updated, /tblOutreach/);
   assert.match(updated, /^AGENT_DEMO_MODE=false$/m);
 });

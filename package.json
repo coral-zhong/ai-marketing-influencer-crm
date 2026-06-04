@@ -8,6 +8,7 @@
     "start": "node src/server.js",
     "dev": "AGENT_DEMO_MODE=true node src/server.js",
     "setup:feishu": "node scripts/setup-feishu-base.mjs",
+    "seed:guide": "node scripts/seed-operation-guide.mjs",
     "test": "node --test test/*.test.js",
     "smoke": "node scripts/local-smoke-test.mjs",
     "verify:local": "npm test && npm run smoke"

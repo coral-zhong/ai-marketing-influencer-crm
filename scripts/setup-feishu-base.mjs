@@ -26,6 +26,7 @@ async function main() {
   const updated = upsertEnvValues(envText, {
     FEISHU_BASE_TOKEN: setup.baseToken,
     FEISHU_CREATORS_TABLE_ID: setup.creatorsTableId,
+    FEISHU_TABLES_JSON: JSON.stringify(setup.tables || {}),
     AGENT_DEMO_MODE: "false"
   });
   await writeFile(envPath, updated, "utf8");
@@ -37,7 +38,8 @@ async function main() {
     baseToken: setup.baseToken,
     creatorsTableId: setup.creatorsTableId,
     tables: setup.tables,
-    views: setup.views
+    views: setup.views,
+    seededRecords: setup.seededRecords
   }, null, 2));
 }
 
