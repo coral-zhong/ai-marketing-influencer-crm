@@ -2,133 +2,101 @@
 
 **English** | [中文](#中文)
 
-An AI-powered influencer marketing workspace that lives inside Feishu.
+An AI-assisted influencer marketing CRM that runs inside Feishu.
 
-Give it a creator, a campaign, or a piece of published content. It helps you decide what to do next: who to contact, what to say, whether to negotiate, whether the sample arrived, whether the content is late, whether the post performed well, and whether the creator or content is worth reusing.
+It helps creator partnership teams manage the workflow from creator discovery to outreach, negotiation, sample tracking, content delivery, performance review, second collaboration, and content reuse.
 
-This repository is the agent package for a Feishu Base CRM template. A user copies the Feishu template first, then gives this GitHub link to an AI agent or technical helper to connect creator search, screening, outreach, negotiation, tracking, and recommendation workflows.
+The product has two parts:
+
+- a Feishu Base template for the CRM workspace
+- an agent package that connects AI workflow abilities to the copied Base
 
 ## Who This Is For
 
-This is for founders, marketers, ecommerce operators, and creator partnership teams who run influencer campaigns in spreadsheets, DMs, emails, and scattered notes.
+This is for founders, marketers, ecommerce operators, and creator partnership teams who manage influencer campaigns across spreadsheets, DMs, emails, and scattered notes.
 
-You might need this if:
+You may need it if:
 
-- You already collect creator leads but do not know who is actually worth contacting.
-- You spend too much time writing outreach and follow-ups.
-- You lose track of samples, deliverables, deadlines, and published links.
-- You want AI help, but you still want a human to approve messages, offers, and reuse decisions.
-- You want the workflow in Feishu, not in a developer terminal.
+- you already collect creator leads but do not know who to prioritize
+- you spend too much time writing outreach and follow-ups
+- you lose track of samples, deadlines, deliverables, and published links
+- you want AI help while keeping human approval for external actions
+- you want the workflow to live in Feishu
 
 ## What You Get
 
-A Feishu-first CRM workflow for influencer marketing:
+The Feishu CRM template includes workspace tables for:
 
-- Creator intake and screening
-- Campaign planning and task breakdown
-- Outreach draft generation
-- Send-ready outreach package with approval gate
-- Negotiation assistant
-- Collaboration confirmation
-- Sample tracking
-- Content delivery tracking
-- Published content performance tracking
-- Second collaboration recommendation
-- Content repurpose recommendation
-- Feishu OAuth install entry point for hosted installation
+- campaigns
+- creators
+- creator search
+- outreach
+- negotiations
+- collaborations
+- samples
+- content deliverables
+- published content
+- performance
+- recommendations
+- agent tasks
+- operation guide
 
-The product is designed around a simple rule:
+The agent can help with:
+
+1. finding creator candidates from website snippets
+2. screening creators against a campaign
+3. breaking a campaign into tasks
+4. drafting outreach
+5. preparing a send-ready outreach package
+6. assisting negotiation
+7. confirming collaboration details
+8. tracking samples and content delivery
+9. reviewing published content performance
+10. recommending second collaborations and content reuse
+
+The product follows one rule:
 
 ```text
 AI can draft, score, summarize, and recommend.
 Humans approve before anything external happens.
 ```
 
-## Recommended Install
+## How To Install
 
-For non-technical users, start by copying the Feishu Base template into your own workspace. The template is the product workspace. This GitHub repo adds the agent abilities that make the CRM useful.
+Start with the Feishu template.
 
-After copying the template, give this repo and your copied Base URL to an AI coding agent.
+1. Get the Feishu CRM template link from the product owner.
+2. Copy the template into your own Feishu workspace.
+3. Open the copied Base and copy its browser URL.
+4. Give the copied Base URL and this GitHub repo link to your AI coding agent or technical helper.
 
-Copy this:
+Copy this prompt:
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my Feishu Base URL>.
+Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my copied Feishu Base URL>.
 ```
 
-The AI agent or technical helper will install the repo, run the local verification, and connect the agent to your copied Base.
+The agent or technical helper will install the package, verify it locally, and connect it to your copied Feishu Base.
 
-The Feishu setup has three paths:
+Detailed setup guide: [Template-First Install](docs/template-first-install.md)
 
-- Recommended: copy the complete Feishu Base template, then connect the copied Base.
-- Developer install: paste an existing Feishu Base link and let the agent read the Base token and Creators table ID from the URL.
-- Internal test: ask the agent to create a new CRM Base through the Feishu API.
+## Credentials
 
-If your AI agent runs inside a restricted sandbox and cannot reach `open.feishu.cn`, let it prepare the repo and then run the final Feishu setup command on your own computer:
+Trying the agent locally does not require Feishu credentials.
 
-```bash
-npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
-```
+Connecting it to a real Feishu Base requires a Feishu app connection so the agent can write approved results back to your workspace. Do not put secrets into public issues, screenshots, or commits.
 
-or:
-
-```bash
-npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
-```
-
-## What It Can Do
-
-Once installed, the agent can help with:
-
-1. Import and search creator candidates.
-2. Screen a creator against a campaign.
-3. Break a campaign into tasks.
-4. Draft outreach.
-5. Prepare an approved send package.
-6. Assist negotiation without making commitments.
-7. Confirm a collaboration.
-8. Track samples and content delivery.
-9. Track published content performance.
-10. Recommend second collaborations and content reuse.
-11. Prepare the Feishu OAuth install entry point.
-
-## Connect To Feishu
-
-For trying it locally: **No Feishu credentials are needed.**
-
-For real writeback to your workspace, the local install needs:
-
-- `FEISHU_APP_ID`
-- `FEISHU_APP_SECRET`
-- either an existing Feishu Base link or permission to create a new Base
-
-`AGENT_API_SECRET` is not a Feishu credential. It is a private shared secret for the local agent endpoint. Your AI agent can generate a random value for it.
-
-For a hosted install path, the user should not copy secrets manually. The hosted app should handle authorization through Feishu OAuth.
-
-Setup guides:
+## Useful Docs
 
 - [Template-First Install](docs/template-first-install.md)
-- [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)
-
-## For Builders And Agents
-
-Useful docs:
-
 - [Operation Guide](docs/operation-guide.md)
-- [Template-First Install](docs/template-first-install.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
-- [Agent Capability Map](docs/agent-capability-map.md)
-- [Product Build Checklist](docs/product-build-checklist.md)
-- [Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md)
-- [Full Feishu CRM Template Schema](schema/full-template.schema.json)
 
-## Privacy And Safety
+## Safety
 
-- Trying it locally does not need real Feishu credentials.
-- Real secrets should never be committed to this repo.
-- `FEISHU_APP_SECRET` belongs on the hosted server only.
-- The agent should not automatically send outreach, promise payment, ship samples, approve creator content, or publish reused content.
+The agent should not automatically send outreach, promise payment, confirm collaboration terms, ship samples, approve creator content, or publish reused content.
+
+Those actions should stay human-approved.
 
 ## License
 
@@ -140,38 +108,55 @@ MIT
 
 一个运行在飞书里的 AI 红人营销 CRM。
 
-你给它一个达人、一个 Campaign，或者一条已经发布的内容，它会帮你判断下一步：该不该联系、怎么写 outreach、怎么谈判、样品有没有到、内容有没有逾期、发布效果好不好、这个达人值不值得二次合作、这条内容值不值得复用。
+它帮助红人营销团队管理从达人发现、筛选、outreach、谈判、寄样、内容交付、发布表现复盘，到二次合作和内容复用的完整流程。
 
-这个 GitHub 仓库是飞书 CRM 模板的 agent 配套包。用户先复制飞书模板，再把这个 GitHub 链接交给 AI agent 或技术助手，用来连接达人搜索、筛选、outreach、谈判、跟踪和推荐能力。
+这个产品由两部分组成：
 
-## 这个产品适合谁
+- 飞书多维表格模板：用户实际使用的 CRM 工作台
+- Agent package：把 AI 工作流能力连接到用户复制后的 Base
+
+## 适合谁
 
 如果你的红人营销现在靠表格、私信、邮件和零散备注撑着，这个产品就是为你准备的。
 
 你可能会需要它，如果：
 
-- 你已经有达人名单，但不知道谁值得优先联系。
-- 你花很多时间写 outreach 和 follow-up。
-- 你经常跟丢样品、内容截止日期、发布链接和表现数据。
-- 你想用 AI 提效，但不希望 AI 自动替你发消息、承诺报价或审批内容。
-- 你希望工作流在飞书里完成，而不是在 Terminal 里完成。
+- 你已经有达人名单，但不知道谁值得优先联系
+- 你花很多时间写 outreach 和 follow-up
+- 你经常跟丢样品、截止日期、内容交付和发布链接
+- 你想用 AI 提效，但不希望 AI 自动替你做对外承诺
+- 你希望工作流在飞书里完成
 
 ## 你会得到什么
 
-一个以飞书为中心的红人营销工作流：
+飞书 CRM 模板包含：
 
-- 达人导入与筛选
-- Campaign 规划和任务拆解
-- Outreach 草稿生成
-- 带审批门槛的发送包
-- 谈判助手
-- 合作确认
-- 寄样跟踪
-- 内容交付跟踪
-- 已发布内容表现跟踪
-- 二次合作推荐
-- 内容复用推荐
-- 面向托管安装的飞书 OAuth 入口
+- Campaigns
+- Creators
+- Creator Search
+- Outreach
+- Negotiations
+- Collaborations
+- Samples
+- Content Deliverables
+- Published Content
+- Performance
+- Recommendations
+- Agent Tasks
+- Operation Guide
+
+Agent 可以帮你：
+
+1. 从网站片段里发现达人候选
+2. 根据 Campaign 筛选达人
+3. 拆解 Campaign 任务
+4. 起草 outreach
+5. 准备可审核的发送包
+6. 辅助谈判
+7. 确认合作信息
+8. 跟踪寄样和内容交付
+9. 复盘已发布内容表现
+10. 推荐二次合作和内容复用
 
 产品遵守一个简单原则：
 
@@ -180,91 +165,42 @@ AI 可以起草、评分、总结和推荐。
 任何对外动作都需要人来确认。
 ```
 
-## 推荐安装方式
+## 如何安装
 
-对于非技术用户，推荐先把飞书 Base 模板复制到自己的空间。模板是用户实际看到和操作的产品工作台，这个 GitHub repo 负责补上 agent 能力。
+先从飞书模板开始。
 
-复制模板后，把这个 repo 和复制后的 Base URL 发给 AI coding agent。
+1. 从产品方获得飞书 CRM 模板链接。
+2. 把模板复制到你自己的飞书空间。
+3. 打开复制后的 Base，复制浏览器地址。
+4. 把复制后的 Base URL 和这个 GitHub repo 链接交给你的 AI coding agent 或技术助手。
 
-复制这句话给它：
+可以直接复制这句话：
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my Feishu Base URL>.
+Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my copied Feishu Base URL>.
 ```
 
-AI agent 或技术助手会安装 repo，运行本地验证，并把 agent 连接到你复制后的 Base。
+AI agent 或技术助手会安装 package，运行本地验证，并连接到你复制后的飞书 Base。
 
-连接飞书有三条路径：
+详细安装指南：[Template-First Install](docs/template-first-install.md)
 
-- 推荐路径：复制完整飞书 Base 模板，然后连接复制后的 Base。
-- 开发者安装：粘贴一个已有飞书多维表格链接，让 Agent 从 URL 里识别 Base token 和 Creators table ID。
-- 内部测试：让 Agent 通过飞书 API 新建一个 CRM Base。
+## 凭证说明
 
-如果你的 AI agent 运行在受限沙箱里，访问不了 `open.feishu.cn`，让它先准备好 repo，然后你在自己的电脑上运行最后一步：
+本地试用 agent 不需要飞书凭证。
 
-```bash
-npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
-```
+连接真实飞书 Base 时，需要配置飞书应用连接，让 agent 可以把审核后的结果写回你的工作台。不要把密钥发到公开 issue、截图或 Git commit 里。
 
-或者：
-
-```bash
-npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
-```
-
-## 它能做什么
-
-安装后，Agent 可以帮你：
-
-1. 导入和搜索达人候选。
-2. 根据 Campaign 筛选达人。
-3. 把 Campaign 拆成任务。
-4. 生成 outreach 草稿。
-5. 准备带审批门槛的发送包。
-6. 辅助谈判，但不自动承诺。
-7. 确认合作。
-8. 跟踪寄样和内容交付。
-9. 跟踪已发布内容表现。
-10. 推荐二次合作和内容复用。
-11. 准备飞书 OAuth 安装入口。
-
-## 连接飞书需要什么？
-
-本地试用：**不需要飞书凭证。**
-
-如果要写入你的真实飞书空间，本地安装需要：
-
-- `FEISHU_APP_ID`
-- `FEISHU_APP_SECRET`
-- 一个已有飞书 Base 链接，或允许 Agent 新建 Base
-
-`AGENT_API_SECRET` 不是飞书凭证。它只是本地 agent 接口的访问密码，可以让 AI agent 自动生成一个随机值。
-
-如果走托管安装路径，用户不应该手动复制密钥。授权应该通过飞书 OAuth 完成。
-
-配置指南：
+## 有用文档
 
 - [Template-First Install / 模板优先安装](docs/template-first-install.md)
-- [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)
-
-## 给开发者和 AI agent
-
-有用文档：
-
 - [Operation Guide / 操作指南](docs/operation-guide.md)
-- [Template-First Install / 模板优先安装](docs/template-first-install.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
-- [Agent Capability Map](docs/agent-capability-map.md)
-- [Product Build Checklist](docs/product-build-checklist.md)
-- [Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md)
-- [Full Feishu CRM Template Schema](schema/full-template.schema.json)
 
-## 隐私和安全
+## 安全边界
 
-- 本地试用不需要真实飞书凭证。
-- 真实密钥不要提交到这个仓库。
-- `FEISHU_APP_SECRET` 只能保存在托管服务端。
-- Agent 不能自动发送 outreach、承诺付款、寄样、审批达人内容或发布复用内容。
+Agent 不应该自动发送 outreach、承诺付款、确认合作条款、安排寄样、审批达人内容或发布复用内容。
+
+这些动作都应该由人来确认。
 
 ## License
 
