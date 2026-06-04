@@ -45,6 +45,49 @@ This repo is the public productization workspace for the MVP. It will contain:
 
 Local developer automation is intentionally not the default path.
 
+## Quick Start
+
+Run the Cloud Agent MVP locally:
+
+```bash
+npm test
+npm start
+```
+
+In another terminal, send a demo screening request:
+
+```bash
+curl -s http://localhost:3215/api/tasks/screen-creator \
+  -H "content-type: application/json" \
+  -d '{
+    "creator": {
+      "name": "Maya Tech Finds",
+      "platform": "TikTok",
+      "profileUrl": "https://example.com/maya",
+      "exampleVideoUrl": "https://example.com/video",
+      "category": "UGC tech review"
+    },
+    "campaign": {
+      "campaignGoal": "Find creators for short tutorial demos",
+      "creatorCriteria": "TikTok UGC review creators"
+    }
+  }'
+```
+
+Optional request protection:
+
+```bash
+AGENT_API_SECRET="replace-me" npm start
+```
+
+Then include:
+
+```bash
+-H "x-agent-secret: replace-me"
+```
+
+The current public MVP returns deterministic screening output and a demo writeback status. Direct Feishu OpenAPI writeback is intentionally isolated behind `src/feishuClient.js` for the next implementation step.
+
 ## Docs
 
 - [Productization Plan](docs/productization-plan.md)
@@ -54,4 +97,3 @@ Local developer automation is intentionally not the default path.
 ## Safety Principle
 
 The agent may score, summarize, recommend, and draft. It must not automatically send outreach, promise payment, ship samples, approve content, or publish posts.
-
