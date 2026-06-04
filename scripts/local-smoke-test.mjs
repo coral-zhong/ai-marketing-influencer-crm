@@ -187,9 +187,30 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(sampleTracking.ok === true, "sample tracking should return ok=true");
   assert(sampleTracking.tracking.sampleStatus === "Received", "sample tracking should detect delivered sample");
 
+  const contentDelivery = await requestJson(`${baseUrl}/api/content/delivery-track`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      collaboration: {
+        collaborationName: "Maya Tech Finds x Spring TikTok UGC Test",
+        creatorName: "Maya Tech Finds"
+      },
+      content: {
+        deliverableName: "TikTok demo video",
+        dueDate: "2026-07-01",
+        submittedAt: "2026-06-29",
+        submittedUrl: "https://example.com/submitted-video"
+      },
+      today: "2026-06-30"
+    })
+  });
+
+  assert(contentDelivery.ok === true, "content delivery tracking should return ok=true");
+  assert(contentDelivery.delivery.deliveryStatus === "Awaiting Review", "submitted content should await review");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -201,7 +222,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     sendPackageStatus: sendPackage.package.status,
     negotiationStatus: negotiation.guidance.status,
     collaborationStatus: collaboration.confirmation.status,
-    sampleStatus: sampleTracking.tracking.sampleStatus
+    sampleStatus: sampleTracking.tracking.sampleStatus,
+    contentDeliveryStatus: contentDelivery.delivery.deliveryStatus
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

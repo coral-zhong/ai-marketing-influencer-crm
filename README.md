@@ -225,6 +225,26 @@ curl -s http://localhost:3215/api/samples/track \
   }'
 ```
 
+Track content delivery status:
+
+```bash
+curl -s http://localhost:3215/api/content/delivery-track \
+  -H "content-type: application/json" \
+  -d '{
+    "collaboration": {
+      "collaborationName": "Maya Tech Finds x Spring TikTok UGC Test",
+      "creatorName": "Maya Tech Finds"
+    },
+    "content": {
+      "deliverableName": "TikTok demo video",
+      "dueDate": "2026-07-01",
+      "submittedAt": "2026-06-29",
+      "submittedUrl": "https://example.com/submitted-video"
+    },
+    "today": "2026-06-30"
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:

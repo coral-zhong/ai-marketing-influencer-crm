@@ -13,7 +13,7 @@ Working rule:
 - [x] Negotiation assistant
 - [x] Collaboration confirmation
 - [x] Sample tracking
-- [ ] Content delivery tracking
+- [x] Content delivery tracking
 - [ ] Published content / performance tracking
 - [ ] Second collaboration recommendation
 - [ ] Content repurpose recommendation
@@ -35,3 +35,4 @@ Working rule:
 - 2026-06-04: Completed `Negotiation assistant` with `POST /api/negotiation/assist`, review-only reply suggestions, risk detection, guardrails, local tests, and smoke coverage.
 - 2026-06-04: Completed `Collaboration confirmation` with `POST /api/collaborations/confirm`, approval gate, collaboration draft output, fulfillment-start defaults, local tests, and smoke coverage.
 - 2026-06-04: Completed `Sample tracking` with `POST /api/samples/track`, tracking status classification, missing-info blockers, content kickoff reminder draft, local tests, and smoke coverage.
+- 2026-06-04: Completed `Content delivery tracking` with `POST /api/content/delivery-track`, submitted/overdue/revision-needed status classification, blockers, local tests, and smoke coverage.

@@ -10,6 +10,7 @@ import { prepareOutreachSendPackage } from "./outreachSendWorkflow.js";
 import { assistNegotiation } from "./negotiationAssistant.js";
 import { confirmCollaboration } from "./collaborationConfirmation.js";
 import { trackSample } from "./sampleTracking.js";
+import { trackContentDelivery } from "./contentDeliveryTracking.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -173,6 +174,25 @@ export function createApp(config = loadConfig()) {
           tracking: trackSample({
             collaboration: body.collaboration,
             sample: body.sample
+          })
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/content/delivery-track") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.collaboration || !body.content) {
+          return sendJson(response, 400, { ok: false, error: "content delivery tracking input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          delivery: trackContentDelivery({
+            collaboration: body.collaboration,
+            content: body.content,
+            today: body.today
           })
         });
       }

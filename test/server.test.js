@@ -391,6 +391,48 @@ test("POST /api/samples/track validates request body", async () => {
   });
 });
 
+test("POST /api/content/delivery-track returns delivery status", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/content/delivery-track`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        collaboration: {
+          collaborationName: "Maya Tech Finds x Spring TikTok UGC Test",
+          creatorName: "Maya Tech Finds"
+        },
+        content: {
+          deliverableName: "TikTok demo video",
+          dueDate: "2026-07-01",
+          submittedAt: "2026-06-29",
+          submittedUrl: "https://example.com/submitted-video"
+        },
+        today: "2026-06-30"
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.delivery.deliveryStatus, "Awaiting Review");
+  });
+});
+
+test("POST /api/content/delivery-track validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/content/delivery-track`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "content delivery tracking input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,
