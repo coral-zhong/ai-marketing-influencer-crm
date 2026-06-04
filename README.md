@@ -173,6 +173,22 @@ curl -s http://localhost:3215/api/outreach/send-package \
   }'
 ```
 
+Assist a negotiation reply without making commitments:
+
+```bash
+curl -s http://localhost:3215/api/negotiation/assist \
+  -H "content-type: application/json" \
+  -d '{
+    "creator": { "name": "Maya Tech Finds" },
+    "campaign": {
+      "brand": "Demo Brand",
+      "productName": "Magnetic power bank",
+      "offerRange": "$100-$200 plus sample"
+    },
+    "inboundMessage": "Can you pay $500?"
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:

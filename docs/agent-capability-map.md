@@ -17,7 +17,7 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Outreach | `draft_outreach` | creator + campaign | review-only outreach draft | Yes before send | Implemented MVP |
 | Outreach | `prepare_outreach_send_package` | approved outreach draft | send-ready package | Yes before send | Implemented MVP |
 | Outreach | `draft_follow_up` | outreach record | `Outreach` | Yes before send | Planned |
-| Negotiation | `negotiation_assistant` | reply/context | `Outreach`, `Collaborations` | Yes | Planned |
+| Negotiation | `negotiation_assistant` | reply/context | review-only reply guidance | Yes | Implemented MVP |
 | Fulfillment | `create_collaboration_from_approval` | approved outreach | `Collaborations` | Yes | Planned |
 | Fulfillment | `sample_tracking_agent` | collaboration + logistics | `Collaborations`, `Agent Tasks` | Yes before external message | Planned |
 | Content Delivery | `content_delivery_agent` | collaboration/content status | `Content Assets` | Yes for approval | Planned |

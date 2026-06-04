@@ -132,9 +132,26 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(sendPackage.ok === true, "send package should return ok=true");
   assert(sendPackage.package.status === "Ready To Send", "send package should be ready after approval");
 
+  const negotiation = await requestJson(`${baseUrl}/api/negotiation/assist`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      creator: { name: "Maya Tech Finds" },
+      campaign: {
+        brand: "Demo Brand",
+        productName: "Magnetic power bank",
+        offerRange: "$100-$200 plus sample"
+      },
+      inboundMessage: "Can you pay $500?"
+    })
+  });
+
+  assert(negotiation.ok === true, "negotiation assist should return ok=true");
+  assert(negotiation.guidance.status === "Needs Review", "negotiation guidance should require review");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -143,7 +160,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType),
     outreachStatus: outreachDraft.draft.status,
     creatorSearchCandidates: creatorSearch.summary.candidates,
-    sendPackageStatus: sendPackage.package.status
+    sendPackageStatus: sendPackage.package.status,
+    negotiationStatus: negotiation.guidance.status
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

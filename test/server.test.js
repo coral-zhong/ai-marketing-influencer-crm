@@ -270,6 +270,46 @@ test("POST /api/outreach/send-package validates request body", async () => {
   });
 });
 
+test("POST /api/negotiation/assist returns review-only negotiation guidance", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/negotiation/assist`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        creator: { name: "Maya Tech Finds" },
+        campaign: {
+          brand: "Demo Brand",
+          productName: "Magnetic power bank",
+          offerRange: "$100-$200 plus sample"
+        },
+        inboundMessage: "Can you pay $500?"
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.guidance.status, "Needs Review");
+    assert.equal(body.guidance.permissionLevel, "review");
+    assert.match(body.guidance.suggestedReply, /confirm internally/);
+  });
+});
+
+test("POST /api/negotiation/assist validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/negotiation/assist`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "negotiation input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,
