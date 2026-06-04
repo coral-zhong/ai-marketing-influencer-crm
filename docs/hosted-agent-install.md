@@ -86,6 +86,25 @@ If `/health` works, the hosted agent is online.
 
 If Feishu writeback fails later, the most likely cause is Feishu permission, not Railway. The Feishu app must have permission to edit the copied Base.
 
+## Feishu Writeback Permission
+
+The hosted agent needs two kinds of Feishu permission:
+
+1. The Feishu app has the right API scopes in Feishu Developer Console.
+2. The copied Base gives that Feishu app permission to edit the document.
+
+In Feishu Developer Console, confirm the app has Bitable permissions for reading, editing, and managing Bases, then publish the app version.
+
+In the copied Base, open sharing or collaborator settings and add the Feishu app as a collaborator with edit or manage permission.
+
+If the app can read tables but cannot write records, Feishu may return:
+
+```text
+91403 Forbidden
+```
+
+That usually means the Railway service is online, but the Feishu app still cannot edit this specific copied Base.
+
 ## Hosted Endpoint
 
 Feishu automation should call:
@@ -251,6 +270,25 @@ https://<你的 Railway 域名>/health
 如果 `/health` 正常，说明云端 agent 已经在线。
 
 如果后面飞书写回失败，最常见原因不是 Railway，而是飞书权限。你的飞书应用需要有复制后 Base 的编辑权限。
+
+## 飞书写回权限
+
+云端 agent 需要两层飞书权限：
+
+1. 飞书开发者后台里的应用 API 权限已经开通。
+2. 复制后的 Base 本身允许这个飞书应用编辑文档。
+
+在飞书开发者后台，确认应用已经开通多维表格的读取、编辑、管理相关权限，并且已经发布版本。
+
+在复制后的 Base 里，打开分享或协作者设置，把这个飞书应用添加为协作者，并给编辑或管理权限。
+
+如果应用能读取表结构，但不能写入记录，飞书可能返回：
+
+```text
+91403 Forbidden
+```
+
+这通常说明 Railway 服务已经在线，但飞书应用还不能编辑这张具体复制出来的 Base。
 
 ## 云端 Endpoint
 
