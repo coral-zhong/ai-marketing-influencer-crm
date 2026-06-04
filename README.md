@@ -245,6 +245,30 @@ curl -s http://localhost:3215/api/content/delivery-track \
   }'
 ```
 
+Track published content performance:
+
+```bash
+curl -s http://localhost:3215/api/performance/track \
+  -H "content-type: application/json" \
+  -d '{
+    "collaboration": {
+      "collaborationName": "Maya Tech Finds x Spring TikTok UGC Test",
+      "creatorName": "Maya Tech Finds"
+    },
+    "publishedContent": {
+      "platform": "TikTok",
+      "publishedUrl": "https://www.tiktok.com/@mayatechfinds/video/123",
+      "metrics": {
+        "views": 10000,
+        "likes": 650,
+        "comments": 80,
+        "saves": 120,
+        "shares": 150
+      }
+    }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:

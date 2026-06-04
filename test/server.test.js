@@ -433,6 +433,53 @@ test("POST /api/content/delivery-track validates request body", async () => {
   });
 });
 
+test("POST /api/performance/track returns published content performance", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/performance/track`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        collaboration: {
+          collaborationName: "Maya Tech Finds x Spring TikTok UGC Test",
+          creatorName: "Maya Tech Finds"
+        },
+        publishedContent: {
+          platform: "TikTok",
+          publishedUrl: "https://www.tiktok.com/@mayatechfinds/video/123",
+          metrics: {
+            views: 10000,
+            likes: 650,
+            comments: 80,
+            saves: 120,
+            shares: 150
+          }
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.performance.performanceStatus, "Ready For Review");
+    assert.equal(body.performance.metrics.engagementRate, 0.1);
+  });
+});
+
+test("POST /api/performance/track validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/performance/track`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "performance tracking input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

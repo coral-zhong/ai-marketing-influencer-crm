@@ -208,9 +208,34 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(contentDelivery.ok === true, "content delivery tracking should return ok=true");
   assert(contentDelivery.delivery.deliveryStatus === "Awaiting Review", "submitted content should await review");
 
+  const performanceTracking = await requestJson(`${baseUrl}/api/performance/track`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      collaboration: {
+        collaborationName: "Maya Tech Finds x Spring TikTok UGC Test",
+        creatorName: "Maya Tech Finds"
+      },
+      publishedContent: {
+        platform: "TikTok",
+        publishedUrl: "https://www.tiktok.com/@mayatechfinds/video/123",
+        metrics: {
+          views: 10000,
+          likes: 650,
+          comments: 80,
+          saves: 120,
+          shares: 150
+        }
+      }
+    })
+  });
+
+  assert(performanceTracking.ok === true, "performance tracking should return ok=true");
+  assert(performanceTracking.performance.performanceStatus === "Ready For Review", "published content should be ready for performance review");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -223,7 +248,9 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     negotiationStatus: negotiation.guidance.status,
     collaborationStatus: collaboration.confirmation.status,
     sampleStatus: sampleTracking.tracking.sampleStatus,
-    contentDeliveryStatus: contentDelivery.delivery.deliveryStatus
+    contentDeliveryStatus: contentDelivery.delivery.deliveryStatus,
+    performanceStatus: performanceTracking.performance.performanceStatus,
+    engagementRate: performanceTracking.performance.metrics.engagementRate
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

@@ -14,7 +14,7 @@ Working rule:
 - [x] Collaboration confirmation
 - [x] Sample tracking
 - [x] Content delivery tracking
-- [ ] Published content / performance tracking
+- [x] Published content / performance tracking
 - [ ] Second collaboration recommendation
 - [ ] Content repurpose recommendation
 - [ ] One-click Feishu install / OAuth hosted app
@@ -36,3 +36,4 @@ Working rule:
 - 2026-06-04: Completed `Collaboration confirmation` with `POST /api/collaborations/confirm`, approval gate, collaboration draft output, fulfillment-start defaults, local tests, and smoke coverage.
 - 2026-06-04: Completed `Sample tracking` with `POST /api/samples/track`, tracking status classification, missing-info blockers, content kickoff reminder draft, local tests, and smoke coverage.
 - 2026-06-04: Completed `Content delivery tracking` with `POST /api/content/delivery-track`, submitted/overdue/revision-needed status classification, blockers, local tests, and smoke coverage.
+- 2026-06-04: Completed `Published content / performance tracking` with `POST /api/performance/track`, published URL and metric readiness checks, engagement-rate calculation, performance tiering, local tests, and smoke coverage.

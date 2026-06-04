@@ -21,8 +21,8 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Fulfillment | `create_collaboration_from_approval` | approved outreach/campaign terms | collaboration draft | Yes | Implemented MVP |
 | Fulfillment | `sample_tracking_agent` | collaboration + logistics | sample tracking summary | Yes before external message | Implemented MVP |
 | Content Delivery | `content_delivery_agent` | collaboration/content status | content delivery summary | Yes for approval | Implemented MVP |
-| Content Delivery | `content_monitoring_agent` | published URL | `Content Assets`, `Performance` | No for internal tracking | Planned |
-| Review | `summarize_performance` | performance metrics | `Performance` | No | Planned |
+| Content Delivery | `content_monitoring_agent` | published URL + metrics | performance tracking summary | No for internal tracking | Implemented MVP |
+| Review | `summarize_performance` | performance metrics | performance tier + next action | No | Implemented MVP |
 | Review | `recommend_next_actions` | performance + creator history | `Performance`, `Creators` | Yes before rehire | Planned |
 | Reuse | `second_collaboration_agent` | performance record | `Collaborations`, `Agent Tasks` | Yes | Planned |
 | Reuse | `content_repurpose_agent` | content asset + performance | `Content Assets` | Yes before reuse | Planned |
@@ -38,12 +38,11 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 Recommended next build:
 
 ```text
-import_creators
+second_collaboration_agent
 ```
 
 Reason:
 
-- It supports the user's existing data preparation workflow.
-- It does not require external web search.
-- It makes `screen_creator` useful on batches of real creator data.
-- It is easier to verify than outreach, negotiation, or logistics.
+- It uses the performance output that now exists.
+- It turns reporting into the next business action.
+- It keeps external commitments behind human approval.

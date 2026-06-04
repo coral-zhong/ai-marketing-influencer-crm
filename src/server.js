@@ -11,6 +11,7 @@ import { assistNegotiation } from "./negotiationAssistant.js";
 import { confirmCollaboration } from "./collaborationConfirmation.js";
 import { trackSample } from "./sampleTracking.js";
 import { trackContentDelivery } from "./contentDeliveryTracking.js";
+import { trackPublishedPerformance } from "./performanceTracking.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -193,6 +194,24 @@ export function createApp(config = loadConfig()) {
             collaboration: body.collaboration,
             content: body.content,
             today: body.today
+          })
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/performance/track") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.collaboration || !body.publishedContent) {
+          return sendJson(response, 400, { ok: false, error: "performance tracking input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          performance: trackPublishedPerformance({
+            collaboration: body.collaboration,
+            publishedContent: body.publishedContent
           })
         });
       }
