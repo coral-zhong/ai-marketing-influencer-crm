@@ -5,6 +5,7 @@ import { writeCreatorScreeningResult } from "./feishuClient.js";
 import { importCreatorsFromCsv } from "./importCreators.js";
 import { planCampaignTasks } from "./campaignPlanner.js";
 import { draftOutreach } from "./outreachDraft.js";
+import { searchCreatorsFromWebsiteSources } from "./creatorSearch.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -84,6 +85,28 @@ export function createApp(config = loadConfig()) {
             creator: body.creator,
             campaign: body.campaign
           })
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/creators/search") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!Array.isArray(body.sources)) {
+          return sendJson(response, 400, { ok: false, error: "sources must be an array" });
+        }
+
+        const result = searchCreatorsFromWebsiteSources({
+          campaign: body.campaign || {},
+          sources: body.sources
+        });
+        return sendJson(response, 200, {
+          ok: true,
+          candidates: result.candidates,
+          duplicates: result.duplicates,
+          errors: result.errors,
+          summary: result.summary
         });
       }
 

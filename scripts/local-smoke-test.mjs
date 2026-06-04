@@ -96,16 +96,36 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(outreachDraft.draft.status === "Needs Review", "outreach draft should require review");
   assert(outreachDraft.draft.permissionLevel === "review", "outreach draft should be review-only");
 
+  const creatorSearch = await requestJson(`${baseUrl}/api/creators/search`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      campaign: {
+        creatorCriteria: "UGC tech review creators"
+      },
+      sources: [
+        {
+          url: "https://example.com/top-tech-creators",
+          text: "Maya Tech Finds - TikTok product demos. Profile: https://www.tiktok.com/@mayatechfinds"
+        }
+      ]
+    })
+  });
+
+  assert(creatorSearch.ok === true, "creator search should return ok=true");
+  assert(creatorSearch.summary.candidates === 1, "creator search should find one candidate");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
     importedCreators: importResult.summary.imported,
     duplicateCreators: importResult.summary.duplicates,
     campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType),
-    outreachStatus: outreachDraft.draft.status
+    outreachStatus: outreachDraft.draft.status,
+    creatorSearchCandidates: creatorSearch.summary.candidates
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

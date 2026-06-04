@@ -139,6 +139,24 @@ curl -s http://localhost:3215/api/outreach/draft \
   }'
 ```
 
+Extract creator candidates from website/search result text:
+
+```bash
+curl -s http://localhost:3215/api/creators/search \
+  -H "content-type: application/json" \
+  -d '{
+    "campaign": {
+      "creatorCriteria": "UGC tech review creators"
+    },
+    "sources": [
+      {
+        "url": "https://example.com/top-tech-creators",
+        "text": "Maya Tech Finds - TikTok product demos. Profile: https://www.tiktok.com/@mayatechfinds"
+      }
+    ]
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:
@@ -173,6 +191,7 @@ Official references:
 - [Influencer Marketing Workflow Roadmap](docs/influencer-marketing-workflow-roadmap.md)
 - [Agent Capability Map](docs/agent-capability-map.md)
 - [Build-in-Public Positioning Post](docs/positioning-post.md)
+- [Product Build Checklist](docs/product-build-checklist.md)
 
 ## Schema
 

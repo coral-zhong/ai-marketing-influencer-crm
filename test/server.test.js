@@ -190,6 +190,47 @@ test("POST /api/outreach/draft validates request body", async () => {
   });
 });
 
+test("POST /api/creators/search extracts website creator candidates", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/creators/search`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        campaign: {
+          creatorCriteria: "UGC tech review creators"
+        },
+        sources: [
+          {
+            url: "https://example.com/top-tech-creators",
+            text: "Maya Tech Finds - TikTok product demos. Profile: https://www.tiktok.com/@mayatechfinds"
+          }
+        ]
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.candidates.length, 1);
+    assert.equal(body.candidates[0].profileUrl, "https://www.tiktok.com/@mayatechfinds");
+  });
+});
+
+test("POST /api/creators/search validates source body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/creators/search`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ campaign: {} })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "sources must be an array");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

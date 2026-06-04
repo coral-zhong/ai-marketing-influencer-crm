@@ -21,14 +21,15 @@ Expected output includes:
 ```json
 {
   "ok": true,
-  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach"],
+  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search"],
   "fitScore": 100,
   "tier": "A",
   "writebackMode": "demo",
   "importedCreators": 1,
   "duplicateCreators": 1,
   "campaignTasks": ["creator_search_planner", "screen_creator", "draft_outreach"],
-  "outreachStatus": "Needs Review"
+  "outreachStatus": "Needs Review",
+  "creatorSearchCandidates": 1
 }
 ```
 
