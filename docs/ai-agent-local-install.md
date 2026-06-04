@@ -21,7 +21,7 @@ Expected output includes:
 ```json
 {
   "ok": true,
-  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation"],
+  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install_scaffold"],
   "fitScore": 100,
   "tier": "A",
   "writebackMode": "demo",
@@ -38,7 +38,9 @@ Expected output includes:
   "performanceStatus": "Ready For Review",
   "engagementRate": 0.1,
   "secondCollaborationStatus": "Recommended",
-  "contentRepurposeStatus": "Recommended"
+  "contentRepurposeStatus": "Recommended",
+  "feishuInstallStatus": "Ready",
+  "feishuCallbackStatus": "Ready To Exchange Token"
 }
 ```
 
@@ -123,6 +125,9 @@ FEISHU_APP_ID=
 FEISHU_APP_SECRET=
 FEISHU_BASE_TOKEN=
 FEISHU_CREATORS_TABLE_ID=
+FEISHU_OAUTH_REDIRECT_URI=
+FEISHU_OAUTH_SCOPES=
+FEISHU_OAUTH_EXPECTED_STATE=
 AGENT_API_SECRET=
 AGENT_PORT=3215
 AGENT_DEMO_MODE=false

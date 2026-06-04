@@ -572,6 +572,35 @@ test("POST /api/recommendations/content-repurpose validates request body", async
   });
 });
 
+test("GET /api/install/feishu returns hosted OAuth install plan", async () => {
+  await withServer({
+    feishuAppId: "demo-app-id",
+    feishuOAuthRedirectUri: "https://example.com/api/install/feishu/callback",
+    feishuOAuthScopes: "bitable:app:readonly offline_access"
+  }, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/install/feishu?state=local-test-state`);
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.install.installStatus, "Ready");
+    assert.match(body.install.authUrl, /state=local-test-state/);
+  });
+});
+
+test("GET /api/install/feishu/callback validates OAuth callback", async () => {
+  await withServer({
+    feishuOAuthExpectedState: "local-test-state"
+  }, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/install/feishu/callback?code=auth-code&state=local-test-state`);
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.callback.callbackStatus, "Ready To Exchange Token");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

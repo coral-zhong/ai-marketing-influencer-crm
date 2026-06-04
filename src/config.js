@@ -6,6 +6,9 @@ export function loadConfig(env = process.env) {
     feishuAppId: env.FEISHU_APP_ID || "",
     feishuAppSecret: env.FEISHU_APP_SECRET || "",
     feishuBaseToken: env.FEISHU_BASE_TOKEN || "",
-    feishuCreatorsTableId: env.FEISHU_CREATORS_TABLE_ID || ""
+    feishuCreatorsTableId: env.FEISHU_CREATORS_TABLE_ID || "",
+    feishuOAuthRedirectUri: env.FEISHU_OAUTH_REDIRECT_URI || "",
+    feishuOAuthScopes: env.FEISHU_OAUTH_SCOPES || "",
+    feishuOAuthExpectedState: env.FEISHU_OAUTH_EXPECTED_STATE || ""
   };
 }

@@ -14,12 +14,36 @@ import { trackContentDelivery } from "./contentDeliveryTracking.js";
 import { trackPublishedPerformance } from "./performanceTracking.js";
 import { recommendSecondCollaboration } from "./secondCollaborationRecommendation.js";
 import { recommendContentRepurpose } from "./contentRepurposeRecommendation.js";
+import { buildFeishuInstallPlan, validateFeishuOAuthCallback } from "./feishuInstall.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
     try {
       if (request.method === "GET" && request.url === "/health") {
         return sendJson(response, 200, { ok: true, service: "ai-marketing-influencer-crm" });
+      }
+
+      if (request.method === "GET" && request.url.startsWith("/api/install/feishu/callback")) {
+        const url = new URL(request.url, "http://localhost");
+        return sendJson(response, 200, {
+          ok: true,
+          callback: validateFeishuOAuthCallback({
+            code: url.searchParams.get("code") || "",
+            state: url.searchParams.get("state") || ""
+          }, {
+            expectedState: config.feishuOAuthExpectedState
+          })
+        });
+      }
+
+      if (request.method === "GET" && request.url.startsWith("/api/install/feishu")) {
+        const url = new URL(request.url, "http://localhost");
+        return sendJson(response, 200, {
+          ok: true,
+          install: buildFeishuInstallPlan(config, {
+            state: url.searchParams.get("state") || ""
+          })
+        });
       }
 
       if (request.method === "POST" && request.url === "/api/tasks/screen-creator") {

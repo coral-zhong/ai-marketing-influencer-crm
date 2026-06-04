@@ -26,10 +26,12 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Review | `recommend_next_actions` | performance + creator history | second collaboration recommendation | Yes before rehire | Implemented MVP |
 | Reuse | `second_collaboration_agent` | performance record | second collaboration draft recommendation | Yes | Implemented MVP |
 | Reuse | `content_repurpose_agent` | content asset + performance | content repurpose recommendations | Yes before reuse | Implemented MVP |
+| Install | `feishu_oauth_install_scaffold` | hosted app config | OAuth install URL + callback validation | Yes by Feishu user/admin | Implemented MVP scaffold |
 
 ## Status Definitions
 
 - `Implemented MVP`: runnable in the public repo.
+- `Implemented MVP scaffold`: local and hosted boundary is runnable, but production credentials/token storage must live in the hosted app.
 - `Partially covered`: data model or endpoint shape exists, but production behavior is incomplete.
 - `Planned`: not implemented in this repo yet.
 
@@ -38,11 +40,11 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 Recommended next build:
 
 ```text
-one_click_feishu_install_oauth
+hosted_token_exchange_and_base_template_copy
 ```
 
 Reason:
 
-- It is the remaining productization gap between a developer repo and a real user install.
-- It should define the hosted OAuth/install path before adding more workflow depth.
-- It keeps API credentials out of the public repo and away from non-technical setup.
+- It turns the OAuth scaffold into a real hosted install flow.
+- It should exchange Feishu's one-time code for tokens server-side.
+- It should copy or create the Feishu Base template after authorization.

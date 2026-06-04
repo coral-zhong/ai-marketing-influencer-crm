@@ -315,6 +315,18 @@ curl -s http://localhost:3215/api/recommendations/content-repurpose \
   }'
 ```
 
+Generate a Feishu OAuth install link:
+
+```bash
+curl -s "http://localhost:3215/api/install/feishu?state=local-test-state"
+```
+
+Validate the OAuth callback shape:
+
+```bash
+curl -s "http://localhost:3215/api/install/feishu/callback?code=auth-code&state=local-test-state"
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:
@@ -324,6 +336,9 @@ FEISHU_APP_ID=
 FEISHU_APP_SECRET=
 FEISHU_BASE_TOKEN=
 FEISHU_CREATORS_TABLE_ID=
+FEISHU_OAUTH_REDIRECT_URI=
+FEISHU_OAUTH_SCOPES=
+FEISHU_OAUTH_EXPECTED_STATE=
 AGENT_API_SECRET=
 ```
 
@@ -346,6 +361,7 @@ Official references:
 - [Install Test Runbook](docs/install-test-runbook.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)
+- [Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md)
 - [Influencer Marketing Workflow Roadmap](docs/influencer-marketing-workflow-roadmap.md)
 - [Agent Capability Map](docs/agent-capability-map.md)
 - [Build-in-Public Positioning Post](docs/positioning-post.md)

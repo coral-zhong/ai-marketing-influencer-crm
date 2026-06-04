@@ -6,10 +6,13 @@ const server = createApp({
   port: 0,
   agentApiSecret: "",
   demoMode: true,
-  feishuAppId: "",
+  feishuAppId: "demo-app-id",
   feishuAppSecret: "",
   feishuBaseToken: "",
-  feishuCreatorsTableId: ""
+  feishuCreatorsTableId: "",
+  feishuOAuthRedirectUri: "https://example.com/api/install/feishu/callback",
+  feishuOAuthScopes: "bitable:app:readonly offline_access",
+  feishuOAuthExpectedState: "local-test-state"
 });
 
 await new Promise((resolve) => server.listen(0, resolve));
@@ -268,9 +271,19 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(contentRepurpose.ok === true, "content repurpose recommendation should return ok=true");
   assert(contentRepurpose.recommendation.repurposeStatus === "Recommended", "strong content with rights should be recommended for reuse");
 
+  const feishuInstall = await requestJson(`${baseUrl}/api/install/feishu?state=local-test-state`);
+
+  assert(feishuInstall.ok === true, "Feishu install plan should return ok=true");
+  assert(feishuInstall.install.installStatus === "Ready", "Feishu install plan should be ready when OAuth config exists");
+
+  const feishuCallback = await requestJson(`${baseUrl}/api/install/feishu/callback?code=auth-code&state=local-test-state`);
+
+  assert(feishuCallback.ok === true, "Feishu OAuth callback should return ok=true");
+  assert(feishuCallback.callback.callbackStatus === "Ready To Exchange Token", "Feishu OAuth callback should validate code and state");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install_scaffold"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -287,7 +300,9 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     performanceStatus: performanceTracking.performance.performanceStatus,
     engagementRate: performanceTracking.performance.metrics.engagementRate,
     secondCollaborationStatus: secondCollaboration.recommendation.recommendationStatus,
-    contentRepurposeStatus: contentRepurpose.recommendation.repurposeStatus
+    contentRepurposeStatus: contentRepurpose.recommendation.repurposeStatus,
+    feishuInstallStatus: feishuInstall.install.installStatus,
+    feishuCallbackStatus: feishuCallback.callback.callbackStatus
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));
