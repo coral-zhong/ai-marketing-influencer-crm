@@ -88,6 +88,30 @@ Then include:
 
 The current public MVP returns deterministic screening output and a demo writeback status. Direct Feishu OpenAPI writeback is intentionally isolated behind `src/feishuClient.js` for the next implementation step.
 
+## Feishu Writeback
+
+To enable real Feishu writeback, configure:
+
+```bash
+FEISHU_APP_ID=
+FEISHU_APP_SECRET=
+FEISHU_BASE_TOKEN=
+FEISHU_CREATORS_TABLE_ID=
+AGENT_API_SECRET=
+```
+
+The `screen_creator` endpoint also needs `creatorRecordId` in the request body so it knows which Creator row to update.
+
+The Feishu client uses:
+
+- `POST /open-apis/auth/v3/tenant_access_token/internal`
+- `PUT /open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id`
+
+Official references:
+
+- [Get tenant_access_token](https://open.feishu.cn/document/server-docs/authentication-management/access-token/tenant_access_token_internal)
+- [Update Bitable record](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update)
+
 ## Docs
 
 - [Productization Plan](docs/productization-plan.md)

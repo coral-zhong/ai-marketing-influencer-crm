@@ -26,6 +26,17 @@ npm test
 AGENT_DEMO_MODE=true npm start
 ```
 
+For real Feishu writeback, set these environment variables before starting the agent:
+
+```bash
+FEISHU_APP_ID=
+FEISHU_APP_SECRET=
+FEISHU_BASE_TOKEN=
+FEISHU_CREATORS_TABLE_ID=
+AGENT_API_SECRET=
+npm start
+```
+
 ## Step 1: Create MVP Tables
 
 Create these Feishu Base tables:
@@ -105,6 +116,8 @@ The response should include:
 
 For the public MVP, `writeback.mode` is `demo` unless real Feishu credentials and direct writeback are implemented.
 
+With real Feishu credentials configured, `writeback.mode` should be `feishu_openapi` and the Creator record should move to `Needs Review`.
+
 ## Pass Condition
 
 The install test passes when a non-technical operator can understand:
@@ -115,4 +128,3 @@ The install test passes when a non-technical operator can understand:
 4. whether any error occurred
 
 The test fails if the operator must understand local polling, launchd, ngrok, hidden logs, or terminal-only failures.
-
