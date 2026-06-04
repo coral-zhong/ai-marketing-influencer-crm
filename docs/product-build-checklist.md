@@ -15,6 +15,7 @@ Working rule:
 - [x] Sample tracking
 - [x] Content delivery tracking
 - [x] Published content / performance tracking
+- [x] Viral content breakdown
 - [x] Second collaboration recommendation
 - [x] Content repurpose recommendation
 - [x] One-click Feishu install / OAuth hosted app
@@ -37,6 +38,7 @@ Working rule:
 - 2026-06-04: Completed `Sample tracking` with `POST /api/samples/track`, tracking status classification, missing-info blockers, content kickoff reminder draft, local tests, and smoke coverage.
 - 2026-06-04: Completed `Content delivery tracking` with `POST /api/content/delivery-track`, submitted/overdue/revision-needed status classification, blockers, local tests, and smoke coverage.
 - 2026-06-04: Completed `Published content / performance tracking` with `POST /api/performance/track`, published URL and metric readiness checks, engagement-rate calculation, performance tiering, local tests, and smoke coverage.
+- 2026-06-04: Completed `Viral content breakdown` with `POST /api/content/viral-breakdown`, hook extraction, angle detection, script structure, reusable pattern, local tests, and smoke coverage.
 - 2026-06-04: Completed `Second collaboration recommendation` with `POST /api/recommendations/second-collaboration`, approval-gated re-engagement recommendations, wait-state blockers, local tests, and smoke coverage.
 - 2026-06-04: Completed `Content repurpose recommendation` with `POST /api/recommendations/content-repurpose`, usage-rights blockers, paid/social/email reuse ideas, local tests, and smoke coverage.
 - 2026-06-04: Completed `One-click Feishu install / OAuth hosted app` install boundary with `GET /api/install/feishu`, `GET /api/install/feishu/callback`, OAuth authorize URL generation, callback code/state validation, local tests, and smoke coverage.

@@ -237,6 +237,33 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(performanceTracking.ok === true, "performance tracking should return ok=true");
   assert(performanceTracking.performance.performanceStatus === "Ready For Review", "published content should be ready for performance review");
 
+  const viralBreakdown = await requestJson(`${baseUrl}/api/content/viral-breakdown`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      content: {
+        title: "Magnetic power bank desk setup review",
+        platform: "TikTok",
+        publishedUrl: "https://www.tiktok.com/@mayatechfinds/video/123",
+        transcript: "I stopped carrying three chargers. This magnetic power bank snaps on, charges my phone, and still fits in my small bag.",
+        visualNotes: "Messy cables, snap-on demo, bag fit test.",
+        metrics: {
+          views: 120000,
+          likes: 9600,
+          comments: 420,
+          shares: 1100
+        }
+      },
+      campaign: {
+        productName: "Magnetic power bank",
+        campaignGoal: "Find reusable hooks for UGC ads"
+      }
+    })
+  });
+
+  assert(viralBreakdown.ok === true, "viral breakdown should return ok=true");
+  assert(viralBreakdown.breakdown.breakdownStatus === "Ready For Review", "viral breakdown should be ready for review");
+
   const secondCollaboration = await requestJson(`${baseUrl}/api/recommendations/second-collaboration`, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -310,7 +337,7 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
 
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "viral_breakdown", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -325,6 +352,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     sampleStatus: sampleTracking.tracking.sampleStatus,
     contentDeliveryStatus: contentDelivery.delivery.deliveryStatus,
     performanceStatus: performanceTracking.performance.performanceStatus,
+    viralBreakdownStatus: viralBreakdown.breakdown.breakdownStatus,
+    viralHook: viralBreakdown.breakdown.hook,
     engagementRate: performanceTracking.performance.metrics.engagementRate,
     secondCollaborationStatus: secondCollaboration.recommendation.recommendationStatus,
     contentRepurposeStatus: contentRepurpose.recommendation.repurposeStatus,

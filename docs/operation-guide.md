@@ -20,6 +20,7 @@ The template includes the main workflow tables:
 - `Content Deliverables`
 - `Published Content`
 - `Performance`
+- `Viral Breakdowns`
 - `Recommendations`
 - `Agent Tasks`
 - `Operation Guide`
@@ -32,7 +33,7 @@ This is intentional. A first-time user should be able to copy the template and i
 
 `Agent Tasks` is the review queue and activity log. It records what the agent was asked to do, which record it worked on, whether the task is pending, done, failed, or needs review, and what output it produced.
 
-`Creator Search`, `Outreach`, `Negotiations`, `Collaborations`, `Samples`, `Content Deliverables`, `Published Content`, `Performance`, and `Recommendations` hold the later workflow stages so users do not need to design the CRM structure themselves.
+`Creator Search`, `Outreach`, `Negotiations`, `Collaborations`, `Samples`, `Content Deliverables`, `Published Content`, `Performance`, `Viral Breakdowns`, and `Recommendations` hold the later workflow stages so users do not need to design the CRM structure themselves.
 
 `Operation Guide` explains how to move through the workflow inside the Base.
 
@@ -47,7 +48,7 @@ This is intentional. A first-time user should be able to copy the template and i
 7. Move approved creators to outreach.
 8. Ask the agent to draft outreach and prepare a send package.
 9. Approve messages before anything is sent outside the CRM.
-10. Use the agent to support negotiation, collaboration confirmation, sample tracking, content delivery, performance review, and reuse decisions.
+10. Use the agent to support negotiation, collaboration confirmation, sample tracking, content delivery, performance review, viral content breakdown, and reuse decisions.
 
 ## Human Review Rules
 
@@ -74,6 +75,7 @@ After setup, open the Feishu Base and confirm:
 - `Samples` exists
 - `Content Deliverables` exists
 - `Performance` exists
+- `Viral Breakdowns` exists
 - `Recommendations` exists
 - `Agent Tasks` exists
 - `Operation Guide` exists
@@ -118,6 +120,7 @@ The first test is successful when the CRM helps you make a better next-step deci
 - `Content Deliverables`
 - `Published Content`
 - `Performance`
+- `Viral Breakdowns`
 - `Recommendations`
 - `Agent Tasks`
 - `Operation Guide`
@@ -130,7 +133,7 @@ The first test is successful when the CRM helps you make a better next-step deci
 
 `Agent Tasks` 是 Agent 的任务队列和执行记录。它记录 Agent 被要求做什么、处理哪条记录、任务是待处理/已完成/失败/需要人工审核，以及 Agent 产出的结果。
 
-`Creator Search`、`Outreach`、`Negotiations`、`Collaborations`、`Samples`、`Content Deliverables`、`Published Content`、`Performance` 和 `Recommendations` 承接后面的流程阶段，用户不需要自己设计 CRM 结构。
+`Creator Search`、`Outreach`、`Negotiations`、`Collaborations`、`Samples`、`Content Deliverables`、`Published Content`、`Performance`、`Viral Breakdowns` 和 `Recommendations` 承接后面的流程阶段，用户不需要自己设计 CRM 结构。
 
 `Operation Guide` 用来在 Base 里解释每一步怎么走。
 
@@ -145,7 +148,7 @@ The first test is successful when the CRM helps you make a better next-step deci
 7. 把通过审核的达人推进到 outreach。
 8. 让 Agent 起草 outreach，并准备发送包。
 9. 所有对外消息都先人工确认，再发送。
-10. 后续可以继续让 Agent 辅助谈判、确认合作、跟踪寄样、跟踪内容交付、分析发布表现，并推荐二次合作或内容复用。
+10. 后续可以继续让 Agent 辅助谈判、确认合作、跟踪寄样、跟踪内容交付、分析发布表现、拆解爆款内容，并推荐二次合作或内容复用。
 
 ## 人工审核原则
 
@@ -172,6 +175,7 @@ Agent 不应该自动替你：
 - 有 `Samples`
 - 有 `Content Deliverables`
 - 有 `Performance`
+- 有 `Viral Breakdowns`
 - 有 `Recommendations`
 - 有 `Agent Tasks`
 - 有 `Operation Guide`

@@ -4,7 +4,7 @@
 
 An AI-assisted influencer marketing CRM that runs inside Feishu.
 
-It helps creator partnership teams manage the workflow from creator discovery to outreach, negotiation, sample tracking, content delivery, performance review, second collaboration, and content reuse.
+It helps creator partnership teams manage the workflow from creator discovery to outreach, negotiation, sample tracking, content delivery, performance review, viral content breakdown, second collaboration, and content reuse.
 
 The product has two parts:
 
@@ -37,6 +37,7 @@ The Feishu CRM template includes workspace tables for:
 - content deliverables
 - published content
 - performance
+- viral breakdowns
 - recommendations
 - agent tasks
 - operation guide
@@ -52,7 +53,8 @@ The agent can help with:
 7. confirming collaboration details
 8. tracking samples and content delivery
 9. reviewing published content performance
-10. recommending second collaborations and content reuse
+10. breaking down winning content into reusable hooks and creative patterns
+11. recommending second collaborations and content reuse
 
 The product follows one rule:
 
@@ -108,7 +110,7 @@ MIT
 
 一个运行在飞书里的 AI 红人营销 CRM。
 
-它帮助红人营销团队管理从达人发现、筛选、outreach、谈判、寄样、内容交付、发布表现复盘，到二次合作和内容复用的完整流程。
+它帮助红人营销团队管理从达人发现、筛选、outreach、谈判、寄样、内容交付、发布表现复盘、爆款内容拆解，到二次合作和内容复用的完整流程。
 
 这个产品由两部分组成：
 
@@ -141,6 +143,7 @@ MIT
 - Content Deliverables
 - Published Content
 - Performance
+- Viral Breakdowns
 - Recommendations
 - Agent Tasks
 - Operation Guide
@@ -156,7 +159,8 @@ Agent 可以帮你：
 7. 确认合作信息
 8. 跟踪寄样和内容交付
 9. 复盘已发布内容表现
-10. 推荐二次合作和内容复用
+10. 拆解爆款内容，提取可复用 hook 和创意结构
+11. 推荐二次合作和内容复用
 
 产品遵守一个简单原则：
 

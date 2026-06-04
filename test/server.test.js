@@ -480,6 +480,55 @@ test("POST /api/performance/track validates request body", async () => {
   });
 });
 
+test("POST /api/content/viral-breakdown returns reusable creative patterns", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/content/viral-breakdown`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        content: {
+          title: "Magnetic power bank desk setup review",
+          platform: "TikTok",
+          publishedUrl: "https://example.com/video",
+          transcript: "I stopped carrying three chargers. This magnetic power bank snaps on, charges my phone, and still fits in my small bag.",
+          visualNotes: "Messy cables, snap-on demo, bag fit test.",
+          metrics: {
+            views: 120000,
+            likes: 9600,
+            comments: 420,
+            shares: 1100
+          }
+        },
+        campaign: {
+          productName: "Magnetic power bank"
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.breakdown.breakdownStatus, "Ready For Review");
+    assert.equal(body.breakdown.hook, "I stopped carrying three chargers.");
+    assert.equal(body.breakdown.suggestedRepurpose.length, 3);
+  });
+});
+
+test("POST /api/content/viral-breakdown validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/content/viral-breakdown`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "viral breakdown content input is required");
+  });
+});
+
 test("POST /api/recommendations/second-collaboration returns re-engagement recommendation", async () => {
   await withServer({}, async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/recommendations/second-collaboration`, {

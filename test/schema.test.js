@@ -18,6 +18,7 @@ test("full CRM template schema contains the product tables and required fields",
       "Content Deliverables",
       "Published Content",
       "Performance",
+      "Viral Breakdowns",
       "Recommendations",
       "Agent Tasks",
       "Operation Guide"
@@ -53,6 +54,15 @@ test("full CRM template schema contains the product tables and required fields",
     "Permission Level",
     "Output Summary",
     "Error Message"
+  ]);
+  assertHasFields(schema, "Viral Breakdowns", [
+    "Breakdown Name",
+    "Published URL",
+    "Hook",
+    "Primary Angle",
+    "Script Structure",
+    "Reusable Pattern",
+    "Status"
   ]);
   assertHasFields(schema, "Operation Guide", [
     "Step",

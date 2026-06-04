@@ -51,6 +51,7 @@ Create these Feishu Base tables:
 - `Content Deliverables`
 - `Published Content`
 - `Performance`
+- `Viral Breakdowns`
 - `Recommendations`
 - `Agent Tasks`
 - `Operation Guide`

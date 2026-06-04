@@ -244,6 +244,28 @@
       ]
     },
     {
+      "name": "Viral Breakdowns",
+      "primaryField": "Breakdown Name",
+      "fields": [
+        { "name": "Breakdown Name", "type": "text", "required": true },
+        { "name": "Published URL", "type": "url", "required": true },
+        { "name": "Content Title", "type": "text", "required": false },
+        { "name": "Platform", "type": "text", "required": false },
+        { "name": "Hook", "type": "long_text", "required": false },
+        { "name": "Primary Angle", "type": "text", "required": false },
+        { "name": "Script Structure", "type": "long_text", "required": false },
+        { "name": "Why It Worked", "type": "long_text", "required": false },
+        { "name": "Reusable Pattern", "type": "long_text", "required": false },
+        { "name": "Suggested Repurpose", "type": "long_text", "required": false },
+        { "name": "Status", "type": "select", "required": true, "options": ["Needs Context", "Ready For Review", "Approved", "Archived"] },
+        { "name": "Agent Summary", "type": "long_text", "required": false }
+      ],
+      "views": [
+        { "name": "Ready For Review", "type": "grid" },
+        { "name": "Approved Patterns", "type": "grid" }
+      ]
+    },
+    {
       "name": "Recommendations",
       "primaryField": "Recommendation Name",
       "fields": [
@@ -269,7 +291,7 @@
           "name": "Task Type",
           "type": "select",
           "required": true,
-          "options": ["creator_search", "screen_creator", "campaign_plan", "draft_outreach", "send_package", "negotiation_assist", "confirm_collaboration", "track_sample", "track_content", "track_performance", "recommend_second_collaboration", "recommend_repurpose"]
+          "options": ["creator_search", "screen_creator", "campaign_plan", "draft_outreach", "send_package", "negotiation_assist", "confirm_collaboration", "track_sample", "track_content", "track_performance", "viral_breakdown", "recommend_second_collaboration", "recommend_repurpose"]
         },
         {
           "name": "Input Record Type",
@@ -372,10 +394,10 @@
         },
         {
           "fields": {
-            "Step": "7. Review performance and reuse",
-            "When To Use": "Use this after content is published and metrics are available.",
-            "User Action": "Add published URL and performance metrics.",
-            "Agent Output": "Performance tier, second collaboration recommendation, and content repurpose ideas.",
+            "Step": "7. Review performance, break down viral content, and reuse",
+            "When To Use": "Use this after content is published and metrics, transcript, caption, or visual notes are available.",
+            "User Action": "Add published URL, performance metrics, and enough content context for a breakdown.",
+            "Agent Output": "Performance tier, hook, primary angle, script structure, reusable pattern, second collaboration recommendation, and content repurpose ideas.",
             "Human Approval Required": "Yes"
           }
         }

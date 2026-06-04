@@ -32,6 +32,7 @@ The full template includes:
 - Content Deliverables
 - Published Content
 - Performance
+- Viral Breakdowns
 - Recommendations
 - Agent Tasks
 - Operation Guide
@@ -52,6 +53,7 @@ The repo adds:
 - sample tracking
 - content delivery tracking
 - published content performance tracking
+- viral content breakdown
 - second collaboration recommendation
 - content repurpose recommendation
 - Feishu setup command for connecting the copied Base
@@ -122,6 +124,7 @@ Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I alr
 - Content Deliverables
 - Published Content
 - Performance
+- Viral Breakdowns
 - Recommendations
 - Agent Tasks
 - Operation Guide
@@ -142,6 +145,7 @@ repo 提供：
 - 寄样跟踪
 - 内容交付跟踪
 - 已发布内容表现跟踪
+- 爆款内容拆解
 - 二次合作推荐
 - 内容复用推荐
 - 连接复制后 Base 的飞书 setup 命令

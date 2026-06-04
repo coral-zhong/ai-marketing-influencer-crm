@@ -30,7 +30,7 @@ Expected output includes:
 ```json
 {
   "ok": true,
-  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
+  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "viral_breakdown", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
   "fitScore": 100,
   "tier": "A",
   "writebackMode": "demo",
@@ -45,6 +45,8 @@ Expected output includes:
   "sampleStatus": "Received",
   "contentDeliveryStatus": "Awaiting Review",
   "performanceStatus": "Ready For Review",
+  "viralBreakdownStatus": "Ready For Review",
+  "viralHook": "I stopped carrying three chargers.",
   "engagementRate": 0.1,
   "secondCollaborationStatus": "Recommended",
   "contentRepurposeStatus": "Recommended",

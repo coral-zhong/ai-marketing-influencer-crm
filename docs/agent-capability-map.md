@@ -23,6 +23,7 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Content Delivery | `content_delivery_agent` | collaboration/content status | content delivery summary | Yes for approval | Included |
 | Content Delivery | `content_monitoring_agent` | published URL + metrics | performance tracking summary | No for internal tracking | Included |
 | Review | `summarize_performance` | performance metrics | performance tier + next action | No | Included |
+| Review | `viral_breakdown_agent` | published content + transcript/notes | hook, angle, script structure, reusable pattern | Yes before reuse | Included |
 | Review | `recommend_next_actions` | performance + creator history | second collaboration recommendation | Yes before rehire | Included |
 | Reuse | `second_collaboration_agent` | performance record | second collaboration draft recommendation | Yes | Included |
 | Reuse | `content_repurpose_agent` | content asset + performance | content repurpose recommendations | Yes before reuse | Included |

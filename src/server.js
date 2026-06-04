@@ -12,6 +12,7 @@ import { confirmCollaboration } from "./collaborationConfirmation.js";
 import { trackSample } from "./sampleTracking.js";
 import { trackContentDelivery } from "./contentDeliveryTracking.js";
 import { trackPublishedPerformance } from "./performanceTracking.js";
+import { breakDownViralContent } from "./viralBreakdown.js";
 import { recommendSecondCollaboration } from "./secondCollaborationRecommendation.js";
 import { recommendContentRepurpose } from "./contentRepurposeRecommendation.js";
 import { buildFeishuInstallPlan, validateFeishuOAuthCallback } from "./feishuInstall.js";
@@ -256,6 +257,24 @@ export function createApp(config = loadConfig()) {
           performance: trackPublishedPerformance({
             collaboration: body.collaboration,
             publishedContent: body.publishedContent
+          })
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/content/viral-breakdown") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.content) {
+          return sendJson(response, 400, { ok: false, error: "viral breakdown content input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          breakdown: breakDownViralContent({
+            content: body.content,
+            campaign: body.campaign || {}
           })
         });
       }
