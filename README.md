@@ -117,7 +117,6 @@ Useful docs:
 
 - [Operation Guide](docs/operation-guide.md)
 - [Template-First Install](docs/template-first-install.md)
-- [Customer Delivery](docs/customer-delivery.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Agent Capability Map](docs/agent-capability-map.md)
 - [Product Build Checklist](docs/product-build-checklist.md)
@@ -254,7 +253,6 @@ npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer C
 
 - [Operation Guide / 操作指南](docs/operation-guide.md)
 - [Template-First Install / 模板优先安装](docs/template-first-install.md)
-- [Customer Delivery / 用户交付说明](docs/customer-delivery.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Agent Capability Map](docs/agent-capability-map.md)
 - [Product Build Checklist](docs/product-build-checklist.md)

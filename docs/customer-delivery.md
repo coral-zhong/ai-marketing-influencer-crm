@@ -1,6 +1,8 @@
-# Customer Delivery
+# Internal Customer Delivery
 
-Use this document when you want to give the product to a real user.
+Internal SOP for the product owner. This document is not part of the public user onboarding path.
+
+Use it when you want to give the product to a real user.
 
 The product is delivered as two connected parts:
 
@@ -117,7 +119,9 @@ For a fully self-serve product, the next step is a hosted install:
 
 ---
 
-# 用户交付说明
+# 内部用户交付说明
+
+这是给产品方自己的内部 SOP，不是公开用户 onboarding 文档。
 
 当你想把这个产品交给真实用户时，用这份文档。
 
