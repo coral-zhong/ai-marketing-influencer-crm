@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
-test("minimal CRM schema contains the MVP tables and required fields", async () => {
+test("minimal CRM schema contains the product tables and required fields", async () => {
   const schema = JSON.parse(await readFile(new URL("../schema/minimal-crm.schema.json", import.meta.url), "utf8"));
 
   assert.deepEqual(
@@ -64,4 +64,3 @@ function assertHasFields(schema, tableName, expectedFields) {
     assert.ok(actualFields.has(field), `${tableName}.${field} should exist`);
   }
 }
-

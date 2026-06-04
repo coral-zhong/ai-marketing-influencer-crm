@@ -7,12 +7,13 @@ const server = createApp({
   agentApiSecret: "",
   demoMode: true,
   feishuAppId: "demo-app-id",
-  feishuAppSecret: "",
+  feishuAppSecret: "demo-app-secret",
   feishuBaseToken: "",
   feishuCreatorsTableId: "",
   feishuOAuthRedirectUri: "https://example.com/api/install/feishu/callback",
   feishuOAuthScopes: "bitable:app:readonly offline_access",
-  feishuOAuthExpectedState: "local-test-state"
+  feishuOAuthExpectedState: "local-test-state",
+  fetchImpl: fakeFeishuFetch
 });
 
 await new Promise((resolve) => server.listen(0, resolve));
@@ -281,9 +282,34 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(feishuCallback.ok === true, "Feishu OAuth callback should return ok=true");
   assert(feishuCallback.callback.callbackStatus === "Ready To Exchange Token", "Feishu OAuth callback should validate code and state");
 
+  const feishuExistingBaseSetup = await requestJson(`${baseUrl}/api/setup/feishu-base`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      baseUrl: "https://example.feishu.cn/base/bascnLocalSmoke?table=tblLocalCreators"
+    })
+  });
+
+  assert(feishuExistingBaseSetup.ok === true, "Feishu existing Base setup should return ok=true");
+  assert(feishuExistingBaseSetup.setup.baseToken === "bascnLocalSmoke", "Feishu existing Base setup should parse base token");
+  assert(feishuExistingBaseSetup.setup.creatorsTableId === "tblLocalCreators", "Feishu existing Base setup should parse Creators table id");
+
+  const feishuCreatedBaseSetup = await requestJson(`${baseUrl}/api/setup/feishu-base`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      createNewBase: true,
+      baseName: "AI Marketing CRM Smoke"
+    })
+  });
+
+  assert(feishuCreatedBaseSetup.ok === true, "Feishu created Base setup should return ok=true");
+  assert(feishuCreatedBaseSetup.setup.baseToken === "base-local-smoke", "Feishu created Base setup should return base token");
+  assert(feishuCreatedBaseSetup.setup.creatorsTableId === "tbl_Creators", "Feishu created Base setup should return Creators table id");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -302,7 +328,11 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     secondCollaborationStatus: secondCollaboration.recommendation.recommendationStatus,
     contentRepurposeStatus: contentRepurpose.recommendation.repurposeStatus,
     feishuInstallStatus: feishuInstall.install.installStatus,
-    feishuCallbackStatus: feishuCallback.callback.callbackStatus
+    feishuCallbackStatus: feishuCallback.callback.callbackStatus,
+    parsedBaseToken: feishuExistingBaseSetup.setup.baseToken,
+    parsedCreatorsTableId: feishuExistingBaseSetup.setup.creatorsTableId,
+    createdBaseToken: feishuCreatedBaseSetup.setup.baseToken,
+    createdCreatorsTableId: feishuCreatedBaseSetup.setup.creatorsTableId
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));
@@ -317,4 +347,36 @@ async function requestJson(url, options) {
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+async function fakeFeishuFetch(url, options) {
+  if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+    return jsonResponse({ code: 0, tenant_access_token: "tenant-local-smoke" });
+  }
+
+  if (url.endsWith("/bitable/v1/apps")) {
+    return jsonResponse({ code: 0, data: { app: { app_token: "base-local-smoke" } } });
+  }
+
+  if (url.endsWith("/bitable/v1/apps/base-local-smoke/tables")) {
+    const body = JSON.parse(options.body);
+    return jsonResponse({ code: 0, data: { table_id: `tbl_${body.table.name.replaceAll(" ", "_")}` } });
+  }
+
+  if (url.match(/\/bitable\/v1\/apps\/base-local-smoke\/tables\/tbl_.+\/views$/)) {
+    const body = JSON.parse(options.body);
+    return jsonResponse({ code: 0, data: { view: { view_id: `vew_${body.view_name.replaceAll(" ", "_")}` } } });
+  }
+
+  throw new Error(`Unexpected fake Feishu URL: ${url}`);
+}
+
+function jsonResponse(body) {
+  return {
+    ok: true,
+    status: 200,
+    async json() {
+      return body;
+    }
+  };
 }

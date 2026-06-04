@@ -15,6 +15,7 @@ import { trackPublishedPerformance } from "./performanceTracking.js";
 import { recommendSecondCollaboration } from "./secondCollaborationRecommendation.js";
 import { recommendContentRepurpose } from "./contentRepurposeRecommendation.js";
 import { buildFeishuInstallPlan, validateFeishuOAuthCallback } from "./feishuInstall.js";
+import { createFeishuCrmBase } from "./feishuSetup.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -44,6 +45,23 @@ export function createApp(config = loadConfig()) {
             state: url.searchParams.get("state") || ""
           })
         });
+      }
+
+      if (request.method === "POST" && request.url === "/api/setup/feishu-base") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.baseUrl && !body.createNewBase) {
+          return sendJson(response, 400, { ok: false, error: "baseUrl or createNewBase is required" });
+        }
+
+        const setup = await createFeishuCrmBase(config, {
+          baseUrl: body.baseUrl,
+          baseName: body.baseName
+        }, config.fetchImpl || fetch);
+
+        return sendJson(response, 200, { ok: true, setup });
       }
 
       if (request.method === "POST" && request.url === "/api/tasks/screen-creator") {

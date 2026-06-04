@@ -58,6 +58,11 @@ The AI agent or technical helper will handle the setup steps and tell you when t
 
 After installation, you can connect it to Feishu so the agent can write reviewable creator, campaign, outreach, fulfillment, and performance outputs back into your CRM Base.
 
+The Feishu setup has two paths:
+
+- Paste an existing Feishu Base link. The agent can read the Base token and Creators table ID from the URL.
+- Ask the agent to create a new CRM Base. It can create the Base, tables, fields, select options, and views through the Feishu API.
+
 ## What It Can Do
 
 Once installed, the agent can help with:
@@ -74,17 +79,21 @@ Once installed, the agent can help with:
 10. Recommend second collaborations and content reuse.
 11. Prepare the Feishu OAuth install entry point.
 
-## Do I Need Feishu API Credentials?
+## Connect To Feishu
 
-For trying it locally: **No.**
+For trying it locally: **No Feishu credentials are needed.**
 
-For a real installation that writes to your own Feishu Base: **Yes, unless you use a hosted OAuth app.**
+For real writeback to your workspace, the local install needs:
 
-For the hosted install path: the user should not copy API credentials manually. The hosted app should handle authorization through Feishu OAuth.
+- `FEISHU_APP_ID`
+- `FEISHU_APP_SECRET`
+- either an existing Feishu Base link or permission to create a new Base
 
-If you are setting up the developer version, see [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md).
+`AGENT_API_SECRET` is not a Feishu credential. It is a private shared secret for the local agent endpoint. Your AI agent can generate a random value for it.
 
-If you are building the hosted install flow, see [Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md).
+For a hosted install path, the user should not copy secrets manually. The hosted app should handle authorization through Feishu OAuth.
+
+Setup guide: [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md).
 
 ## For Builders And Agents
 
@@ -167,6 +176,11 @@ AI agent 或技术助手会处理安装步骤，并告诉你什么时候可以�
 
 安装完成后，你可以把它连接到飞书，让 Agent 把达人、Campaign、Outreach、履约和表现分析结果写回你的 CRM Base。
 
+连接飞书有两条路径：
+
+- 粘贴一个已有飞书多维表格链接。Agent 可以自动从 URL 里识别 Base token 和 Creators table ID。
+- 让 Agent 新建一个 CRM Base。它可以通过飞书 API 创建 Base、数据表、字段、选项字段和视图。
+
 ## 它能做什么
 
 安装后，Agent 可以帮你：
@@ -183,17 +197,21 @@ AI agent 或技术助手会处理安装步骤，并告诉你什么时候可以�
 10. 推荐二次合作和内容复用。
 11. 准备飞书 OAuth 安装入口。
 
-## 我需要飞书 API 凭证吗？
+## 连接飞书需要什么？
 
-本地试用：**不需要。**
+本地试用：**不需要飞书凭证。**
 
-如果你要让开发者版本写入自己的真实飞书 Base：**需要，除非你使用托管 OAuth 应用。**
+如果要写入你的真实飞书空间，本地安装需要：
 
-托管安装路径：用户不应该手动复制 API 凭证。授权应该通过飞书 OAuth 完成。
+- `FEISHU_APP_ID`
+- `FEISHU_APP_SECRET`
+- 一个已有飞书 Base 链接，或允许 Agent 新建 Base
 
-开发者配置请看：[Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)。
+`AGENT_API_SECRET` 不是飞书凭证。它只是本地 agent 接口的访问密码，可以让 AI agent 自动生成一个随机值。
 
-托管安装流程请看：[Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md)。
+如果走托管安装路径，用户不应该手动复制密钥。授权应该通过飞书 OAuth 完成。
+
+配置指南：[Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)。
 
 ## 给开发者和 AI agent
 

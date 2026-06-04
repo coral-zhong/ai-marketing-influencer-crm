@@ -1,7 +1,7 @@
 {
-  "name": "AI Marketing Influencer CRM - MVP",
+  "name": "AI Marketing Influencer CRM",
   "version": "0.1.0",
-  "description": "Minimal Feishu Base schema for the first creator capture -> screen_creator -> review loop.",
+  "description": "Feishu Base schema for the AI Marketing Influencer CRM install.",
   "tables": [
     {
       "name": "Campaigns",
@@ -140,4 +140,3 @@
     }
   ]
 }
-

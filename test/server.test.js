@@ -601,6 +601,75 @@ test("GET /api/install/feishu/callback validates OAuth callback", async () => {
   });
 });
 
+test("POST /api/setup/feishu-base parses an existing Base URL", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/setup/feishu-base`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        baseUrl: "https://example.feishu.cn/base/bascnExisting?table=tblCreators"
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.setup.mode, "existing_base_url");
+    assert.equal(body.setup.baseToken, "bascnExisting");
+    assert.equal(body.setup.creatorsTableId, "tblCreators");
+  });
+});
+
+test("POST /api/setup/feishu-base creates a new CRM Base", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+
+    if (url.endsWith("/bitable/v1/apps")) {
+      return jsonResponse({ code: 0, data: { app: { app_token: "base-token" } } });
+    }
+
+    if (url.endsWith("/bitable/v1/apps/base-token/tables")) {
+      const body = JSON.parse(options.body);
+      return jsonResponse({ code: 0, data: { table_id: `tbl_${body.table.name.replaceAll(" ", "_")}` } });
+    }
+
+    if (url.match(/\/bitable\/v1\/apps\/base-token\/tables\/tbl_.+\/views$/)) {
+      const body = JSON.parse(options.body);
+      return jsonResponse({ code: 0, data: { view: { view_id: `vew_${body.view_name.replaceAll(" ", "_")}` } } });
+    }
+
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  await withServer({
+    feishuAppId: "app-id",
+    feishuAppSecret: "app-secret",
+    fetchImpl: fakeFetch
+  }, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/setup/feishu-base`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        createNewBase: true,
+        baseName: "AI Marketing CRM Test"
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.setup.mode, "created");
+    assert.equal(body.setup.baseToken, "base-token");
+    assert.equal(body.setup.creatorsTableId, "tbl_Creators");
+    assert.ok(calls.length >= 4);
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,
@@ -621,4 +690,14 @@ async function withServer(config, callback) {
   } finally {
     await new Promise((resolve) => server.close(resolve));
   }
+}
+
+function jsonResponse(body) {
+  return {
+    ok: true,
+    status: 200,
+    async json() {
+      return body;
+    }
+  };
 }

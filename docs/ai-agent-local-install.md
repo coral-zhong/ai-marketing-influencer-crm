@@ -21,7 +21,7 @@ Expected output includes:
 ```json
 {
   "ok": true,
-  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install"],
+  "checks": ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install", "feishu_existing_base_setup", "feishu_create_base_setup"],
   "fitScore": 100,
   "tier": "A",
   "writebackMode": "demo",
@@ -40,7 +40,11 @@ Expected output includes:
   "secondCollaborationStatus": "Recommended",
   "contentRepurposeStatus": "Recommended",
   "feishuInstallStatus": "Ready",
-  "feishuCallbackStatus": "Ready To Exchange Token"
+  "feishuCallbackStatus": "Ready To Exchange Token",
+  "parsedBaseToken": "bascnLocalSmoke",
+  "parsedCreatorsTableId": "tblLocalCreators",
+  "createdBaseToken": "base-local-smoke",
+  "createdCreatorsTableId": "tbl_Creators"
 }
 ```
 
@@ -132,6 +136,31 @@ AGENT_API_SECRET=
 AGENT_PORT=3215
 AGENT_DEMO_MODE=false
 ```
+
+If the user already has a Feishu Base, the agent can parse the Base token and Creators table ID from the Base URL:
+
+```bash
+curl -s http://localhost:3215/api/setup/feishu-base \
+  -H "content-type: application/json" \
+  -H "x-agent-secret: $AGENT_API_SECRET" \
+  -d '{
+    "baseUrl": "https://your-domain.feishu.cn/base/BASE_TOKEN_HERE?table=TABLE_ID_HERE"
+  }'
+```
+
+If the user wants the agent to create the CRM Base, the Feishu app needs permission to create and manage Bitable resources. Then run:
+
+```bash
+curl -s http://localhost:3215/api/setup/feishu-base \
+  -H "content-type: application/json" \
+  -H "x-agent-secret: $AGENT_API_SECRET" \
+  -d '{
+    "createNewBase": true,
+    "baseName": "AI Marketing Influencer CRM"
+  }'
+```
+
+The response includes `baseToken`, `creatorsTableId`, and a `tables` map. Copy `baseToken` into `FEISHU_BASE_TOKEN` and `creatorsTableId` into `FEISHU_CREATORS_TABLE_ID`.
 
 Then run:
 

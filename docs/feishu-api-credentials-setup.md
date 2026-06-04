@@ -1,210 +1,175 @@
-# Feishu API Credentials Setup
+# Feishu Connection Setup
 
-This guide explains how to configure real Feishu writeback for the AI Marketing Influencer CRM.
+Use this guide when connecting AI Marketing Influencer CRM to a real Feishu Base.
 
-Local demo mode does not need Feishu credentials. Real writeback does.
+For local trial mode, no Feishu credentials are needed. For real writeback, the agent needs permission to access your Feishu workspace.
 
-## What You Are Setting Up
+## What The User Provides
 
-The agent needs permission to update your Feishu Base.
-
-To do that, you will create a Feishu custom app, give it Base permissions, and provide these values locally:
+The user should only need to provide:
 
 ```bash
 FEISHU_APP_ID=
 FEISHU_APP_SECRET=
-FEISHU_BASE_TOKEN=
-FEISHU_CREATORS_TABLE_ID=
-AGENT_API_SECRET=
 ```
 
-## Before You Start
+Then choose one path:
 
-You need:
+- Existing Base: paste a Feishu Base URL.
+- New Base: ask the agent to create a new CRM Base.
 
-- a Feishu account
-- permission to create a custom Feishu app
-- a Feishu Base using the MVP schema
-- a `Creators` table inside that Base
-
-If you only want to test the repo locally, stop here and run:
+`AGENT_API_SECRET` is not from Feishu. It is a private shared secret for the local agent endpoint. The AI agent can generate any long random value, for example:
 
 ```bash
-npm run verify:local
+AGENT_API_SECRET=ai-crm-local-random-private-string
 ```
 
-## Step 1: Create A Feishu Custom App
+## Feishu App Permissions
 
-1. Open the Feishu Open Platform:
+In Feishu Open Platform, enable permissions for:
 
-   [https://open.feishu.cn](https://open.feishu.cn)
+- creating Bitable/Base resources
+- viewing, commenting, editing, and managing Bitable/Base
+- updating Bitable/Base records
 
-2. Go to the developer console.
+Depending on the Feishu console language, these may appear as:
 
-3. Create a new custom app.
-
-4. Copy the app credentials:
-
-   - `App ID`
-   - `App Secret`
-
-These become:
-
-```bash
-FEISHU_APP_ID=your_app_id
-FEISHU_APP_SECRET=your_app_secret
-```
-
-Keep `App Secret` private. Do not paste it into GitHub, public docs, screenshots, or committed files.
-
-## Step 2: Enable Base / Bitable Permissions
-
-In the Feishu app settings, enable permissions that allow the app to read and update Base records.
-
-At minimum, the app needs permission to update records in Feishu Base / Bitable.
-
-The agent uses this API:
-
-```text
-PUT /open-apis/bitable/v1/apps/:app_token/tables/:table_id/records/:record_id
-```
-
-Official reference:
-
-[Update Bitable record](https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update)
-
-Depending on your Feishu console language, the permission may appear as one of these:
-
-- update records
-- edit and manage Base
-- view, comment, edit, and manage Bitable
-- 多维表格记录更新
+- 创建多维表格
 - 查看、评论、编辑和管理多维表格
+- 多维表格记录更新
 
 After changing permissions, publish or release the app changes if Feishu asks you to do so.
 
-## Step 3: Give The App Access To Your Base
+Official Feishu references:
 
-The app must be able to access the specific Base you want to update.
+- Create Bitable app: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app/create
+- Create Bitable table: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table/create
+- Create Bitable view: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-view/create
+- Update Bitable record: https://open.feishu.cn/document/server-docs/docs/bitable-v1/app-table-record/update
 
-Open your Feishu Base and add the app as a collaborator if your workspace requires it.
+## Path A: Existing Feishu Base
 
-The app should have enough permission to update the `Creators` table.
+Ask the user for the browser URL of the `Creators` table.
 
-If the app has API scopes but no access to the Base itself, writeback may still fail.
-
-## Step 4: Get Your Base Token
-
-Open your Feishu Base in the browser.
-
-The URL usually looks like:
+Example:
 
 ```text
-https://your-domain.feishu.cn/base/BASE_TOKEN_HERE?table=tblxxxx
+https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx
 ```
 
-Copy the part after `/base/`.
+The agent can parse:
 
-That value becomes:
+- `FEISHU_BASE_TOKEN=bascnxxxx`
+- `FEISHU_CREATORS_TABLE_ID=tblxxxx`
+
+Call:
 
 ```bash
-FEISHU_BASE_TOKEN=BASE_TOKEN_HERE
+curl -s http://localhost:3215/api/setup/feishu-base \
+  -H "content-type: application/json" \
+  -H "x-agent-secret: $AGENT_API_SECRET" \
+  -d '{
+    "baseUrl": "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
+  }'
 ```
 
-In Feishu API docs, this is also called `app_token` for Bitable.
+Response shape:
 
-## Step 5: Get The Creators Table ID
-
-Open the `Creators` table in your Feishu Base.
-
-Look at the URL. It usually includes:
-
-```text
-?table=TABLE_ID_HERE
+```json
+{
+  "setup": {
+    "mode": "existing_base_url",
+    "baseToken": "bascnxxxx",
+    "creatorsTableId": "tblxxxx",
+    "tables": {
+      "Creators": "tblxxxx"
+    },
+    "views": {}
+  }
+}
 ```
 
-The table ID often starts with `tbl`.
+## Path B: Create A New CRM Base
 
-That value becomes:
+If the user does not have a Base, the agent can create one through Feishu OpenAPI.
+
+Call:
 
 ```bash
-FEISHU_CREATORS_TABLE_ID=TABLE_ID_HERE
+curl -s http://localhost:3215/api/setup/feishu-base \
+  -H "content-type: application/json" \
+  -H "x-agent-secret: $AGENT_API_SECRET" \
+  -d '{
+    "createNewBase": true,
+    "baseName": "AI Marketing Influencer CRM"
+  }'
 ```
 
-## Step 6: Create A Local `.env` File
+The agent will:
 
-In the cloned repo:
+1. get `tenant_access_token` using `FEISHU_APP_ID` and `FEISHU_APP_SECRET`
+2. create a new Feishu Base
+3. create tables from `schema/minimal-crm.schema.json`
+4. create fields and select options
+5. create schema views
+6. return the created `baseToken`, `creatorsTableId`, `tables`, and `views`
+
+Response shape:
+
+```json
+{
+  "setup": {
+    "mode": "created",
+    "baseToken": "bascnxxxx",
+    "creatorsTableId": "tblCreators",
+    "tables": {
+      "Campaigns": "tblCampaigns",
+      "Creators": "tblCreators",
+      "Agent Tasks": "tblAgentTasks"
+    },
+    "views": {
+      "Creators": {
+        "Needs Review": "vewNeedsReview"
+      }
+    }
+  }
+}
+```
+
+Copy:
 
 ```bash
-cp .env.example .env
+FEISHU_BASE_TOKEN=<setup.baseToken>
+FEISHU_CREATORS_TABLE_ID=<setup.creatorsTableId>
 ```
 
-Open `.env` and fill:
+## Local `.env`
 
 ```bash
 FEISHU_APP_ID=your_app_id
 FEISHU_APP_SECRET=your_app_secret
-FEISHU_BASE_TOKEN=your_base_token
-FEISHU_CREATORS_TABLE_ID=your_creators_table_id
-AGENT_API_SECRET=choose-a-private-random-string
+FEISHU_BASE_TOKEN=parsed_or_created_base_token
+FEISHU_CREATORS_TABLE_ID=parsed_or_created_creators_table_id
+AGENT_API_SECRET=generated_private_string
 AGENT_PORT=3215
 AGENT_DEMO_MODE=false
 ```
 
-Important:
+Do not commit `.env`.
 
-- `.env` is ignored by git.
-- Do not commit `.env`.
-- `AGENT_API_SECRET` protects your local agent endpoint from random requests.
+## Real Writeback Check
 
-## Step 7: Start The Agent With Credentials
-
-Load the environment variables and start the server:
+After setup:
 
 ```bash
 source .env
 npm start
 ```
 
-You should see:
-
-```text
-AI Marketing Influencer CRM agent listening on :3215
-```
-
-## Step 8: Send A Real Writeback Test
-
-You need a real Creator record ID from your Feishu `Creators` table.
-
-Create a test Creator row first. Then copy its record ID.
-
-Send:
-
-```bash
-curl -s http://localhost:3215/api/tasks/screen-creator \
-  -H "content-type: application/json" \
-  -H "x-agent-secret: $AGENT_API_SECRET" \
-  -d '{
-    "creatorRecordId": "PASTE_REAL_CREATOR_RECORD_ID_HERE",
-    "creator": {
-      "name": "Maya Tech Finds",
-      "platform": "TikTok",
-      "profileUrl": "https://example.com/maya",
-      "exampleVideoUrl": "https://example.com/video",
-      "category": "UGC tech review"
-    },
-    "campaign": {
-      "campaignGoal": "Find creators for short tutorial demos",
-      "creatorCriteria": "TikTok UGC review creators"
-    }
-  }'
-```
-
-Successful real writeback returns:
+Then ask the agent to run a writeback check against a real Creator row. A successful response includes:
 
 ```json
 {
-  "ok": true,
   "writeback": {
     "mode": "feishu_openapi",
     "written": true
@@ -212,80 +177,14 @@ Successful real writeback returns:
 }
 ```
 
-Then check the Creator row in Feishu. The agent should update fields such as:
+## Hosted Install Path
 
-- `Fit Score`
-- `Tier`
-- `Score Confidence`
-- `Strengths`
-- `Risks`
-- `Recommended Collaboration`
-- `Screening Summary`
-- `Creator Status`
+For a fully managed product, users should not copy `FEISHU_APP_SECRET` into a local install.
 
-## Troubleshooting
+The hosted path should use:
 
-### `writeback.mode` is `demo`
-
-Your agent is still running in demo mode, or credentials are missing.
-
-Check:
-
-```bash
-echo $AGENT_DEMO_MODE
-echo $FEISHU_APP_ID
-echo $FEISHU_BASE_TOKEN
-echo $FEISHU_CREATORS_TABLE_ID
-```
-
-`AGENT_DEMO_MODE` should be `false` for real writeback.
-
-### `writeback.mode` is `config_missing`
-
-The agent is missing either:
-
-- `FEISHU_CREATORS_TABLE_ID`
-- `creatorRecordId`
-
-### Feishu API permission error
-
-Check:
-
-1. The app has Base/Bitable record update permission.
-2. The app has been published or released after permission changes.
-3. The app has access to the target Base.
-4. The `FEISHU_BASE_TOKEN` and `FEISHU_CREATORS_TABLE_ID` are correct.
-
-### Field not found error
-
-Your `Creators` table is missing one or more expected fields.
-
-Compare your Base with:
-
-```text
-schema/minimal-crm.schema.json
-```
-
-### Invalid secret error
-
-Your request is missing the agent endpoint secret.
-
-Include:
-
-```bash
--H "x-agent-secret: $AGENT_API_SECRET"
-```
-
-## Why This Is Still Not One-Click
-
-This setup still requires API credentials because the agent is writing into a private Feishu workspace.
-
-For a true one-click product, the next version should use:
-
-1. a hosted app
-2. OAuth authorization
-3. automatic Base creation or copying
-4. cloud-hosted agent runtime
-
-That would let users click authorize instead of manually copying `APP_ID`, `APP_SECRET`, `BASE_TOKEN`, and `TABLE_ID`.
-
+1. Feishu OAuth authorization
+2. hosted token exchange
+3. secure tenant/user install storage
+4. automatic Base creation or template copy
+5. cloud-hosted agent runtime
