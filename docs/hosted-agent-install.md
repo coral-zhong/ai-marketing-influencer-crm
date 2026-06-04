@@ -84,18 +84,20 @@ Expected response:
 
 If `/health` works, the hosted agent is online.
 
-If Feishu writeback fails later, the most likely cause is Feishu permission, not Railway. The Feishu app must have permission to edit the copied Base.
+If Feishu writeback fails later, the most likely cause is Feishu permission, not Railway.
 
 ## Feishu Writeback Permission
 
-The hosted agent needs two kinds of Feishu permission:
+The hosted agent can connect to Feishu in two different ways:
 
-1. The Feishu app has the right API scopes in Feishu Developer Console.
-2. The copied Base gives that Feishu app permission to edit the document.
+1. App-created Base for internal testing.
+2. OAuth user authorization for public installs.
 
-In Feishu Developer Console, confirm the app has Bitable permissions for reading, editing, and managing Bases, then publish the app version.
+For the current Railway internal test, use the app-created Base path. The Feishu app creates the CRM Base through OpenAPI, then the same app can write back to that Base.
 
-In the copied Base, open sharing or collaborator settings and add the Feishu app as a collaborator with edit or manage permission.
+For a public product, do not ask users to add a Feishu app as a Base collaborator. In many Feishu workspaces, the Base sharing panel only accepts users, groups, departments, or user groups. It may not provide a stable way to add a developer app as a document collaborator.
+
+The public install path should use OAuth user authorization. The user copies the template, clicks the hosted install link, authorizes the app, and the hosted backend writes to the copied Base with that user's `user_access_token`.
 
 If the app can read tables but cannot write records, Feishu may return:
 
@@ -103,7 +105,20 @@ If the app can read tables but cannot write records, Feishu may return:
 91403 Forbidden
 ```
 
-That usually means the Railway service is online, but the Feishu app still cannot edit this specific copied Base.
+That usually means the Railway service is online, but the current token identity cannot edit this specific copied Base.
+
+Decision:
+
+- Internal test: create the Base through the app with `npm run setup:feishu -- --create-new-base`.
+- Public product: use hosted OAuth and write as the authorized user.
+
+Internal test command:
+
+```bash
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
+```
+
+After the command succeeds, copy the new `FEISHU_BASE_TOKEN` and `FEISHU_TABLES_JSON` from `.env` into Railway Variables, then redeploy.
 
 ## Hosted Endpoint
 
@@ -269,18 +284,20 @@ https://<你的 Railway 域名>/health
 
 如果 `/health` 正常，说明云端 agent 已经在线。
 
-如果后面飞书写回失败，最常见原因不是 Railway，而是飞书权限。你的飞书应用需要有复制后 Base 的编辑权限。
+如果后面飞书写回失败，最常见原因不是 Railway，而是飞书权限。
 
 ## 飞书写回权限
 
-云端 agent 需要两层飞书权限：
+云端 agent 有两种连接飞书的方式：
 
-1. 飞书开发者后台里的应用 API 权限已经开通。
-2. 复制后的 Base 本身允许这个飞书应用编辑文档。
+1. 内测用：应用通过 API 自动创建 Base。
+2. 对外用：用户 OAuth 授权后，用用户身份写回。
 
-在飞书开发者后台，确认应用已经开通多维表格的读取、编辑、管理相关权限，并且已经发布版本。
+当前 Railway 内测建议走“应用自动创建 Base”路径。飞书应用通过 OpenAPI 创建 CRM Base，然后同一个应用可以写回这张 Base。
 
-在复制后的 Base 里，打开分享或协作者设置，把这个飞书应用添加为协作者，并给编辑或管理权限。
+对外产品不要要求用户把飞书应用添加为 Base 协作者。很多飞书工作区的 Base 分享面板只支持添加用户、群组、部门或用户组，不一定提供稳定的“把开发者应用加为文档协作者”的入口。
+
+正式产品应该走 OAuth 用户授权。用户复制模板后，点击 hosted install 链接授权，后台用这个用户的 `user_access_token` 写回用户复制后的 Base。
 
 如果应用能读取表结构，但不能写入记录，飞书可能返回：
 
@@ -288,7 +305,20 @@ https://<你的 Railway 域名>/health
 91403 Forbidden
 ```
 
-这通常说明 Railway 服务已经在线，但飞书应用还不能编辑这张具体复制出来的 Base。
+这通常说明 Railway 服务已经在线，但当前 token 身份不能编辑这张具体复制出来的 Base。
+
+结论：
+
+- 内测：用 `npm run setup:feishu -- --create-new-base` 让应用自动创建 Base。
+- 对外产品：用 hosted OAuth，让 agent 以授权用户身份写回。
+
+内测命令：
+
+```bash
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
+```
+
+命令成功后，把 `.env` 里新的 `FEISHU_BASE_TOKEN` 和 `FEISHU_TABLES_JSON` 复制到 Railway Variables，然后重新部署。
 
 ## 云端 Endpoint
 
