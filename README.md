@@ -124,6 +124,7 @@ Official references:
 - [Cloud Agent MVP Spec](docs/cloud-agent-mvp-spec.md)
 - [Install Test Runbook](docs/install-test-runbook.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
+- [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)
 - [Build-in-Public Positioning Post](docs/positioning-post.md)
 
 ## Schema
