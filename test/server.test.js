@@ -108,6 +108,45 @@ test("POST /api/creators/import validates CSV body", async () => {
   });
 });
 
+test("POST /api/campaigns/plan returns campaign task decomposition", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/campaigns/plan`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        campaign: {
+          campaignName: "Spring TikTok UGC Test",
+          brand: "Demo Brand",
+          productName: "Magnetic power bank",
+          campaignGoal: "Find creators who can make short tutorial-style TikTok demos.",
+          creatorCriteria: "TikTok UGC review creators with clear product demos."
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.plan.tasks.length, 3);
+    assert.equal(body.plan.tasks[0].taskType, "creator_search_planner");
+  });
+});
+
+test("POST /api/campaigns/plan validates campaign body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/campaigns/plan`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "campaign is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

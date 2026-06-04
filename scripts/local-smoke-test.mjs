@@ -58,14 +58,32 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(importResult.summary.imported === 1, "creator import should import one unique creator");
   assert(importResult.summary.duplicates === 1, "creator import should report duplicate creators");
 
+  const campaignPlan = await requestJson(`${baseUrl}/api/campaigns/plan`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      campaign: {
+        campaignName: "Spring TikTok UGC Test",
+        brand: "Demo Brand",
+        productName: "Magnetic power bank",
+        campaignGoal: "Find creators who can make short tutorial demos.",
+        creatorCriteria: "TikTok UGC review creators with clear product demos."
+      }
+    })
+  });
+
+  assert(campaignPlan.ok === true, "campaign plan should return ok=true");
+  assert(campaignPlan.plan.tasks.length === 3, "campaign plan should create three task previews");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
     importedCreators: importResult.summary.imported,
-    duplicateCreators: importResult.summary.duplicates
+    duplicateCreators: importResult.summary.duplicates,
+    campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType)
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

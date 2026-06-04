@@ -3,6 +3,7 @@ import { loadConfig } from "./config.js";
 import { screenCreator } from "./screenCreator.js";
 import { writeCreatorScreeningResult } from "./feishuClient.js";
 import { importCreatorsFromCsv } from "./importCreators.js";
+import { planCampaignTasks } from "./campaignPlanner.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -49,6 +50,21 @@ export function createApp(config = loadConfig()) {
           duplicates: result.duplicates,
           errors: result.errors,
           summary: result.summary
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/campaigns/plan") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.campaign || typeof body.campaign !== "object") {
+          return sendJson(response, 400, { ok: false, error: "campaign is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          plan: planCampaignTasks(body.campaign)
         });
       }
 

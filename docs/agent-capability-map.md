@@ -9,8 +9,8 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Data Preparation | `import_creators` | CSV or pasted creator rows | parsed import preview | No, unless deleting/merging | Implemented MVP |
 | Data Preparation | `normalize_creator_profile` | raw creator record | `Creators` | No | Planned |
 | Data Preparation | `screen_creator` | creator + campaign context | `Creators`, `Agent Tasks` | Yes before outreach | Implemented MVP |
-| Campaign Creation | `campaign_planner` | product/campaign notes | `Campaigns`, `Agent Tasks` | Yes | Planned |
-| Campaign Creation | `decompose_campaign_tasks` | campaign row | `Agent Tasks` | Yes before activation | Planned |
+| Campaign Creation | `campaign_planner` | product/campaign notes | campaign task preview | Yes | Implemented MVP |
+| Campaign Creation | `decompose_campaign_tasks` | campaign row | campaign task preview | Yes before activation | Implemented MVP |
 | Creator Search | `creator_search_planner` | campaign task | `Agent Tasks` | Yes before broad search | Planned |
 | Creator Search | `capture_creator` | profile URL / search result | `Creators` | No | Partially covered by MVP endpoint shape |
 | Creator Search | `capture_video` | video URL / source result | `Videos` | No | Planned |

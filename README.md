@@ -104,6 +104,22 @@ curl -s http://localhost:3215/api/creators/import \
   }'
 ```
 
+Plan a Campaign into agent tasks:
+
+```bash
+curl -s http://localhost:3215/api/campaigns/plan \
+  -H "content-type: application/json" \
+  -d '{
+    "campaign": {
+      "campaignName": "Spring TikTok UGC Test",
+      "brand": "Demo Brand",
+      "productName": "Magnetic power bank",
+      "campaignGoal": "Find creators who can make short tutorial demos.",
+      "creatorCriteria": "TikTok UGC review creators with clear product demos."
+    }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:
