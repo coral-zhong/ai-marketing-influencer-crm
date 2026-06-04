@@ -283,7 +283,7 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
 
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install_scaffold"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation", "content_repurpose_recommendation", "feishu_oauth_install"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,

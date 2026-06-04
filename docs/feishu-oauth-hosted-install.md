@@ -1,8 +1,10 @@
 # Feishu OAuth Hosted Install
 
-This repo includes a tested install scaffold, not a production Feishu marketplace app.
+This document explains the hosted Feishu install path for this product repository.
 
-## What Is Implemented
+The repo includes the install entry point that generates a Feishu OAuth authorization URL and validates the callback. A managed hosted deployment should add server-side token exchange, secure install storage, and Feishu Base creation.
+
+## What Is Included
 
 - `GET /api/install/feishu` builds a Feishu OAuth authorization URL.
 - `GET /api/install/feishu/callback` validates that Feishu returned a `code` and matching `state`.
@@ -12,7 +14,7 @@ This repo includes a tested install scaffold, not a production Feishu marketplac
 
 The real hosted app must keep `FEISHU_APP_SECRET` server-side. Do not put it in this public repo, a browser bundle, a Feishu Base, or a user-facing setup form.
 
-After callback validation, the hosted service should:
+After callback validation, the hosted service completes the install by:
 
 1. Exchange the one-time authorization `code` for `user_access_token`.
 2. Store tenant/user install state securely.

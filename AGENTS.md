@@ -1,10 +1,10 @@
 # Agent Instructions
 
-This repository is a public MVP for an AI Marketing Influencer CRM cloud agent.
+This repository is an installable AI Marketing Influencer CRM agent for Feishu.
 
 ## Primary Goal
 
-Help a user install and verify the repo locally, then optionally configure Feishu writeback.
+Help a user install and verify the product from GitHub, then optionally configure Feishu writeback.
 
 The minimum successful local install is:
 
@@ -63,4 +63,3 @@ Expected result:
 - `src/server.js`: HTTP server and endpoints
 - `src/feishuClient.js`: Feishu OpenAPI writeback boundary
 - `scripts/local-smoke-test.mjs`: local smoke verification
-

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": false,
   "type": "module",
-  "description": "Cloud agent MVP for an AI influencer CRM that writes reviewable creator screening results back to Feishu.",
+  "description": "Installable AI influencer CRM agent that writes reviewable marketing workflow outputs back to Feishu.",
   "scripts": {
     "start": "node src/server.js",
     "dev": "AGENT_DEMO_MODE=true node src/server.js",
