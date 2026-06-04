@@ -480,6 +480,54 @@ test("POST /api/performance/track validates request body", async () => {
   });
 });
 
+test("POST /api/recommendations/second-collaboration returns re-engagement recommendation", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/recommendations/second-collaboration`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        creator: {
+          name: "Maya Tech Finds",
+          platform: "TikTok"
+        },
+        campaign: {
+          campaignName: "Spring TikTok UGC Test",
+          productName: "Magnetic power bank"
+        },
+        performance: {
+          performanceStatus: "Ready For Review",
+          performanceTier: "Strong",
+          metrics: {
+            views: 10000,
+            engagementRate: 0.1
+          }
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.recommendation.recommendationStatus, "Recommended");
+    assert.equal(body.recommendation.approvalRequired, true);
+  });
+});
+
+test("POST /api/recommendations/second-collaboration validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/recommendations/second-collaboration`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "second collaboration recommendation input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

@@ -233,9 +233,28 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(performanceTracking.ok === true, "performance tracking should return ok=true");
   assert(performanceTracking.performance.performanceStatus === "Ready For Review", "published content should be ready for performance review");
 
+  const secondCollaboration = await requestJson(`${baseUrl}/api/recommendations/second-collaboration`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      creator: {
+        name: "Maya Tech Finds",
+        platform: "TikTok"
+      },
+      campaign: {
+        campaignName: "Spring TikTok UGC Test",
+        productName: "Magnetic power bank"
+      },
+      performance: performanceTracking.performance
+    })
+  });
+
+  assert(secondCollaboration.ok === true, "second collaboration recommendation should return ok=true");
+  assert(secondCollaboration.recommendation.recommendationStatus === "Recommended", "strong performance should recommend second collaboration");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation", "sample_tracking", "content_delivery_tracking", "performance_tracking", "second_collaboration_recommendation"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -250,7 +269,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     sampleStatus: sampleTracking.tracking.sampleStatus,
     contentDeliveryStatus: contentDelivery.delivery.deliveryStatus,
     performanceStatus: performanceTracking.performance.performanceStatus,
-    engagementRate: performanceTracking.performance.metrics.engagementRate
+    engagementRate: performanceTracking.performance.metrics.engagementRate,
+    secondCollaborationStatus: secondCollaboration.recommendation.recommendationStatus
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

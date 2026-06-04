@@ -23,8 +23,8 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Content Delivery | `content_delivery_agent` | collaboration/content status | content delivery summary | Yes for approval | Implemented MVP |
 | Content Delivery | `content_monitoring_agent` | published URL + metrics | performance tracking summary | No for internal tracking | Implemented MVP |
 | Review | `summarize_performance` | performance metrics | performance tier + next action | No | Implemented MVP |
-| Review | `recommend_next_actions` | performance + creator history | `Performance`, `Creators` | Yes before rehire | Planned |
-| Reuse | `second_collaboration_agent` | performance record | `Collaborations`, `Agent Tasks` | Yes | Planned |
+| Review | `recommend_next_actions` | performance + creator history | second collaboration recommendation | Yes before rehire | Implemented MVP |
+| Reuse | `second_collaboration_agent` | performance record | second collaboration draft recommendation | Yes | Implemented MVP |
 | Reuse | `content_repurpose_agent` | content asset + performance | `Content Assets` | Yes before reuse | Planned |
 
 ## Status Definitions
@@ -38,11 +38,11 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 Recommended next build:
 
 ```text
-second_collaboration_agent
+content_repurpose_agent
 ```
 
 Reason:
 
-- It uses the performance output that now exists.
-- It turns reporting into the next business action.
-- It keeps external commitments behind human approval.
+- It uses the performance and collaboration outputs that now exist.
+- It turns strong content into reusable ad/email/social asset suggestions.
+- It keeps final reuse decisions behind human approval.

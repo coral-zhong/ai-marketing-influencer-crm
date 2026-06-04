@@ -269,6 +269,31 @@ curl -s http://localhost:3215/api/performance/track \
   }'
 ```
 
+Recommend a second collaboration from reviewed performance:
+
+```bash
+curl -s http://localhost:3215/api/recommendations/second-collaboration \
+  -H "content-type: application/json" \
+  -d '{
+    "creator": {
+      "name": "Maya Tech Finds",
+      "platform": "TikTok"
+    },
+    "campaign": {
+      "campaignName": "Spring TikTok UGC Test",
+      "productName": "Magnetic power bank"
+    },
+    "performance": {
+      "performanceStatus": "Ready For Review",
+      "performanceTier": "Strong",
+      "metrics": {
+        "views": 10000,
+        "engagementRate": 0.1
+      }
+    }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:
