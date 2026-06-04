@@ -44,12 +44,28 @@ try {
   assert(screening.result.tier === "A", "screening result should include expected tier");
   assert(screening.writeback.mode === "demo", "local smoke test should use demo writeback");
 
+  const importResult = await requestJson(`${baseUrl}/api/creators/import`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      csv: `Creator Name,Platform,Profile URL,Category
+Maya Tech Finds,TikTok,https://example.com/maya,UGC tech review
+Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
+    })
+  });
+
+  assert(importResult.ok === true, "creator import should return ok=true");
+  assert(importResult.summary.imported === 1, "creator import should import one unique creator");
+  assert(importResult.summary.duplicates === 1, "creator import should report duplicate creators");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator"],
+    checks: ["health", "screen_creator", "import_creators"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
-    writebackMode: screening.writeback.mode
+    writebackMode: screening.writeback.mode,
+    importedCreators: importResult.summary.imported,
+    duplicateCreators: importResult.summary.duplicates
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));
@@ -65,4 +81,3 @@ async function requestJson(url, options) {
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
-

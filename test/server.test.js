@@ -73,6 +73,41 @@ test("POST /api/tasks/screen-creator validates creator name", async () => {
   });
 });
 
+test("POST /api/creators/import parses CSV and returns imported creators", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/creators/import`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        csv: `Creator Name,Platform,Profile URL,Category
+Maya Tech Finds,TikTok,https://example.com/maya,UGC tech review`
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.summary.imported, 1);
+    assert.equal(body.creators[0].name, "Maya Tech Finds");
+    assert.equal(body.creators[0].status, "To Screen");
+  });
+});
+
+test("POST /api/creators/import validates CSV body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/creators/import`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "csv is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,
@@ -94,4 +129,3 @@ async function withServer(config, callback) {
     await new Promise((resolve) => server.close(resolve));
   }
 }
-

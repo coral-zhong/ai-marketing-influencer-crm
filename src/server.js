@@ -2,6 +2,7 @@ import http from "node:http";
 import { loadConfig } from "./config.js";
 import { screenCreator } from "./screenCreator.js";
 import { writeCreatorScreeningResult } from "./feishuClient.js";
+import { importCreatorsFromCsv } from "./importCreators.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -30,6 +31,25 @@ export function createApp(config = loadConfig()) {
         });
 
         return sendJson(response, 200, { ok: true, result, writeback });
+      }
+
+      if (request.method === "POST" && request.url === "/api/creators/import") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.csv || typeof body.csv !== "string") {
+          return sendJson(response, 400, { ok: false, error: "csv is required" });
+        }
+
+        const result = importCreatorsFromCsv(body.csv);
+        return sendJson(response, 200, {
+          ok: true,
+          creators: result.imported,
+          duplicates: result.duplicates,
+          errors: result.errors,
+          summary: result.summary
+        });
       }
 
       return sendJson(response, 404, { ok: false, error: "not_found" });
@@ -68,4 +88,3 @@ function sendJson(response, statusCode, body) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   startServer();
 }
-

@@ -6,7 +6,7 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 
 | Workflow Stage | Agent Capability | Input | Writes To | Human Approval Required | Status |
 |---|---|---|---|---|---|
-| Data Preparation | `import_creators` | CSV or pasted creator rows | `Creators` | No, unless deleting/merging | Planned |
+| Data Preparation | `import_creators` | CSV or pasted creator rows | parsed import preview | No, unless deleting/merging | Implemented MVP |
 | Data Preparation | `normalize_creator_profile` | raw creator record | `Creators` | No | Planned |
 | Data Preparation | `screen_creator` | creator + campaign context | `Creators`, `Agent Tasks` | Yes before outreach | Implemented MVP |
 | Campaign Creation | `campaign_planner` | product/campaign notes | `Campaigns`, `Agent Tasks` | Yes | Planned |
@@ -46,4 +46,3 @@ Reason:
 - It does not require external web search.
 - It makes `screen_creator` useful on batches of real creator data.
 - It is easier to verify than outreach, negotiation, or logistics.
-

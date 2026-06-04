@@ -46,8 +46,8 @@ Goal: make creator capture + screening usable enough for a real operator test.
 | Local install verification | Another AI agent can clone and verify the repo | `npm run verify:local` | Done |
 | Feishu Creator writeback | Agent can update a real Creator row | `src/feishuClient.js` | Done |
 | Feishu credential setup guide | User can configure real writeback manually | `docs/feishu-api-credentials-setup.md` | Done |
+| Creator import | User can upload existing creator data | CSV import endpoint + validation | Done |
 | Campaign context in screening | Screening uses campaign criteria, claims, and target market | enriched `screen_creator` input | Next |
-| Creator import | User can upload existing creator data | CSV import script + mapping guide | Next |
 
 ### Next: Campaign-To-Creator Pipeline
 
@@ -267,4 +267,3 @@ Acceptance criteria:
 Agents can prepare, score, draft, summarize, and recommend.
 
 Humans approve external communication, payment, shipment, content approval, and publishing.
-

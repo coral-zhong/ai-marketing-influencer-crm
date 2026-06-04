@@ -94,6 +94,16 @@ Then include:
 
 The current public MVP returns deterministic screening output and a demo writeback status. Direct Feishu OpenAPI writeback is intentionally isolated behind `src/feishuClient.js` for the next implementation step.
 
+Import a small creator CSV:
+
+```bash
+curl -s http://localhost:3215/api/creators/import \
+  -H "content-type: application/json" \
+  -d '{
+    "csv": "Creator Name,Platform,Profile URL,Category\nMaya Tech Finds,TikTok,https://example.com/maya,UGC tech review\nAlex Home Lab,YouTube,https://example.com/alex,Home tech"
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:

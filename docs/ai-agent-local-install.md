@@ -21,10 +21,12 @@ Expected output includes:
 ```json
 {
   "ok": true,
-  "checks": ["health", "screen_creator"],
+  "checks": ["health", "screen_creator", "import_creators"],
   "fitScore": 100,
   "tier": "A",
-  "writebackMode": "demo"
+  "writebackMode": "demo",
+  "importedCreators": 1,
+  "duplicateCreators": 1
 }
 ```
 
@@ -153,4 +155,3 @@ Check that `FEISHU_CREATORS_TABLE_ID` and `creatorRecordId` are both present.
 ### Feishu writeback returns an API error
 
 Check that the Feishu app has permission to update Bitable records and has access to the target Base.
-
