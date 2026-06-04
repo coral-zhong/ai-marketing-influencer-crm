@@ -82,6 +82,8 @@ The agent or technical helper will install the package, verify it locally, and c
 
 Detailed setup guide: [Template-First Install](docs/template-first-install.md)
 
+For always-on cloud usage, deploy the agent with [Hosted Agent Install](docs/hosted-agent-install.md).
+
 ## Credentials
 
 Trying the agent locally does not require Feishu credentials.
@@ -91,6 +93,7 @@ Connecting it to a real Feishu Base requires a Feishu app connection so the agen
 ## Useful Docs
 
 - [Template-First Install](docs/template-first-install.md)
+- [Hosted Agent Install](docs/hosted-agent-install.md)
 - [Operation Guide](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 
@@ -188,6 +191,8 @@ AI agent 或技术助手会安装 package，运行本地验证，并连接到你
 
 详细安装指南：[Template-First Install](docs/template-first-install.md)
 
+如果你希望 agent 常驻在线，可以按 [Hosted Agent Install](docs/hosted-agent-install.md) 部署到云端。
+
 ## 凭证说明
 
 本地试用 agent 不需要飞书凭证。
@@ -197,6 +202,7 @@ AI agent 或技术助手会安装 package，运行本地验证，并连接到你
 ## 有用文档
 
 - [Template-First Install / 模板优先安装](docs/template-first-install.md)
+- [Hosted Agent Install / 云端 Agent 安装](docs/hosted-agent-install.md)
 - [Operation Guide / 操作指南](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 
