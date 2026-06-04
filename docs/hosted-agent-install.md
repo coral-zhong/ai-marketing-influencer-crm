@@ -1,13 +1,22 @@
 # Hosted Agent Install
 
-This is the recommended path for a real user experience.
+This is the builder and internal-test guide for running the cloud agent.
 
-The user copies the Feishu CRM template. The agent runs in the cloud. Feishu automation calls the hosted agent when an `Agent Tasks` record is created.
+For a low-friction public product, do not expose this setup to end users. Use hosted OAuth and per-user install storage instead. See [Low-Friction Product Plan](low-friction-product-plan.md).
+
+The validated internal-test path is:
+
+```text
+Feishu app creates the CRM Base
+-> agent runs on Railway
+-> Agent Tasks calls the hosted agent
+-> hosted agent writes the result back to Feishu
+```
 
 ## Product Flow
 
 ```text
-Feishu Base template
+Feishu app-created Base
 -> user creates or updates an Agent Tasks row
 -> Feishu automation sends an HTTP request
 -> hosted agent runs the workflow
@@ -19,10 +28,12 @@ Feishu Base template
 
 Use this path when you want the agent to stay online without running anything on your own laptop.
 
-Before Railway, make sure the repo is on GitHub and your copied Feishu Base URL has already been connected locally once:
+Before Railway, make sure the repo is on GitHub and the Feishu app has created or connected a test Base locally.
+
+Recommended internal-test command:
 
 ```bash
-npm run setup:feishu -- --base-url "<copied Feishu Base URL>"
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
 ```
 
 That command updates `.env` locally. Copy the values from `.env` into Railway variables. Do not commit `.env`.
@@ -200,14 +211,23 @@ This hosted path currently provides the trigger and writeback foundation. More t
 
 # 云端 Agent 安装
 
-这是更接近真实用户体验的路径。
+这是开发者和内测用的 cloud agent 部署文档。
 
-用户复制飞书 CRM 模板。Agent 运行在云端。飞书自动化在 `Agent Tasks` 新增记录时调用云端 agent。
+正式对外产品不要把这些配置暴露给终端用户。对外应该走 hosted OAuth 和每个用户自己的安装配置。见 [Low-Friction Product Plan](low-friction-product-plan.md)。
+
+已经验证通过的内测路径是：
+
+```text
+飞书应用自动创建 CRM Base
+-> agent 跑在 Railway
+-> Agent Tasks 调用云端 agent
+-> 云端 agent 把结果写回飞书
+```
 
 ## 产品流程
 
 ```text
-飞书 Base 模板
+飞书应用创建的 Base
 -> 用户创建或更新 Agent Tasks 记录
 -> 飞书自动化发送 HTTP 请求
 -> 云端 agent 执行 workflow
@@ -219,10 +239,12 @@ This hosted path currently provides the trigger and writeback foundation. More t
 
 选择这条路径后，agent 会一直跑在云端，不需要你的电脑常驻开机。
 
-部署 Railway 之前，先确认这个 repo 已经发布到 GitHub，并且你已经在本地用复制后的飞书 Base URL 连接过一次：
+部署 Railway 之前，先确认这个 repo 已经发布到 GitHub，并且飞书应用已经在本地创建或连接了一张测试 Base。
+
+推荐的内测命令：
 
 ```bash
-npm run setup:feishu -- --base-url "<复制后的飞书 Base URL>"
+npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer CRM"
 ```
 
 这条命令会更新本地 `.env`。把 `.env` 里的值复制到 Railway Variables。不要把 `.env` 提交到 GitHub。

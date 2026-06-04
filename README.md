@@ -8,8 +8,8 @@ It helps creator partnership teams manage the workflow from creator discovery to
 
 The product has two parts:
 
-- a Feishu Base template for the CRM workspace
-- an agent package that connects AI workflow abilities to the copied Base
+- a Feishu CRM workspace for the marketing team
+- a cloud agent that writes reviewable AI output back into Feishu
 
 ## Who This Is For
 
@@ -65,35 +65,37 @@ Humans approve before anything external happens.
 
 ## How To Install
 
-Start with the Feishu template.
+The lowest-friction path is a hosted workspace.
 
-1. Get the Feishu CRM template link from the product owner.
-2. Copy the template into your own Feishu workspace.
-3. Open the copied Base and copy its browser URL.
-4. Give the copied Base URL and this GitHub repo link to your AI coding agent or technical helper.
+1. Ask the product owner for an installed Feishu CRM workspace.
+2. Open the CRM in Feishu.
+3. Create a Campaign.
+4. Create an `Agent Tasks` row for `campaign_plan`.
+5. Review the AI output written back into Feishu.
 
-Copy this prompt:
+This proves the core product loop:
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my copied Feishu Base URL>.
+Campaign in Feishu
+-> cloud agent runs
+-> AI plan is written back to Feishu
+-> human reviews next actions
 ```
 
-The agent or technical helper will install the package, verify it locally, and connect it to your copied Feishu Base.
+Self-hosting and developer setup are available, but they are not the recommended path for non-technical users.
 
-Detailed setup guide: [Template-First Install](docs/template-first-install.md)
-
-For always-on cloud usage, deploy the agent with [Hosted Agent Install](docs/hosted-agent-install.md).
+Builder guide: [Hosted Agent Install](docs/hosted-agent-install.md)
 
 ## Credentials
 
-Trying the agent locally does not require Feishu credentials.
+End users should not need to handle Feishu App ID, App Secret, Base tokens, or API keys.
 
-Connecting it to a real Feishu Base requires a Feishu app connection so the agent can write approved results back to your workspace. Do not put secrets into public issues, screenshots, or commits.
+For the current hosted test, the product owner configures the Feishu app and cloud agent. For a public multi-user product, installation should use Feishu OAuth so each user authorizes access without copying secrets.
 
 ## Useful Docs
 
-- [Template-First Install](docs/template-first-install.md)
 - [Hosted Agent Install](docs/hosted-agent-install.md)
+- [Low-Friction Product Plan](docs/low-friction-product-plan.md)
 - [Operation Guide](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 
@@ -117,8 +119,8 @@ MIT
 
 这个产品由两部分组成：
 
-- 飞书多维表格模板：用户实际使用的 CRM 工作台
-- Agent package：把 AI 工作流能力连接到用户复制后的 Base
+- 飞书 CRM 工作台：营销团队实际操作的地方
+- 云端 Agent：把可审核的 AI 结果写回飞书
 
 ## 适合谁
 
@@ -174,35 +176,37 @@ AI 可以起草、评分、总结和推荐。
 
 ## 如何安装
 
-先从飞书模板开始。
+阻力最低的路径是使用已经安装好的云端工作区。
 
-1. 从产品方获得飞书 CRM 模板链接。
-2. 把模板复制到你自己的飞书空间。
-3. 打开复制后的 Base，复制浏览器地址。
-4. 把复制后的 Base URL 和这个 GitHub repo 链接交给你的 AI coding agent 或技术助手。
+1. 向产品方获取已经连接好云端 agent 的飞书 CRM。
+2. 在飞书里打开 CRM。
+3. 创建一个 Campaign。
+4. 在 `Agent Tasks` 里创建一条 `campaign_plan` 任务。
+5. 在飞书里审核 AI 写回的结果。
 
-可以直接复制这句话：
+这个测试证明的是：
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my copied Feishu Base URL>.
+飞书里的 Campaign
+-> 云端 agent 执行
+-> AI 结果写回飞书
+-> 人来审核下一步动作
 ```
 
-AI agent 或技术助手会安装 package，运行本地验证，并连接到你复制后的飞书 Base。
+自托管和开发者安装仍然支持，但不应该作为非技术用户的默认路径。
 
-详细安装指南：[Template-First Install](docs/template-first-install.md)
-
-如果你希望 agent 常驻在线，可以按 [Hosted Agent Install](docs/hosted-agent-install.md) 部署到云端。
+开发者指南：[Hosted Agent Install](docs/hosted-agent-install.md)
 
 ## 凭证说明
 
-本地试用 agent 不需要飞书凭证。
+终端用户不应该处理飞书 App ID、App Secret、Base token 或 API key。
 
-连接真实飞书 Base 时，需要配置飞书应用连接，让 agent 可以把审核后的结果写回你的工作台。不要把密钥发到公开 issue、截图或 Git commit 里。
+当前云端测试由产品方配置飞书应用和 cloud agent。正式多用户产品应该走飞书 OAuth，让用户授权访问，而不是复制密钥。
 
 ## 有用文档
 
-- [Template-First Install / 模板优先安装](docs/template-first-install.md)
 - [Hosted Agent Install / 云端 Agent 安装](docs/hosted-agent-install.md)
+- [Low-Friction Product Plan / 低阻力产品方案](docs/low-friction-product-plan.md)
 - [Operation Guide / 操作指南](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 

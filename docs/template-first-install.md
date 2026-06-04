@@ -1,21 +1,22 @@
 # Template-First Install
 
-This is the recommended install path for non-technical users.
+This is the recommended preview path for non-technical users.
 
-The user starts with a complete Feishu Base template, then connects the GitHub repo for the agent capabilities.
+The user starts with a complete Feishu Base template so they can understand the workflow before connecting the cloud agent.
+
+For a real public product, users should not be asked to configure Feishu developer credentials or add a developer app as a document collaborator. The low-friction path should use a hosted install and Feishu OAuth.
 
 ## What The User Does
 
 1. Open the shared Feishu Base template.
 2. Make a copy into their own Feishu workspace.
 3. Open the copied Base and copy the browser URL.
-4. Give the GitHub repo link and the copied Base URL to an AI agent or technical helper.
-5. The agent installs the local service, verifies it, and connects the CRM agent to the copied Base.
+4. Use the copied Base as a preview workspace, or ask the product owner to connect it through the hosted install flow.
 
 Copy this prompt:
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my Feishu Base URL>.
+I copied the AI Marketing Influencer CRM template into Feishu. Help me connect it through the hosted install flow, without asking me for App Secret or table IDs.
 ```
 
 ## What The Template Contains
@@ -64,13 +65,15 @@ Copying a template lets the user see the whole CRM immediately.
 
 They do not need to wait for a script to create tables before understanding the product. They can inspect the workflow, views, and operation guide first, then connect the agent.
 
-The API-created Base path still exists for developer installs and internal tests, but template-first should be the default public install path.
+The app-created Base path exists for developer installs and internal tests. It is currently the most reliable path for testing cloud writeback because the Feishu app can write to the Base it created.
 
 For automatic Feishu triggers, deploy the agent as a hosted service. See [Hosted Agent Install](hosted-agent-install.md).
 
 ## Connecting The Copied Base
 
-After the user copies the template, run:
+This path is for builders and internal tests only. It may fail if the current token identity cannot edit the copied Base.
+
+After the user copies the template, a technical helper can run:
 
 ```bash
 npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
@@ -88,28 +91,32 @@ This writes the default workflow steps into the copied or created `Operation Gui
 
 If the AI agent cannot access `open.feishu.cn`, this is usually an agent sandbox network limitation. Run the command on the user's own computer.
 
-If `npm run seed:guide` or real writeback returns `Forbidden`, the copied Base exists but the Feishu app does not have edit access to that copied document. Open the copied Base in Feishu, share it with the integration app as a document collaborator, and give it edit or manage permission. Feishu documents describe this as adding the app to the document collaborators / document app permissions.
+If `npm run seed:guide` or real writeback returns `Forbidden`, do not ask a non-technical user to debug Feishu app permissions. Use one of these paths instead:
+
+- Internal test: let the Feishu app create the Base with `npm run setup:feishu -- --create-new-base`.
+- Public product: use hosted OAuth and write back as the authorized user.
 
 ---
 
 # 模板优先安装
 
-这是推荐给非技术用户的默认安装路径。
+这是推荐给非技术用户的预览路径。
 
-用户先复制一个完整的飞书多维表格模板，再连接 GitHub 里的 agent 能力。
+用户先复制一个完整的飞书多维表格模板，理解工作流，再连接云端 agent。
+
+正式对外产品里，不应该要求用户配置飞书开发者凭证，也不应该要求用户把开发者应用添加为文档协作者。低阻力路径应该走 hosted install 和飞书 OAuth。
 
 ## 用户需要做什么
 
 1. 打开共享的飞书 CRM Base 模板。
 2. 复制到自己的飞书空间。
 3. 打开复制后的 Base，并复制浏览器里的 Base 链接。
-4. 把 GitHub repo 链接和复制后的 Base 链接发给 AI agent 或技术助手。
-5. Agent 安装本地服务、完成验证，并把 CRM agent 连接到这个 Base。
+4. 把复制后的 Base 当作预览工作区，或让产品方通过 hosted install 帮你连接。
 
 可以直接复制这句话：
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. I already copied the Feishu CRM template. Connect the agent to this Base URL: <paste my Feishu Base URL>.
+I copied the AI Marketing Influencer CRM template into Feishu. Help me connect it through the hosted install flow, without asking me for App Secret or table IDs.
 ```
 
 ## 模板里包含什么
@@ -158,13 +165,15 @@ repo 提供：
 
 他们不需要等脚本创建表格以后才理解产品，也不需要一开始就面对 API 创建流程。用户可以先查看完整工作流、视图和操作指南，再连接 agent。
 
-自动创建 Base 的路径仍然保留，适合开发者安装和内部测试；但公开对外时，默认应该走模板优先。
+应用自动创建 Base 的路径仍然保留，适合开发者安装和内部测试。它目前是测试云端写回最稳定的路径，因为飞书应用可以写回自己创建的 Base。
 
 如果需要飞书自动触发 agent，需要把 agent 部署成云端服务。见 [Hosted Agent Install](hosted-agent-install.md)。
 
 ## 连接复制后的 Base
 
-用户复制模板后，运行：
+这条路径只适合开发者和内部测试。如果当前 token 身份不能编辑复制后的 Base，真实写回可能失败。
+
+用户复制模板后，技术助手可以运行：
 
 ```bash
 npm run setup:feishu -- --base-url "https://your-domain.feishu.cn/base/bascnxxxx?table=tblxxxx"
@@ -182,4 +191,7 @@ npm run seed:guide
 
 如果 AI agent 访问不了 `open.feishu.cn`，通常是 agent 沙箱网络限制。让用户在自己的电脑上运行这条命令即可。
 
-如果 `npm run seed:guide` 或真实写回返回 `Forbidden`，说明复制后的 Base 存在，但飞书应用还没有这份复制文档的编辑权限。打开复制后的 Base，在分享/协作者里把对应集成应用加入为文档协作者，并授予可编辑或可管理权限。飞书文档里通常称为给应用开通云文档权限，或把应用添加为文档协作应用。
+如果 `npm run seed:guide` 或真实写回返回 `Forbidden`，不要让非技术用户继续调试飞书应用权限。改走下面两条路径之一：
+
+- 内测：用 `npm run setup:feishu -- --create-new-base` 让飞书应用自动创建 Base。
+- 对外产品：用 hosted OAuth，让 agent 以授权用户身份写回。

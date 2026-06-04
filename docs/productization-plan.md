@@ -16,39 +16,87 @@ Positioning:
 
 > AI Influencer CRM that installs into your Feishu and runs marketing agents in the cloud.
 
+The product should not be explained as "adding an AI agent to Feishu Base." That is a developer framing.
+
+The user-facing promise is:
+
+> Create a campaign in Feishu. Let AI turn it into creator tasks, drafts, review notes, and follow-up recommendations.
+
 ## Product Tiers
 
 | Tier | Purpose | Public Default |
 |---|---|---|
-| Feishu + Cloud Agent | Main product experience | Yes |
-| Feishu-native template | Lightweight preview or fallback | No |
-| Local runner | Developer/self-hosted mode | No |
+| Hosted Feishu CRM + Cloud Agent | Main product experience | Yes |
+| Feishu template only | Preview the workflow | No |
+| GitHub self-hosting kit | Developer/self-hosted mode | No |
 
 The public product should avoid local runtime, launchd, ngrok, and hidden terminal logs.
+
+It should also avoid asking users for Feishu App ID, App Secret, Base tokens, or table IDs.
+
+## Current Validation Status
+
+The cloud writeback loop has been validated:
+
+```text
+Railway hosted agent
+-> /api/agent-tasks/run
+-> campaign_plan workflow
+-> Feishu OpenAPI
+-> write back to Agent Tasks
+```
+
+Verified result:
+
+```json
+{
+  "endpointStatus": 200,
+  "taskStatus": "needs_review",
+  "writebackMode": "feishu_openapi",
+  "written": true
+}
+```
+
+The reliable internal-test path is app-created Base:
+
+```text
+Feishu app creates the Base
+-> same app writes back to that Base
+```
+
+The copied-template path is useful for previewing the CRM, but it should not be the main writeback path until hosted OAuth is complete.
 
 ## Second-Batch Validation Goal
 
 The next validation should answer:
 
-> Can a new user fill a few setup fields, get the CRM installed into their Feishu, capture one creator, and see one useful agent result written back?
+> Can a new user open an installed Feishu CRM, create one Campaign, trigger one Agent Task, and see one useful agent result written back?
 
 First loop:
 
 ```text
-Creator capture
--> screen_creator
--> write Fit Score, Risks, Strengths, Recommended Next Action
+Campaign row
+-> campaign_plan
+-> write recommended creator tasks and outreach direction
 -> mark Needs Review
 ```
 
 ## Minimum Setup Fields
 
+For the user-facing product:
+
 | Field | Why It Is Needed |
 |---|---|
-| Feishu authorization / tenant access | Create or copy the CRM and write records |
-| Base name | Create the user's workspace |
-| First campaign or product context | Make screening output relevant |
-| LLM billing mode | User-provided API key or hosted trial quota |
+| Feishu authorization | Install/connect the CRM and write records |
+| First campaign or product context | Make AI output relevant |
+
+For builders and internal tests only:
+
+| Field | Why It Is Needed |
+|---|---|
+| Feishu App ID / App Secret | Create a test Base and write through OpenAPI |
+| Railway variables | Host the agent |
+| Base token / table map | Point one deployment at one test Base |
 
 ## Creator Capture MVP
 
@@ -91,3 +139,19 @@ The GitHub project should be positioned as:
 
 It should not make local launchd the default path.
 
+It should not make GitHub cloning the first step for a non-technical marketer.
+
+## Next Product Step
+
+Build this lower-friction path:
+
+```text
+Hosted install page
+-> Feishu OAuth
+-> create CRM Base or connect selected Base
+-> save per-install config
+-> show success page with Feishu CRM link
+-> Feishu automation triggers cloud agent
+```
+
+This turns the current internal test into a product install.
