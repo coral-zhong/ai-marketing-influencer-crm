@@ -1,0 +1,143 @@
+{
+  "name": "AI Marketing Influencer CRM - MVP",
+  "version": "0.1.0",
+  "description": "Minimal Feishu Base schema for the first creator capture -> screen_creator -> review loop.",
+  "tables": [
+    {
+      "name": "Campaigns",
+      "primaryField": "Campaign Name",
+      "fields": [
+        { "name": "Campaign Name", "type": "text", "required": true },
+        { "name": "Brand", "type": "text", "required": true },
+        { "name": "Product Name", "type": "text", "required": true },
+        { "name": "Campaign Goal", "type": "long_text", "required": true },
+        { "name": "Target Market", "type": "text", "required": false },
+        { "name": "Creator Criteria", "type": "long_text", "required": false },
+        { "name": "Claims Allowed", "type": "long_text", "required": false },
+        { "name": "Claims To Avoid", "type": "long_text", "required": false },
+        {
+          "name": "Status",
+          "type": "select",
+          "required": true,
+          "options": ["Draft", "Active", "Paused", "Completed"]
+        }
+      ],
+      "views": [
+        {
+          "name": "Active Campaigns",
+          "type": "grid",
+          "filter": { "field": "Status", "operator": "is", "value": "Active" }
+        }
+      ]
+    },
+    {
+      "name": "Creators",
+      "primaryField": "Creator Name",
+      "fields": [
+        { "name": "Creator Name", "type": "text", "required": true },
+        {
+          "name": "Platform",
+          "type": "select",
+          "required": true,
+          "options": ["TikTok", "Instagram", "YouTube", "Xiaohongshu", "Other"]
+        },
+        { "name": "Profile URL", "type": "url", "required": true },
+        { "name": "Example Video URL", "type": "url", "required": false },
+        { "name": "Category", "type": "text", "required": false },
+        { "name": "Notes", "type": "long_text", "required": false },
+        {
+          "name": "Creator Status",
+          "type": "select",
+          "required": true,
+          "options": ["Captured", "To Screen", "Needs Review", "To Outreach", "Rejected"]
+        },
+        { "name": "Fit Score", "type": "number", "required": false },
+        {
+          "name": "Tier",
+          "type": "select",
+          "required": false,
+          "options": ["A", "B", "C", "Reject"]
+        },
+        {
+          "name": "Score Confidence",
+          "type": "select",
+          "required": false,
+          "options": ["High", "Medium", "Low"]
+        },
+        { "name": "Strengths", "type": "long_text", "required": false },
+        { "name": "Risks", "type": "long_text", "required": false },
+        {
+          "name": "Recommended Collaboration",
+          "type": "select",
+          "required": false,
+          "options": ["Seed", "Paid", "Affiliate", "Re-hire", "Reject", "Needs Review"]
+        },
+        { "name": "Screening Summary", "type": "long_text", "required": false },
+        { "name": "Last Agent Run At", "type": "datetime", "required": false },
+        { "name": "Agent Error", "type": "long_text", "required": false }
+      ],
+      "views": [
+        {
+          "name": "To Screen",
+          "type": "grid",
+          "filter": { "field": "Creator Status", "operator": "is", "value": "To Screen" }
+        },
+        {
+          "name": "Needs Review",
+          "type": "grid",
+          "filter": { "field": "Creator Status", "operator": "is", "value": "Needs Review" }
+        }
+      ]
+    },
+    {
+      "name": "Agent Tasks",
+      "primaryField": "Task Name",
+      "fields": [
+        { "name": "Task Name", "type": "text", "required": true },
+        {
+          "name": "Task Type",
+          "type": "select",
+          "required": true,
+          "options": ["screen_creator"]
+        },
+        {
+          "name": "Input Record Type",
+          "type": "select",
+          "required": true,
+          "options": ["Creator"]
+        },
+        { "name": "Input Record ID", "type": "text", "required": true },
+        {
+          "name": "Status",
+          "type": "select",
+          "required": true,
+          "options": ["pending", "processing", "needs_review", "done", "failed"]
+        },
+        {
+          "name": "Permission Level",
+          "type": "select",
+          "required": true,
+          "options": ["auto", "review", "manual"]
+        },
+        { "name": "Output Summary", "type": "long_text", "required": false },
+        { "name": "Output JSON", "type": "long_text", "required": false },
+        { "name": "Error Message", "type": "long_text", "required": false },
+        { "name": "Started At", "type": "datetime", "required": false },
+        { "name": "Finished At", "type": "datetime", "required": false }
+      ],
+      "views": [
+        {
+          "name": "Pending Tasks",
+          "type": "grid",
+          "filter": { "field": "Status", "operator": "is", "value": "pending" }
+        },
+        {
+          "name": "Needs Review",
+          "type": "grid",
+          "filter": { "field": "Status", "operator": "is", "value": "needs_review" }
+        }
+      ]
+    }
+  ]
+}
+

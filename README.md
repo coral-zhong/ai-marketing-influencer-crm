@@ -92,7 +92,12 @@ The current public MVP returns deterministic screening output and a demo writeba
 
 - [Productization Plan](docs/productization-plan.md)
 - [Cloud Agent MVP Spec](docs/cloud-agent-mvp-spec.md)
+- [Install Test Runbook](docs/install-test-runbook.md)
 - [Build-in-Public Positioning Post](docs/positioning-post.md)
+
+## Schema
+
+- [Minimal Feishu CRM Schema](schema/minimal-crm.schema.json)
 
 ## Safety Principle
 
