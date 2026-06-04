@@ -81,6 +81,55 @@ export async function writeAgentTaskResult(config, payload, fetchImpl = fetch) {
   };
 }
 
+export async function resolveAgentTaskFromFeishu(config, payload, fetchImpl = fetch) {
+  const hasCredentials = Boolean(config.feishuAppId && config.feishuAppSecret && config.feishuBaseToken);
+  if (!hasCredentials || config.demoMode) {
+    throw new Error("Feishu credentials are required to resolve an Agent Tasks record.");
+  }
+
+  const agentTasksTableId = config.feishuTables?.["Agent Tasks"];
+  if (!agentTasksTableId || !payload.taskRecordId) {
+    throw new Error("Agent Tasks table id and taskRecordId are required to resolve hosted task input.");
+  }
+
+  const tenantAccessToken = await getTenantAccessToken(config, fetchImpl);
+  const taskRecord = await getBitableRecord({
+    baseToken: config.feishuBaseToken,
+    tableId: agentTasksTableId,
+    recordId: payload.taskRecordId,
+    tenantAccessToken
+  }, fetchImpl);
+  const taskFields = taskRecord.fields || {};
+  const taskType = textField(taskFields["Task Type"]);
+  const inputRecordType = textField(taskFields["Input Record Type"]);
+  const inputRecordId = textField(taskFields["Input Record ID"]);
+
+  if (taskType === "campaign_plan" && inputRecordType === "Campaign") {
+    const campaignsTableId = config.feishuTables?.Campaigns;
+    if (!campaignsTableId) throw new Error("Campaigns table id is required to resolve campaign_plan input.");
+    if (!inputRecordId) throw new Error("Input Record ID is required for campaign_plan tasks.");
+
+    const campaignRecord = await getBitableRecord({
+      baseToken: config.feishuBaseToken,
+      tableId: campaignsTableId,
+      recordId: inputRecordId,
+      tenantAccessToken
+    }, fetchImpl);
+
+    return {
+      taskType,
+      input: {
+        campaign: mapCampaignFields(campaignRecord.fields || {})
+      }
+    };
+  }
+
+  return {
+    taskType,
+    input: {}
+  };
+}
+
 export function buildCreatorScreeningFields(result) {
   return {
     "Fit Score": result.fitScore,
@@ -146,6 +195,20 @@ async function updateBitableRecord(input, fetchImpl) {
   );
 }
 
+async function getBitableRecord(input, fetchImpl) {
+  const url = `${FEISHU_OPENAPI_BASE_URL}/bitable/v1/apps/${encodeURIComponent(input.baseToken)}/tables/${encodeURIComponent(input.tableId)}/records/${encodeURIComponent(input.recordId)}`;
+  const body = await parseFeishuResponse(
+    await fetchImpl(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${input.tenantAccessToken}`,
+        "content-type": "application/json; charset=utf-8"
+      }
+    })
+  );
+  return body.data?.record || {};
+}
+
 async function parseFeishuResponse(response) {
   const body = await response.json();
   if (!response.ok || body.code !== 0) {
@@ -158,4 +221,27 @@ async function parseFeishuResponse(response) {
 function arrayToText(value) {
   if (Array.isArray(value)) return value.join("\n");
   return value || "";
+}
+
+function mapCampaignFields(fields) {
+  return {
+    campaignName: textField(fields["Campaign Name"]),
+    brand: textField(fields.Brand),
+    productName: textField(fields["Product Name"]),
+    campaignGoal: textField(fields["Campaign Goal"]),
+    targetMarket: textField(fields["Target Market"]),
+    creatorCriteria: textField(fields["Creator Criteria"]),
+    claimsAllowed: textField(fields["Claims Allowed"]),
+    claimsToAvoid: textField(fields["Claims To Avoid"])
+  };
+}
+
+function textField(value) {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (Array.isArray(value)) return value.map(textField).filter(Boolean).join("\n");
+  if (value && typeof value === "object") {
+    return textField(value.text || value.name || value.value || value.id || "");
+  }
+  return "";
 }

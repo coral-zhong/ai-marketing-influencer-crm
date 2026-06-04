@@ -197,6 +197,80 @@ test("POST /api/agent-tasks/run executes and writes back a hosted campaign task"
   });
 });
 
+test("POST /api/agent-tasks/run resolves campaign task input from Feishu when only taskRecordId is provided", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblAgentTasks/records/recTask") && options.method === "GET") {
+      return jsonResponse({
+        code: 0,
+        data: {
+          record: {
+            record_id: "recTask",
+            fields: {
+              "Task Type": "campaign_plan",
+              "Input Record Type": "Campaign",
+              "Input Record ID": "recCampaign"
+            }
+          }
+        }
+      });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblCampaigns/records/recCampaign")) {
+      return jsonResponse({
+        code: 0,
+        data: {
+          record: {
+            record_id: "recCampaign",
+            fields: {
+              "Campaign Name": "Spring TikTok UGC Test",
+              Brand: "Demo Brand",
+              "Product Name": "Magnetic power bank",
+              "Campaign Goal": "Find creators for short tutorial demos",
+              "Creator Criteria": "TikTok UGC review creators"
+            }
+          }
+        }
+      });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblAgentTasks/records/recTask") && options.method === "PUT") {
+      return jsonResponse({ code: 0, data: { record: { record_id: "recTask" } } });
+    }
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  await withServer({
+    agentApiSecret: "secret",
+    feishuAppId: "app-id",
+    feishuAppSecret: "app-secret",
+    feishuBaseToken: "base-token",
+    feishuTables: {
+      Campaigns: "tblCampaigns",
+      "Agent Tasks": "tblAgentTasks"
+    },
+    fetchImpl: fakeFetch
+  }, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/agent-tasks/run`, {
+      method: "POST",
+      headers: { "content-type": "application/json", "x-agent-secret": "secret" },
+      body: JSON.stringify({
+        taskRecordId: "recTask"
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.task.status, "needs_review");
+    assert.equal(body.writeback.written, true);
+    assert.match(body.task.outputSummary, /Campaign plan created/);
+    assert.equal(calls.filter((call) => call.options.method === "GET").length, 2);
+  });
+});
+
 test("POST /api/agent-tasks/run validates task type", async () => {
   await withServer({}, async (baseUrl) => {
     const response = await fetch(`${baseUrl}/api/agent-tasks/run`, {
@@ -208,7 +282,7 @@ test("POST /api/agent-tasks/run validates task type", async () => {
 
     assert.equal(response.status, 400);
     assert.equal(body.ok, false);
-    assert.equal(body.error, "taskType is required");
+    assert.equal(body.error, "taskType or taskRecordId is required");
   });
 });
 

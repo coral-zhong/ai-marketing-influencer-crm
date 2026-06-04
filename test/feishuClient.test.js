@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildAgentTaskResultFields, buildCreatorScreeningFields, writeAgentTaskResult, writeCreatorScreeningResult } from "../src/feishuClient.js";
+import { buildAgentTaskResultFields, buildCreatorScreeningFields, resolveAgentTaskFromFeishu, writeAgentTaskResult, writeCreatorScreeningResult } from "../src/feishuClient.js";
 
 test("buildCreatorScreeningFields maps screening result to Feishu field names", () => {
   const fields = buildCreatorScreeningFields({
@@ -153,6 +153,72 @@ test("writeAgentTaskResult updates an Agent Tasks record through OpenAPI", async
   assert.equal(writeback.written, true);
   assert.equal(calls[1].options.method, "PUT");
   assert.equal(JSON.parse(calls[1].options.body).fields.Status, "needs_review");
+});
+
+test("resolveAgentTaskFromFeishu reads campaign task input from Feishu records", async () => {
+  const calls = [];
+  const fakeFetch = async (url, options) => {
+    calls.push({ url, options });
+    if (url.endsWith("/auth/v3/tenant_access_token/internal")) {
+      return jsonResponse({ code: 0, tenant_access_token: "tenant-token" });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblAgentTasks/records/recTask")) {
+      return jsonResponse({
+        code: 0,
+        data: {
+          record: {
+            record_id: "recTask",
+            fields: {
+              "Task Type": "campaign_plan",
+              "Input Record Type": "Campaign",
+              "Input Record ID": "recCampaign"
+            }
+          }
+        }
+      });
+    }
+    if (url.endsWith("/bitable/v1/apps/base-token/tables/tblCampaigns/records/recCampaign")) {
+      return jsonResponse({
+        code: 0,
+        data: {
+          record: {
+            record_id: "recCampaign",
+            fields: {
+              "Campaign Name": "Spring TikTok UGC Test",
+              Brand: "Demo Brand",
+              "Product Name": "Magnetic power bank",
+              "Campaign Goal": "Find creators for short tutorial demos",
+              "Creator Criteria": "TikTok UGC review creators"
+            }
+          }
+        }
+      });
+    }
+    throw new Error(`Unexpected URL: ${url}`);
+  };
+
+  const task = await resolveAgentTaskFromFeishu(
+    {
+      feishuAppId: "app-id",
+      feishuAppSecret: "app-secret",
+      feishuBaseToken: "base-token",
+      feishuTables: {
+        Campaigns: "tblCampaigns",
+        "Agent Tasks": "tblAgentTasks"
+      }
+    },
+    {
+      taskRecordId: "recTask"
+    },
+    fakeFetch
+  );
+
+  assert.equal(task.taskType, "campaign_plan");
+  assert.equal(task.input.campaign.campaignName, "Spring TikTok UGC Test");
+  assert.equal(task.input.campaign.productName, "Magnetic power bank");
+  assert.equal(calls.length, 3);
+  assert.equal(calls[1].options.method, "GET");
+  assert.equal(calls[2].options.method, "GET");
 });
 
 function jsonResponse(body) {

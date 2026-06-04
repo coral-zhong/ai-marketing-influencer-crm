@@ -1,7 +1,7 @@
 import http from "node:http";
 import { loadConfig } from "./config.js";
 import { screenCreator } from "./screenCreator.js";
-import { writeAgentTaskResult, writeCreatorScreeningResult } from "./feishuClient.js";
+import { resolveAgentTaskFromFeishu, writeAgentTaskResult, writeCreatorScreeningResult } from "./feishuClient.js";
 import { runAgentTask } from "./agentTaskRunner.js";
 import { importCreatorsFromCsv } from "./importCreators.js";
 import { planCampaignTasks } from "./campaignPlanner.js";
@@ -127,13 +127,19 @@ export function createApp(config = loadConfig()) {
         if (authError) return sendJson(response, 401, { ok: false, error: authError });
 
         const body = await readJson(request);
-        if (!body.taskType) {
-          return sendJson(response, 400, { ok: false, error: "taskType is required" });
+        if (!body.taskType && !body.taskRecordId) {
+          return sendJson(response, 400, { ok: false, error: "taskType or taskRecordId is required" });
         }
 
+        const resolvedTask = body.taskType
+          ? { taskType: body.taskType, input: body.input || {} }
+          : await resolveAgentTaskFromFeishu(config, {
+            taskRecordId: body.taskRecordId
+          }, config.fetchImpl || fetch);
+
         const task = runAgentTask({
-          taskType: body.taskType,
-          input: body.input || {}
+          taskType: resolvedTask.taskType,
+          input: resolvedTask.input || {}
         });
         const writeback = await writeAgentTaskResult(config, {
           taskRecordId: body.taskRecordId,

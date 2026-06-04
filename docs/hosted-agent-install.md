@@ -150,19 +150,17 @@ Request body:
 
 ```json
 {
-  "taskRecordId": "<Agent Tasks record id>",
-  "taskType": "campaign_plan",
-  "input": {
-    "campaign": {
-      "campaignName": "Spring TikTok UGC Test",
-      "brand": "Demo Brand",
-      "productName": "Magnetic power bank",
-      "campaignGoal": "Find creators for short tutorial demos",
-      "creatorCriteria": "TikTok UGC review creators"
-    }
-  }
+  "taskRecordId": "<Agent Tasks record id>"
 }
 ```
+
+The hosted agent reads the task type and input record from Feishu:
+
+- `Task Type`
+- `Input Record Type`
+- `Input Record ID`
+
+For `campaign_plan`, `Input Record Type` should be `Campaign`, and `Input Record ID` should be the Feishu record ID of the Campaign row.
 
 Supported hosted task types now:
 
@@ -187,7 +185,7 @@ Create an automation in the copied Base:
 4. URL: hosted `/api/agent-tasks/run` endpoint.
 5. Method: `POST`.
 6. Headers: include `content-type` and `x-agent-secret`.
-7. Body: include the task record id, task type, and input fields.
+7. Body: include the task record id.
 
 For the first live test, use `campaign_plan`.
 
@@ -361,19 +359,17 @@ x-agent-secret: <AGENT_API_SECRET>
 
 ```json
 {
-  "taskRecordId": "<Agent Tasks record id>",
-  "taskType": "campaign_plan",
-  "input": {
-    "campaign": {
-      "campaignName": "Spring TikTok UGC Test",
-      "brand": "Demo Brand",
-      "productName": "Magnetic power bank",
-      "campaignGoal": "Find creators for short tutorial demos",
-      "creatorCriteria": "TikTok UGC review creators"
-    }
-  }
+  "taskRecordId": "<Agent Tasks record id>"
 }
 ```
+
+云端 agent 会自己从飞书读取任务类型和输入记录：
+
+- `Task Type`
+- `Input Record Type`
+- `Input Record ID`
+
+如果是 `campaign_plan`，`Input Record Type` 应该是 `Campaign`，`Input Record ID` 应该是 Campaign 那一行的飞书 record ID。
 
 当前已支持的云端任务类型：
 
@@ -398,7 +394,7 @@ Endpoint 会写回：
 4. URL：云端 `/api/agent-tasks/run` endpoint。
 5. Method：`POST`。
 6. Headers：包含 `content-type` 和 `x-agent-secret`。
-7. Body：包含 task record id、task type 和 input fields。
+7. Body：包含 task record id。
 
 第一次真实测试建议先用 `campaign_plan`。
 

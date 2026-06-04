@@ -95,6 +95,7 @@ For the current hosted test, the product owner configures the Feishu app and clo
 ## Useful Docs
 
 - [Hosted Agent Install](docs/hosted-agent-install.md)
+- [Feishu Agent Task Automation](docs/feishu-agent-task-automation.md)
 - [Low-Friction Product Plan](docs/low-friction-product-plan.md)
 - [Operation Guide](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
@@ -206,6 +207,7 @@ AI 可以起草、评分、总结和推荐。
 ## 有用文档
 
 - [Hosted Agent Install / 云端 Agent 安装](docs/hosted-agent-install.md)
+- [Feishu Agent Task Automation / 飞书 Agent Tasks 自动化](docs/feishu-agent-task-automation.md)
 - [Low-Friction Product Plan / 低阻力产品方案](docs/low-friction-product-plan.md)
 - [Operation Guide / 操作指南](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
