@@ -7,11 +7,12 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "AGENT_DEMO_MODE=true node src/server.js",
-    "test": "node --test"
+    "test": "node --test test/*.test.js",
+    "smoke": "node scripts/local-smoke-test.mjs",
+    "verify:local": "npm test && npm run smoke"
   },
   "engines": {
     "node": ">=20"
   },
   "license": "MIT"
 }
-

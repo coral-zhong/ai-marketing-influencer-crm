@@ -47,6 +47,12 @@ Local developer automation is intentionally not the default path.
 
 ## Quick Start
 
+Fastest local verification:
+
+```bash
+npm run verify:local
+```
+
 Run the Cloud Agent MVP locally:
 
 ```bash
@@ -117,6 +123,7 @@ Official references:
 - [Productization Plan](docs/productization-plan.md)
 - [Cloud Agent MVP Spec](docs/cloud-agent-mvp-spec.md)
 - [Install Test Runbook](docs/install-test-runbook.md)
+- [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Build-in-Public Positioning Post](docs/positioning-post.md)
 
 ## Schema
