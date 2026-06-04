@@ -46,23 +46,21 @@ Humans approve before anything external happens.
 
 ## Install With An AI Agent
 
-The easiest path is to give this repo to an AI coding agent and ask it to install and verify the product for you.
+Give this repo to an AI coding agent and ask it to install the product for you.
 
 Copy this:
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. Run npm run verify:local to confirm the product works, then explain which Feishu credentials are needed if I want real writeback to my own Base.
+Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me and tell me when it is ready to connect to my Feishu Base.
 ```
 
-That is the only verification command a technical helper or AI agent needs to run for the basic install test.
+The AI agent or technical helper will handle the setup steps and tell you when the CRM is ready to connect to Feishu.
 
-You do not need to manually call API endpoints. You do not need to paste technical requests. You do not need Feishu credentials just to confirm that the product installs and runs.
+After installation, you can connect it to Feishu so the agent can write reviewable creator, campaign, outreach, fulfillment, and performance outputs back into your CRM Base.
 
-## What The Install Test Proves
+## What It Can Do
 
-The install test checks that the product workflow can run end to end.
-
-It verifies that the agent can:
+Once installed, the agent can help with:
 
 1. Import and search creator candidates.
 2. Screen a creator against a campaign.
@@ -74,36 +72,11 @@ It verifies that the agent can:
 8. Track samples and content delivery.
 9. Track published content performance.
 10. Recommend second collaborations and content reuse.
-11. Generate and validate the Feishu OAuth install entry point.
-
-## How A Real User Should Experience It
-
-The intended product experience is not:
-
-```text
-open terminal
-run local server
-copy API keys
-paste technical requests
-debug config errors
-```
-
-The intended product experience is:
-
-```text
-click Feishu install link
-authorize the app
-open the CRM Base
-add creators and campaigns
-review AI suggestions inside Feishu
-approve only when ready
-```
-
-This repo already contains the workflow logic, local install verification, Feishu writeback boundary, and OAuth install entry point. For a fully managed experience, deploy it as a hosted Feishu app so authorization, token storage, and Base setup happen for the user.
+11. Prepare the Feishu OAuth install entry point.
 
 ## Do I Need Feishu API Credentials?
 
-For install verification: **No.**
+For trying it locally: **No.**
 
 For a real installation that writes to your own Feishu Base: **Yes, unless you use a hosted OAuth app.**
 
@@ -112,27 +85,6 @@ For the hosted install path: the user should not copy API credentials manually. 
 If you are setting up the developer version, see [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md).
 
 If you are building the hosted install flow, see [Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md).
-
-## Product Status
-
-This is a working product repository. It includes the installable agent service, workflow logic, tests, Feishu writeback boundary, and documentation needed for an AI agent or technical helper to set it up.
-
-Included:
-
-- AI-agent-assisted installation and verification
-- Feishu writeback boundary
-- Core influencer CRM workflow endpoints
-- Review-first safety model
-- Feishu OAuth install entry point
-- English and Chinese user-facing README
-
-Optional upgrades for a smoother managed product:
-
-- Hosted Feishu OAuth token exchange
-- Secure tenant/user install storage
-- One-click Feishu Base creation or template copy
-- A friendly install success page
-- Production deployment of the agent service
 
 ## For Builders And Agents
 
@@ -146,7 +98,7 @@ Useful docs:
 
 ## Privacy And Safety
 
-- Install verification does not need real Feishu credentials.
+- Trying it locally does not need real Feishu credentials.
 - Real secrets should never be committed to this repo.
 - `FEISHU_APP_SECRET` belongs on the hosted server only.
 - The agent should not automatically send outreach, promise payment, ship samples, approve creator content, or publish reused content.
@@ -203,23 +155,21 @@ AI 可以起草、评分、总结和推荐。
 
 ## 让 AI Agent 帮你安装
 
-最简单的方法，是把这个 GitHub 仓库发给你的 AI coding agent，让它替你安装和验证产品。
+把这个 GitHub 仓库发给你的 AI coding agent，让它替你安装产品。
 
 复制这句话给它：
 
 ```text
-Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. Run npm run verify:local to confirm the product works, then explain which Feishu credentials are needed if I want real writeback to my own Base.
+Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me and tell me when it is ready to connect to my Feishu Base.
 ```
 
-基础安装测试只需要这一条验证命令。
+AI agent 或技术助手会处理安装步骤，并告诉你什么时候可以连接飞书。
 
-你不需要手动调用 API。你不需要复制一堆技术请求。你也不需要为了确认产品能安装运行而准备飞书凭证。
+安装完成后，你可以把它连接到飞书，让 Agent 把达人、Campaign、Outreach、履约和表现分析结果写回你的 CRM Base。
 
-## 安装测试证明什么
+## 它能做什么
 
-安装测试会验证这个红人营销工作流可以跑通。
-
-它会检查 Agent 是否能：
+安装后，Agent 可以帮你：
 
 1. 导入和搜索达人候选。
 2. 根据 Campaign 筛选达人。
@@ -231,36 +181,11 @@ Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. Run n
 8. 跟踪寄样和内容交付。
 9. 跟踪已发布内容表现。
 10. 推荐二次合作和内容复用。
-11. 生成并校验飞书 OAuth 安装入口。
-
-## 真正用户应该怎么使用
-
-理想体验不是：
-
-```text
-打开 Terminal
-启动本地服务
-复制 API key
-粘贴技术请求
-自己排查配置错误
-```
-
-理想体验是：
-
-```text
-点击飞书安装链接
-授权应用
-打开 CRM Base
-添加达人和 Campaign
-在飞书里审核 AI 建议
-确认后再对外执行
-```
-
-这个 repo 已经包含工作流逻辑、安装验证、飞书写回边界和 OAuth 安装入口。如果要做成更顺滑的全托管体验，可以部署成托管飞书应用，让授权、token 保存和 Base 创建都由服务端自动处理。
+11. 准备飞书 OAuth 安装入口。
 
 ## 我需要飞书 API 凭证吗？
 
-安装验证：**不需要。**
+本地试用：**不需要。**
 
 如果你要让开发者版本写入自己的真实飞书 Base：**需要，除非你使用托管 OAuth 应用。**
 
@@ -269,27 +194,6 @@ Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. Run n
 开发者配置请看：[Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md)。
 
 托管安装流程请看：[Feishu OAuth Hosted Install](docs/feishu-oauth-hosted-install.md)。
-
-## 产品状态
-
-这是一个真实可安装的产品仓库。它包含 Agent 服务、红人营销工作流、测试、飞书写回边界和让 AI agent 帮用户安装所需的文档。
-
-已经包含：
-
-- AI agent 辅助安装和验证
-- 飞书写回边界
-- 核心红人 CRM 工作流
-- 人工审核优先的安全模型
-- 飞书 OAuth 安装入口
-- 中英文 README
-
-如果要进一步升级成完全托管的低摩擦产品，可以继续补：
-
-- 托管服务完成 Feishu OAuth token exchange
-- 安全保存用户/租户安装状态
-- 一键创建或复制飞书 Base 模板
-- 友好的安装成功页面
-- 云端部署 Agent 服务
 
 ## 给开发者和 AI agent
 
@@ -303,7 +207,7 @@ Install https://github.com/coral-zhong/ai-marketing-influencer-crm for me. Run n
 
 ## 隐私和安全
 
-- 安装验证不需要真实飞书凭证。
+- 本地试用不需要真实飞书凭证。
 - 真实密钥不要提交到这个仓库。
 - `FEISHU_APP_SECRET` 只能保存在托管服务端。
 - Agent 不能自动发送 outreach、承诺付款、寄样、审批达人内容或发布复用内容。
