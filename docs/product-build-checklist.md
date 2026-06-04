@@ -11,7 +11,7 @@ Working rule:
 - [x] Creator search from websites
 - [x] Outreach send workflow
 - [x] Negotiation assistant
-- [ ] Collaboration confirmation
+- [x] Collaboration confirmation
 - [ ] Sample tracking
 - [ ] Content delivery tracking
 - [ ] Published content / performance tracking
@@ -33,3 +33,4 @@ Working rule:
 - 2026-06-04: Completed `Creator search from websites` with `POST /api/creators/search`, local tests, smoke coverage, and website-source candidate extraction.
 - 2026-06-04: Completed `Outreach send workflow` with `POST /api/outreach/send-package`, approval gate, send-ready package output, local tests, and smoke coverage.
 - 2026-06-04: Completed `Negotiation assistant` with `POST /api/negotiation/assist`, review-only reply suggestions, risk detection, guardrails, local tests, and smoke coverage.
+- 2026-06-04: Completed `Collaboration confirmation` with `POST /api/collaborations/confirm`, approval gate, collaboration draft output, fulfillment-start defaults, local tests, and smoke coverage.

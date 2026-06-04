@@ -149,9 +149,27 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(negotiation.ok === true, "negotiation assist should return ok=true");
   assert(negotiation.guidance.status === "Needs Review", "negotiation guidance should require review");
 
+  const collaboration = await requestJson(`${baseUrl}/api/collaborations/confirm`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      approvalStatus: "Approved",
+      creator: { name: "Maya Tech Finds" },
+      campaign: { campaignName: "Spring TikTok UGC Test", productName: "Magnetic power bank" },
+      terms: {
+        deliverables: "1 TikTok video",
+        offer: "$150 plus sample",
+        deadline: "2026-07-01"
+      }
+    })
+  });
+
+  assert(collaboration.ok === true, "collaboration confirmation should return ok=true");
+  assert(collaboration.confirmation.status === "Ready For Fulfillment", "collaboration should be ready for fulfillment after approval");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach", "creator_search", "outreach_send_package", "negotiation_assistant", "collaboration_confirmation"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
@@ -161,7 +179,8 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
     outreachStatus: outreachDraft.draft.status,
     creatorSearchCandidates: creatorSearch.summary.candidates,
     sendPackageStatus: sendPackage.package.status,
-    negotiationStatus: negotiation.guidance.status
+    negotiationStatus: negotiation.guidance.status,
+    collaborationStatus: collaboration.confirmation.status
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

@@ -310,6 +310,46 @@ test("POST /api/negotiation/assist validates request body", async () => {
   });
 });
 
+test("POST /api/collaborations/confirm creates collaboration draft", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/collaborations/confirm`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        approvalStatus: "Approved",
+        creator: { name: "Maya Tech Finds" },
+        campaign: { campaignName: "Spring TikTok UGC Test", productName: "Magnetic power bank" },
+        terms: {
+          deliverables: "1 TikTok video",
+          offer: "$150 plus sample",
+          deadline: "2026-07-01"
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.confirmation.status, "Ready For Fulfillment");
+    assert.equal(body.confirmation.collaboration.sampleStatus, "Not Sent");
+  });
+});
+
+test("POST /api/collaborations/confirm validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/collaborations/confirm`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({})
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "collaboration confirmation input is required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

@@ -8,6 +8,7 @@ import { draftOutreach } from "./outreachDraft.js";
 import { searchCreatorsFromWebsiteSources } from "./creatorSearch.js";
 import { prepareOutreachSendPackage } from "./outreachSendWorkflow.js";
 import { assistNegotiation } from "./negotiationAssistant.js";
+import { confirmCollaboration } from "./collaborationConfirmation.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -139,6 +140,21 @@ export function createApp(config = loadConfig()) {
         return sendJson(response, 200, {
           ok: true,
           guidance: assistNegotiation(body)
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/collaborations/confirm") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (Object.keys(body).length === 0) {
+          return sendJson(response, 400, { ok: false, error: "collaboration confirmation input is required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          confirmation: confirmCollaboration(body)
         });
       }
 

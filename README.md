@@ -189,6 +189,23 @@ curl -s http://localhost:3215/api/negotiation/assist \
   }'
 ```
 
+Confirm an approved collaboration into a fulfillment-ready draft:
+
+```bash
+curl -s http://localhost:3215/api/collaborations/confirm \
+  -H "content-type: application/json" \
+  -d '{
+    "approvalStatus": "Approved",
+    "creator": { "name": "Maya Tech Finds" },
+    "campaign": { "campaignName": "Spring TikTok UGC Test", "productName": "Magnetic power bank" },
+    "terms": {
+      "deliverables": "1 TikTok video",
+      "offer": "$150 plus sample",
+      "deadline": "2026-07-01"
+    }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:
