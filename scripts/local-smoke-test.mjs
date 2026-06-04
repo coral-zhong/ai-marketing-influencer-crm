@@ -75,15 +75,37 @@ Maya Duplicate,TikTok,https://example.com/maya,UGC tech review`
   assert(campaignPlan.ok === true, "campaign plan should return ok=true");
   assert(campaignPlan.plan.tasks.length === 3, "campaign plan should create three task previews");
 
+  const outreachDraft = await requestJson(`${baseUrl}/api/outreach/draft`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      creator: {
+        name: "Maya Tech Finds",
+        platform: "TikTok",
+        category: "UGC tech review"
+      },
+      campaign: {
+        brand: "Demo Brand",
+        productName: "Magnetic power bank",
+        campaignGoal: "Find creators who can make short tutorial demos."
+      }
+    })
+  });
+
+  assert(outreachDraft.ok === true, "outreach draft should return ok=true");
+  assert(outreachDraft.draft.status === "Needs Review", "outreach draft should require review");
+  assert(outreachDraft.draft.permissionLevel === "review", "outreach draft should be review-only");
+
   console.log(JSON.stringify({
     ok: true,
-    checks: ["health", "screen_creator", "import_creators", "campaign_plan"],
+    checks: ["health", "screen_creator", "import_creators", "campaign_plan", "draft_outreach"],
     fitScore: screening.result.fitScore,
     tier: screening.result.tier,
     writebackMode: screening.writeback.mode,
     importedCreators: importResult.summary.imported,
     duplicateCreators: importResult.summary.duplicates,
-    campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType)
+    campaignTasks: campaignPlan.plan.tasks.map((task) => task.taskType),
+    outreachStatus: outreachDraft.draft.status
   }, null, 2));
 } finally {
   await new Promise((resolve) => server.close(resolve));

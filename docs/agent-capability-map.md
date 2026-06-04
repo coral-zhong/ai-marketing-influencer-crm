@@ -14,7 +14,7 @@ This map links the influencer marketing workflow to agent tasks, Feishu tables, 
 | Creator Search | `creator_search_planner` | campaign task | `Agent Tasks` | Yes before broad search | Planned |
 | Creator Search | `capture_creator` | profile URL / search result | `Creators` | No | Partially covered by MVP endpoint shape |
 | Creator Search | `capture_video` | video URL / source result | `Videos` | No | Planned |
-| Outreach | `draft_outreach` | creator + campaign | `Outreach` | Yes before send | Planned |
+| Outreach | `draft_outreach` | creator + campaign | review-only outreach draft | Yes before send | Implemented MVP |
 | Outreach | `draft_follow_up` | outreach record | `Outreach` | Yes before send | Planned |
 | Negotiation | `negotiation_assistant` | reply/context | `Outreach`, `Collaborations` | Yes | Planned |
 | Fulfillment | `create_collaboration_from_approval` | approved outreach | `Collaborations` | Yes | Planned |

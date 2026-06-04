@@ -120,6 +120,25 @@ curl -s http://localhost:3215/api/campaigns/plan \
   }'
 ```
 
+Draft review-only outreach:
+
+```bash
+curl -s http://localhost:3215/api/outreach/draft \
+  -H "content-type: application/json" \
+  -d '{
+    "creator": {
+      "name": "Maya Tech Finds",
+      "platform": "TikTok",
+      "category": "UGC tech review"
+    },
+    "campaign": {
+      "brand": "Demo Brand",
+      "productName": "Magnetic power bank",
+      "campaignGoal": "Find creators who can make short tutorial demos."
+    }
+  }'
+```
+
 ## Feishu Writeback
 
 To enable real Feishu writeback, configure:

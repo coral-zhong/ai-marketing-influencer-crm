@@ -147,6 +147,49 @@ test("POST /api/campaigns/plan validates campaign body", async () => {
   });
 });
 
+test("POST /api/outreach/draft returns a review-only outreach draft", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/outreach/draft`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        creator: {
+          name: "Maya Tech Finds",
+          platform: "TikTok",
+          category: "UGC tech review"
+        },
+        campaign: {
+          brand: "Demo Brand",
+          productName: "Magnetic power bank",
+          campaignGoal: "Find creators who can make short tutorial demos."
+        }
+      })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 200);
+    assert.equal(body.ok, true);
+    assert.equal(body.draft.status, "Needs Review");
+    assert.equal(body.draft.permissionLevel, "review");
+    assert.match(body.draft.message, /Magnetic power bank/);
+  });
+});
+
+test("POST /api/outreach/draft validates request body", async () => {
+  await withServer({}, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/api/outreach/draft`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ creator: { name: "Maya" } })
+    });
+    const body = await response.json();
+
+    assert.equal(response.status, 400);
+    assert.equal(body.ok, false);
+    assert.equal(body.error, "creator and campaign are required");
+  });
+});
+
 async function withServer(config, callback) {
   const server = createApp({
     port: 0,

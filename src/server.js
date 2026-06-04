@@ -4,6 +4,7 @@ import { screenCreator } from "./screenCreator.js";
 import { writeCreatorScreeningResult } from "./feishuClient.js";
 import { importCreatorsFromCsv } from "./importCreators.js";
 import { planCampaignTasks } from "./campaignPlanner.js";
+import { draftOutreach } from "./outreachDraft.js";
 
 export function createApp(config = loadConfig()) {
   return http.createServer(async (request, response) => {
@@ -65,6 +66,24 @@ export function createApp(config = loadConfig()) {
         return sendJson(response, 200, {
           ok: true,
           plan: planCampaignTasks(body.campaign)
+        });
+      }
+
+      if (request.method === "POST" && request.url === "/api/outreach/draft") {
+        const authError = validateSecret(request, config);
+        if (authError) return sendJson(response, 401, { ok: false, error: authError });
+
+        const body = await readJson(request);
+        if (!body.creator || !body.campaign) {
+          return sendJson(response, 400, { ok: false, error: "creator and campaign are required" });
+        }
+
+        return sendJson(response, 200, {
+          ok: true,
+          draft: draftOutreach({
+            creator: body.creator,
+            campaign: body.campaign
+          })
         });
       }
 

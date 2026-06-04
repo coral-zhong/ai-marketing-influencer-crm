@@ -48,6 +48,7 @@ Goal: make creator capture + screening usable enough for a real operator test.
 | Feishu credential setup guide | User can configure real writeback manually | `docs/feishu-api-credentials-setup.md` | Done |
 | Creator import | User can upload existing creator data | CSV import endpoint + validation | Done |
 | Campaign task decomposition | User can preview creator-search/screening/outreach tasks | `POST /api/campaigns/plan` | Done |
+| Review-only outreach draft | User can preview safe creator outreach copy | `POST /api/outreach/draft` | Done |
 | Campaign context in screening | Screening uses campaign criteria, claims, and target market | enriched `screen_creator` input | Next |
 
 ### Next: Campaign-To-Creator Pipeline
