@@ -111,6 +111,7 @@ Setup guide: [Feishu API Credentials Setup](docs/feishu-api-credentials-setup.md
 
 Useful docs:
 
+- [Operation Guide](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Agent Capability Map](docs/agent-capability-map.md)
 - [Product Build Checklist](docs/product-build-checklist.md)
@@ -241,6 +242,7 @@ npm run setup:feishu -- --create-new-base --base-name "AI Marketing Influencer C
 
 有用文档：
 
+- [Operation Guide / 操作指南](docs/operation-guide.md)
 - [AI Agent Local Install Handoff](docs/ai-agent-local-install.md)
 - [Agent Capability Map](docs/agent-capability-map.md)
 - [Product Build Checklist](docs/product-build-checklist.md)

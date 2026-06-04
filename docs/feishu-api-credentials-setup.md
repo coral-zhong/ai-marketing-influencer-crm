@@ -101,10 +101,12 @@ The agent will:
 
 1. get `tenant_access_token` using `FEISHU_APP_ID` and `FEISHU_APP_SECRET`
 2. create a new Feishu Base
-3. create tables from `schema/minimal-crm.schema.json`
+3. create the default CRM tables from `schema/minimal-crm.schema.json`
 4. create fields and select options
 5. create schema views
 6. return the created `baseToken`, `creatorsTableId`, `tables`, and `views`
+
+The default install creates three tables: `Campaigns`, `Creators`, and `Agent Tasks`. They are the starting CRM model: campaign brief, creator pipeline, and agent review log. See [Operation Guide](operation-guide.md) for the full workflow explanation.
 
 The command updates `.env` and prints a safe summary:
 
